@@ -1,7 +1,7 @@
 import React, { Component } from 'react';  
 import { Platform, StyleSheet, View, Text,  Image, TouchableOpacity, Alert } from 'react-native';  
 import TabNavigator from './TabNavigator';
-export default class Myapp extends Component<{}>  
+export default class Splash extends Component 
 {  
   constructor(){  
     super();  
@@ -17,9 +17,14 @@ export default class Myapp extends Component<{}>
   
  componentDidMount(){  
    var that = this;  
-   setTimeout(function(){  
-     that.Hide_Splash_Screen();  
-   }, 2000);  
+  //  setTimeout(function(){  
+  //    that.Hide_Splash_Screen();  
+  //  }, 2000);  
+  setTimeout(
+    ()=> {
+      this.props.navigation.navigate("TabNavigator");
+        },1000
+);
   }  
   
    render()  
