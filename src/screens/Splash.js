@@ -22,7 +22,8 @@ export default class Splash extends Component
   //  }, 2000);  
   setTimeout(
     ()=> {
-      this.props.navigation.navigate("TabNavigator");
+       this.props.navigation.navigate("TabNavigator");
+
         },1000
 );
   }  
@@ -43,10 +44,7 @@ export default class Splash extends Component
                 {  
                  (this.state.isVisible === true) ? Splash_Screen : null  
                }  
-
-
            </View>
-     
              );  
    }  
 }  

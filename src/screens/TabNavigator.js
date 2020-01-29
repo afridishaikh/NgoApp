@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text , StyleSheet, ScrollView, View, ImageComponent} from 'react-native';
+import {Text, StyleSheet, ScrollView, View, ImageComponent} from 'react-native';
 
 // import Icon from 'react-native-vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,17 +9,17 @@ import {createAppContainer} from 'react-navigation';
 import {createMaterialBottomTabNavigator}   from 'react-navigation-material-bottom-tabs';
 
 import Logsig from './Logsig'
-
+import Home from './TabPages/Home/Home'
 //webminar
 
 class HomeScreen extends Component{
     render(){
         return(
 
-            
-            <View style={style.cotntainer}> 
-            <Text> Hello World</Text> 
-            </View>
+            <Home/>
+            // <View style={style.cotntainer}> 
+            // {/* <Text> Hello World</Text>  */}
+            // </View>
         )
     }
 }
