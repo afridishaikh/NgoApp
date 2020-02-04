@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {View,Stylesheet,Text,Button} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 // import { createDrawerNavigator } from 'react-navigation' 
- import { createSwitchNavigator  } from 'react-navigation';
+ import {  
+     createSwitchNavigator  
+} from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 

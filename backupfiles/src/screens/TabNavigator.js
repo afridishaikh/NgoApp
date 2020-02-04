@@ -7,9 +7,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Drawer from './Drawer'
 import {createAppContainer} from 'react-navigation';
 import {createMaterialBottomTabNavigator}   from 'react-navigation-material-bottom-tabs';
-import Rt from './users/rt'
-import Login from './users/login'
-import Home from './home/Home'
+
+import Logsig from '../screens/Logsig'
+import Home from './TabPages/Home/Home'
 
 
 class HomeScreen extends Component{
@@ -25,7 +25,7 @@ class LogSig extends Component{
     render(){
         return(
           
-         <Rt/>
+         <Logsig/>
         )
     }
 }
@@ -66,7 +66,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
         activeColor:'white',
         inactiveColor:'#3e2465',
         barStyle:{backgroundColor:'#694fad',
-        
         
         },
     }
