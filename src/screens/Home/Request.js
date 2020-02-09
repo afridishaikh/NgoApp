@@ -1,27 +1,47 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, TextInput, TouchableHighlight } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  TouchableHighlight,
+  Image,
+  Alert,
+  ScrollView
+} from 'react-native';
+
+// const { navigate } = this.props.navigation;
+export default class LoginView extends Component {
+  constructor(props) {
+    super(props);
+    state = {
+      name: '',
+      username: '',
+      mo_no: '',
+      address: '',
+      city: '',
+      password: '',
+    }
+  }
+  onClickListener = (viewId) => {
+    Alert.alert("Alert", "Button pressed " + viewId);
+  }
 
 
-
-class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
 
-
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Request')}>
-          <Text style={styles.loginText}>Post A Request</Text>
-          </TouchableHighlight>
-
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>List Of NGO</Text>
- </TouchableHighlight>
-      
+        <ScrollView>
+          <Text> Here is Request Form </Text>
+        </ScrollView>
       </View>
+
+
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -63,14 +83,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   loginButton: {
-    backgroundColor: "#00b5ec",
-  },
-  signupButton: {
-    backgroundColor: "#980953",
+    backgroundColor: 'red'// "#00b5ec",
   },
   loginText: {
     color: 'white',
   }
 });
-
-export default Home;

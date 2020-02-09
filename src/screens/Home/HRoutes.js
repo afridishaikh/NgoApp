@@ -1,30 +1,23 @@
 import React, { Component } from 'react';
+import Home from './Home' ;
+import Request from './Request';
+import List from './List'
 
-
-import MainActivity from './MainActivity' ;
-
-
-import SecondActivity from './SecondActivity' ;
-import Signup from './signup'
 
 import { createStackNavigator } from 'react-navigation-stack';
 import {  createAppContainer } from 'react-navigation';
 
-
-
-
 const MyProject = createStackNavigator(
 {
 
- First: { screen: MainActivity},
- 
- Second: { screen: SecondActivity },
+ Home: { screen: Home},
+ Request: {screen: Request},
+ List: {screen: List}
 
- Signup: {screen: Signup}
 
 },
 {
-    initialRouteName:'First',
+    initialRouteName:'Home',
     headerMode:'none',
     
   })

@@ -1,6 +1,4 @@
-//This is an example of Tab inside Navigation Drawer in React Native//
 import React, { Component } from 'react';
-//import react in our code.
 import {
   StyleSheet,
   Platform,
@@ -8,18 +6,25 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
- 
+
 //Import required react-navigation component 
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import { createDrawerNavigator} from 'react-navigation-drawer';
- 
-//Import all the screens for Drawer/ Sidebar
-import Screen1 from './screen1';
-import Screen2 from './screen2';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+
+//Import all the screens for Drawer
+
+import TabNavigator from './TabNavigator';
 import Screen3 from './screen3';
- 
+
+
+// ComponentWillMount(){
+//   BackHandler.addEventListener('hardwareBackPress', function(){
+//     return true;
+//   });
+// }
 //Navigation Drawer Structure for all screen
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
@@ -27,6 +32,11 @@ class NavigationDrawerStructure extends Component {
     //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
   };
+  ComponentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', function () {
+      return true;
+    });
+  }
   render() {
     return (
       <View style={{ flexDirection: 'row' }}>
@@ -36,24 +46,24 @@ class NavigationDrawerStructure extends Component {
             source={require('../../assets/icons/drawer.png')}
             style={{ width: 30, height: 30, marginLeft: 5 }}
           />
-      
+
         </TouchableOpacity>
       </View>
     );
   }
 }
- 
+
 //Stack Navigator for First Option of Navigation Drawer
 const FirstActivity_StackNavigator = createStackNavigator({
   //All the screen from the Screen1 will be indexed here
   First: {
-    screen: Screen1,
+    screen: TabNavigator,
     navigationOptions: ({ navigation }) => ({
-      title: 'Demo Screen 1',
+      title: 'NGO App',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         // backgroundColor: '#FF9800',
-          backgroundColor: 'purple',
+        backgroundColor: 'purple',
 
         shadowOpacity: 0,
         elevation: 0,
@@ -62,16 +72,16 @@ const FirstActivity_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
+
 //Stack Navigator for Second Option of Navigation Drawer
 const Screen2_StackNavigator = createStackNavigator({
   //All the screen from the Screen2 will be indexed here
   Second: {
-    screen: Screen2,
+    screen: Screen3,
     navigationOptions: ({ navigation }) => ({
       title: 'Demo Screen 2',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
- 
+
       headerStyle: {
         backgroundColor: '#FF9800',
       },
@@ -79,7 +89,7 @@ const Screen2_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
+
 //Stack Navigator for Third Option of Navigation Drawer
 const Screen3_StackNavigator = createStackNavigator({
   //All the screen from the Screen3 will be indexed here
@@ -88,7 +98,7 @@ const Screen3_StackNavigator = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: 'Demo Screen 3',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
- 
+
       headerStyle: {
         backgroundColor: '#FF9800',
       },
@@ -96,7 +106,7 @@ const Screen3_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
+
 //Drawer Navigator for the Navigation Drawer / Sidebar
 const DrawerNavigatorExample = createDrawerNavigator({
   //Drawer Optons and indexing
@@ -104,10 +114,10 @@ const DrawerNavigatorExample = createDrawerNavigator({
     //Title
     screen: FirstActivity_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'Demo Screen 1',
+      drawerLabel: 'NGO App',
     },
   },
- 
+
   Screen2: {
     //Title
     screen: Screen2_StackNavigator,
@@ -115,7 +125,7 @@ const DrawerNavigatorExample = createDrawerNavigator({
       drawerLabel: 'Demo Screen 2',
     },
   },
- 
+
   Screen3: {
     //Title
     screen: Screen3_StackNavigator,
