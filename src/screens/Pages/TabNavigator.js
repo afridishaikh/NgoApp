@@ -1,3 +1,4 @@
+//Bottom Material Tabs
 import React, { Component } from 'react';
 import { Text, StyleSheet, ScrollView, View, ImageComponent } from 'react-native';
 
@@ -8,7 +9,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 
 import HomeRoute from '../Home/HRoutes'
 import UserRoute from '../Users/URoutes'
-
+//Routes for Material Bottom Tabs
 class HomeScreen extends Component {
     render() {
         return (
@@ -24,6 +25,7 @@ class UserScreen extends Component {
     }
 }
 
+//Material Bottom Tabs
 const TabNavigator = createMaterialBottomTabNavigator(
     //Define Routes & Tabs
     {
@@ -58,8 +60,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
         inactiveColor: '#3e2465',
         barStyle: {
             backgroundColor: '#694fad',
-
-
         },
     }
 );

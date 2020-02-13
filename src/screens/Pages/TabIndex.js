@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 //Import required react-navigation component 
 import { createAppContainer } from 'react-navigation';
@@ -15,7 +16,6 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 //Import all the screens for Drawer
-
 import TabNavigator from './TabNavigator';
 import Screen3 from './screen3';
 
@@ -25,6 +25,8 @@ import Screen3 from './screen3';
 //     return true;
 //   });
 // }
+
+
 //Navigation Drawer Structure for all screen
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
@@ -32,21 +34,20 @@ class NavigationDrawerStructure extends Component {
     //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
   };
-  ComponentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', function () {
-      return true;
-    });
-  }
+  // ComponentWillMount() {
+  //   BackHandler.addEventListener('hardwareBackPress', function () {
+  //     return true;
+  //   }
+  //   );
+  // }
   render() {
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-          {/*Donute Button Image */}
           <Image
             source={require('../../assets/icons/drawer.png')}
             style={{ width: 30, height: 30, marginLeft: 5 }}
           />
-
         </TouchableOpacity>
       </View>
     );
@@ -59,16 +60,16 @@ const FirstActivity_StackNavigator = createStackNavigator({
   First: {
     screen: TabNavigator,
     navigationOptions: ({ navigation }) => ({
+     // header: null,
+     
       title: 'NGO App',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
-        // backgroundColor: '#FF9800',
         backgroundColor: 'purple',
-
         shadowOpacity: 0,
         elevation: 0,
       },
-      headerTintColor: '#fff',
+      headerTintColor: "Black",
     }),
   },
 });
@@ -98,7 +99,6 @@ const Screen3_StackNavigator = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: 'Demo Screen 3',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-
       headerStyle: {
         backgroundColor: '#FF9800',
       },
@@ -114,7 +114,7 @@ const DrawerNavigatorExample = createDrawerNavigator({
     //Title
     screen: FirstActivity_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'NGO App',
+      drawerLabel: 'Home',
     },
   },
 
@@ -122,7 +122,7 @@ const DrawerNavigatorExample = createDrawerNavigator({
     //Title
     screen: Screen2_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'Demo Screen 2',
+      drawerLabel: 'About Us',
     },
   },
 
@@ -130,7 +130,7 @@ const DrawerNavigatorExample = createDrawerNavigator({
     //Title
     screen: Screen3_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'Demo Screen 3',
+      drawerLabel: 'Option 3',
     },
   },
 });

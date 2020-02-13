@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, Text, View, Button, Image, TextInput, TouchableHighlight, Alert } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TextInput, TouchableHighlight, Alert,ImageBackground } from 'react-native';
 
 const DismissKeyBoard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -43,8 +43,9 @@ class Login extends Component {
         if (responseJson === 'Data Matched') {
           // ToastAndroid.show('Login Successfull' ,ToastAndroid.SHORT);
           //Then open Profile activity and send user email to profile activity.
-          this.props.navigation.navigate('Home');
+          
           Alert.alert('success');
+          this.props.navigation.push('Profile');
         }
         else {
           Alert.alert(responseJson);
@@ -56,6 +57,13 @@ class Login extends Component {
 
   render() {
     return (
+      // <View style={styes.imagecontainer}>
+      //   <Image style={styles.bgImage}
+      //   source={this.props.imageSource} />
+      //   {this.props.children}
+      // </View>
+      <View style={styles.container}>
+      {/* <ImageBackground source={require('../../assets/images/bg.jpg')} style={{width: '100%', height: '100%'}}> */}
       <View style={styles.container}>
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{ uri: 'https://png.icons8.com/message/ultraviolet/50/3498db' }} />
@@ -79,20 +87,23 @@ class Login extends Component {
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Signup')}>
-          <Text style={styles.loginText}>Sign UP</Text>
-        </TouchableHighlight>
-
+        
 
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
           <Text>Forgot your password?</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-          <Text>Register</Text>
+        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Signup')}>
+          <Text style={styles.loginText}>Sign UP</Text>
         </TouchableHighlight>
-      </View>
 
+         <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Profile')}>
+        {/* <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}> */}
+          <Text>Profile</Text>
+        </TouchableHighlight>
+        </View>
+
+      </View>
     );
   }
 }
