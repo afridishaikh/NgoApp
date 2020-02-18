@@ -15,8 +15,10 @@
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-gesture-handler": "^1.5.3",
+    "react-native-image-picker": "^2.3.0",
     "react-native-image-slider-box": "^1.0.12",
     "react-native-linear-gradient": "^2.5.6",
+    "react-native-material-dropdown": "^0.11.1",
     "react-native-paper": "^3.4.0",
     "react-native-reanimated": "^1.4.0",
     "react-native-screens": "^2.0.0-alpha.22",
@@ -26,7 +28,8 @@
     "react-navigation-drawer": "^2.3.3",
     "react-navigation-material-bottom-tabs": "^2.1.5",
     "react-navigation-stack": "^1.10.3",
-    "react-navigation-tabs": "^2.7.0"
+    "react-navigation-tabs": "^2.7.0",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",

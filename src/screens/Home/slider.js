@@ -27,9 +27,9 @@ export default class Slider extends Component {
         autoplay
         circleLoop
           images={this.state.images}
-          onCurrentImagePressed={index =>
-            console.warn(`image ${index} pressed`)
-          }
+          // onCurrentImagePressed={index =>
+          //   console.warn(`image ${index} pressed`)
+          // }
         />
       </View>
     );

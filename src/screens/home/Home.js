@@ -19,7 +19,7 @@ class Home extends Component {
           <Text style={styles.loginText}>List Of NGO</Text>
         </TouchableHighlight>
       
-
+      
    
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
           <Text style={styles.loginText}>Option 3</Text>

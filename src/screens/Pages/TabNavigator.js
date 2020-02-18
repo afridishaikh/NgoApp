@@ -8,7 +8,10 @@ import { createAppContainer } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import HomeRoute from '../Home/HRoutes'
+
+// import HomeRoute from './../Home/Home'
 import UserRoute from '../Users/URoutes'
+// import UserRoute from '../Users/login'
 //Routes for Material Bottom Tabs
 class HomeScreen extends Component {
     render() {
@@ -48,7 +51,14 @@ const TabNavigator = createMaterialBottomTabNavigator(
                     <View>
                         <Icon style={[{ color: tintColor }]} size={25} name={'user'} />
                     </View>
-                )
+                ),
+
+                activeColor: 'white',
+                inactiveColor: '#3e2465',
+                barStyle: {
+                    backgroundColor: '#d13560',
+                },
+
             },
 
         }
@@ -66,7 +76,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
 
 //Styles for Componets
 const style = StyleSheet.create({
-
     cotntainer: {
         flex: 1,
         justifyContent: 'center',

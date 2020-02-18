@@ -18,6 +18,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 //Import all the screens for Drawer
 import TabNavigator from './TabNavigator';
 import Screen3 from './screen3';
+import Login1 from './login1';
 
 
 // ComponentWillMount(){
@@ -60,16 +61,16 @@ const FirstActivity_StackNavigator = createStackNavigator({
   First: {
     screen: TabNavigator,
     navigationOptions: ({ navigation }) => ({
-     // header: null,
-     
+      // header: null,
+
       title: 'NGO App',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
-        backgroundColor: 'purple',
+        backgroundColor: '#694fad',
         shadowOpacity: 0,
         elevation: 0,
       },
-      headerTintColor: "Black",
+      headerTintColor: "white",
     }),
   },
 });
@@ -108,13 +109,14 @@ const Screen3_StackNavigator = createStackNavigator({
 });
 
 //Drawer Navigator for the Navigation Drawer / Sidebar
-const DrawerNavigatorExample = createDrawerNavigator({
+const DrawerNavigator = createDrawerNavigator({
   //Drawer Optons and indexing
   Screen1: {
     //Title
     screen: FirstActivity_StackNavigator,
     navigationOptions: {
       drawerLabel: 'Home',
+      drawerIcon: ({ tintColor }) => <Icon style={[{ color: tintColor }]} size={25} name={'home'} />
     },
   },
 
@@ -123,6 +125,7 @@ const DrawerNavigatorExample = createDrawerNavigator({
     screen: Screen2_StackNavigator,
     navigationOptions: {
       drawerLabel: 'About Us',
+      drawerIcon: ({ tintColor }) => <Icon style={[{ color: tintColor }]} size={25} name={'user'} />
     },
   },
 
@@ -134,4 +137,4 @@ const DrawerNavigatorExample = createDrawerNavigator({
     },
   },
 });
-export default createAppContainer(DrawerNavigatorExample);
+export default createAppContainer(DrawerNavigator);

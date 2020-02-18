@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+
 import { StyleSheet, Text, View, Button, Image, TextInput, TouchableHighlight, Alert,ImageBackground } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+
 const DismissKeyBoard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     {children}
@@ -61,12 +62,15 @@ class Login extends Component {
       //   source={this.props.imageSource} />
       //   {this.props.children}
       // </View>
+
       <View style={styles.container}>
+            <Text style={{color:'#121456',fontSize:25,textDecorationLine:'underline'}} 
+             onPress={() => this.props.navigation.push('TabNavigator')}>Skip
+             </Text>
       {/* <ImageBackground source={require('../../assets/images/bg.jpg')} style={{width: '100%', height: '100%'}}> */}
       <View style={styles.container}>
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={ require('../../assets/icons/user.png') } />
-        
           <TextInput style={styles.inputs}
             placeholder="Username"
             keyboardType="email-address"
