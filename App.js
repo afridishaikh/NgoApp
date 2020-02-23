@@ -1,189 +1,129 @@
 import React, { Component } from 'react'
 
 
-import Routes from './src/screens/Routes'
+ import Routes from './src/screens/Routes'
+// import Upload from './backupfiles/Try/upload'
+//import Fetch from './backupfiles/Try/fetch'
 export class App extends Component {
   render() {
-    return <Routes/>
-
+    // return <Upload/>
+     return <Routes/>
+    //return <Fetch/>
   }
 }
 export default App
 
-// 888888888888888888888888888888888888888888888888888888888888888888
+// 0000000000000000000000000000000000000000000000000000
 
-// import React, { Component } from 'react';
+
+// //This is an example code to get Geolocation//  
+// import React from 'react';
+// //import react in our code. 
+// import {View, Text,  StyleSheet, Image ,PermissionsAndroid,Platform} from 'react-native';
+// //import all the components we are going to use.
+// import Geolocation from '@react-native-community/geolocation';
  
-// import { StyleSheet, Text, View, PixelRatio, TouchableOpacity, Image, TextInput, Alert ,ScrollView} from 'react-native';
  
-// import ImagePicker from 'react-native-image-picker';
- 
-// import RNFetchBlob from 'rn-fetch-blob';
- 
-// export default class upload extends Component {
- 
-//   constructor() {
- 
-//     super();
- 
-//     this.state = {
- 
-//       ImageSource: null,
- 
-//       data: null,
- 
-//       Image_TAG: ''
- 
+// export default class App extends React.Component {
+//   state = {
+//     currentLongitude: 'unknown',//Initial Longitude
+//     currentLatitude: 'unknown',//Initial Latitude
+//  }
+//  componentDidMount = () => {
+//   var that =this;
+//   //Checking for the permission just after component loaded
+//   if(Platform.OS === 'ios'){
+//     this.callLocation(that);
+//   }else{
+//     async function requestLocationPermission() {
+//       try {
+//         const granted = await PermissionsAndroid.request(
+//           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,{
+//             'title': 'Location Access Required',
+//             'message': 'This App needs to Access your location'
+//           }
+//         )
+//         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//           //To Check, If Permission is granted
+//           that.callLocation(that);
+//         } else {
+//           alert("Permission Denied");
+//         }
+//       } catch (err) {
+//         alert("err",err);
+//         console.warn(err)
+//       }
 //     }
-//   }
- 
-//   selectPhotoTapped() {
-//     const options = {
-//       quality: 1.0,
-//       maxWidth: 500,
-//       maxHeight: 500,
-//       storageOptions: {
-//         skipBackup: true
-//       }
-//     };
- 
-//     ImagePicker.showImagePicker(options, (response) => {
-//       console.log('Response = ', response);
- 
-//       if (response.didCancel) {
-//         console.log('User cancelled photo picker');
-//       }
-//       else if (response.error) {
-//         console.log('ImagePicker Error: ', response.error);
-//       }
-//       else if (response.customButton) {
-//         console.log('User tapped custom button: ', response.customButton);
-//       }
-//       else {
-//         let source = { uri: response.uri };
- 
-//         this.setState({
- 
-//           ImageSource: source,
-//           data: response.data
- 
-//         });
-//       }
-//     });
-//   }
- 
-  
- 
-//   render() {
-//     return (
-//       <View style={styles.MainContainer}>
-//         <ScrollView horizontal={true}>
-//  <View style={styles.columes} >
-//           <View style={styles.rows}>
-//         <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
- 
-//           <View style={styles.ImageContainer}>
- 
-//             {this.state.ImageSource === null ? <Text>Select a Photo</Text> :
-//               <Image style={styles.ImageContainer} source={this.state.ImageSource} />
-//             }
- 
-//           </View>
- 
-//         </TouchableOpacity>
-
-// {/*  
- 
-//         <TouchableOpacity onPress={this.uploadImageToServer} activeOpacity={0.6} style={styles.button} >
- 
-//           <Text style={styles.TextStyle}> UPLOAD IMAGE TO SERVER </Text>
- 
-//         </TouchableOpacity> */}
-//         </View>
-//         </View>
-//         </ScrollView>
-//       </View>
+//     requestLocationPermission();
+//   }    
+//  }
+//  callLocation(that){
+//   //alert("callLocation Called");
+//     Geolocation.getCurrentPosition(
+//       //Will give you the current location
+//        (position) => {
+//           const currentLongitude = JSON.stringify(position.coords.longitude);
+//           //getting the Longitude from the location json
+//           const currentLatitude = JSON.stringify(position.coords.latitude);
+//           //getting the Latitude from the location json
+//           that.setState({ currentLongitude:currentLongitude });
+//           //Setting state Longitude to re re-render the Longitude Text
+//           that.setState({ currentLatitude:currentLatitude });
+//           //Setting state Latitude to re re-render the Longitude Text
+//        },
+//        (error) => alert(error.message),
+//        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
 //     );
-//   }
- 
+//     that.watchID = Geolocation.watchPosition((position) => {
+//       //Will give you the location on location change
+//         console.log(position);
+//         const currentLongitude = JSON.stringify(position.coords.longitude);
+//         //getting the Longitude from the location json
+//         const currentLatitude = JSON.stringify(position.coords.latitude);
+//         //getting the Latitude from the location json
+//        that.setState({ currentLongitude:currentLongitude });
+//        //Setting state Longitude to re re-render the Longitude Text
+//        that.setState({ currentLatitude:currentLatitude });
+//        //Setting state Latitude to re re-render the Longitude Text
+//     });
+//  }
+//  componentWillUnmount = () => {
+//     Geolocation.clearWatch(this.watchID);
+//  }
+//  render() {
+//     return (
+//        <View style = {styles.container}>
+//           <Image
+//             source={{uri:'https://png.icons8.com/dusk/100/000000/compass.png'}}
+//             style={{width: 100, height: 100}}
+//           />
+//           <Text style = {styles.boldText}>
+//              You are Here
+//           </Text>
+//           <Text style={{justifyContent:'center',alignItems: 'center',marginTop:16}}>
+//             Longitude: {this.state.currentLongitude}
+//           </Text>
+//           <Text style={{justifyContent:'center',alignItems: 'center',marginTop:16}}>
+//             Latitude: {this.state.currentLatitude}
+//           </Text>
+//        </View>
+//     )
+//  }
 // }
- 
-// const styles = StyleSheet.create({
- 
-//   container: {
+// const styles = StyleSheet.create ({
+//  container: {
 //     flex: 1,
 //     alignItems: 'center',
-//     backgroundColor: '#FFF8E1',
-//     paddingTop: 20
-//   },
- 
-//   ImageContainer: {
-//     borderRadius:10,
-//     width: 180,
-//     height: 180,
-//     // borderColor: '#9B9B9B',
-//     borderWidth: 1 / PixelRatio.get(),
-
-//     justifyContent: 'center',
-//     // alignItems: 'center',
-//     backgroundColor: 'white',
-
-//   },
- 
-//   TextInputStyle: {
- 
-//     textAlign: 'center',
-//     height: 40,
-//     width: '30%',
-//     borderRadius: 10,
-//     borderWidth: 1,
-//     // borderColor: '#028b53',
-//     // marginTop: 20
-//     alignItems:'center'
-//   },
- 
-//   button: {
- 
-//     width: '50%',
-//     height:'10%',
-//     backgroundColor: '#00BCD4',
-//     borderRadius: 40,
-//     marginTop: 20,
-//     alignItems:'center'
-//   },
- 
-//   TextStyle: {
-//     color: '#fff',
-//     textAlign: 'center',
-//     padding: 10
-//   },
-//   MainContainer: {
-//     flex: 1,
-//     // backgroundColor: '#FFF8E1',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   borderColor:'#023056',
-//   borderWidth:3,
-//   marginBottom:20,
-//    paddingTop:80,
-
-//   },
-//   rows:
-//   {
-//     flex:2,
-//     flexDirection:"row",
-//     paddingTop:25
-//   },
-//   columes:
-//   {
-//     flex:2,
-//     flexDirection:"row",
-//     paddingTop:25
-//   },
- 
-// });
-
-
+//     justifyContent:'center',
+//     marginTop: 50,
+//     padding:16,
+//     backgroundColor:'white'
+//  },
+//  boldText: {
+//     fontSize: 30,
+//     color: 'red',
+//  }
+// })
 
 // *************************************************************
 // //import liraries

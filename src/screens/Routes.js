@@ -9,7 +9,7 @@ import Login1 from './Pages/login1';
 import Login from './Users/login';
 import Signup from './Users/signup'
 import Profile from './Users/Profile';
-import Home from './Home/Home' ;
+import Home from './Home/Home';
 import Request from './Home/Request';
 import List from './Home/List'
 
@@ -43,9 +43,6 @@ const AppNavigator = createStackNavigator({
     Home: { screen: Home },
     Request: { screen: Request },
     List: { screen: List }
-
-
-
 },
     //Navigation Options
     {

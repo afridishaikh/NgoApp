@@ -27,7 +27,7 @@ class Home extends Component {
 
         
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>Option 4</Text>
+          <Text style={styles.loginText}>Donate to NGO</Text>
         </TouchableHighlight>
       </View>
 

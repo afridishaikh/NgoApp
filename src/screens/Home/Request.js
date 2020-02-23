@@ -1,10 +1,8 @@
-
-
 import React, { Component } from 'react';
-import {Dropdown} from  'react-native-material-dropdown'
-import ImagePicker from 'react-native-image-picker'; 
+import { Dropdown } from 'react-native-material-dropdown'
+import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
- 
+// import ScrollView from 'react-native-gesture-handler' 
 import {
   StyleSheet,
   Text,
@@ -14,7 +12,9 @@ import {
   TouchableHighlight,
   Image,
   Alert,
-  ScrollView
+  ScrollView,
+  PixelRatio,
+  TouchableOpacity
 } from 'react-native';
 // import { black } from 'react-native-paper/lib/typescript/src/styles/colors';
 
@@ -24,28 +24,78 @@ export default class LoginView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      TextInputNName: '',
-       TextInputMono: '',
-      TextInputAddress:'',
+  
+      problem:'',
+      photo:'',
+      location:'',
+      address:'',
+      mo_no:''
+      // ImageSource: null,
+      // data: null,
+      // Image_TAG: ''
     }
   }
 
+
+  selectPhotoTapped() {
+    const options = {
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let source = { uri: response.uri };
+
+        this.setState({
+
+          ImageSource: source,
+          data: response.data
+
+        });
+      }
+    });
+  }
+
+
   InsertDataToServer = () => {
-    const { TextInputNName } = this.state;
-    const { TextInputMono } = this.state;
-    const{ TextInputAddress} =this.state;
+    const { problem } = this.state;
+    const { photo } = this.state;
+    const { location } = this.state;
+    const { address } = this.state;
+    const { mo_no } = this.state;
+
+
 
     //The connection And Insert
-    fetch('http://192.168.42.250/ngoapp/user_signup.php', {
+    fetch('http://192.168.42.250/ngoapp/request.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-            name: TextInputNName,
-            mo_no: TextInputMono,
-            address:TextInputAddress,
+        problem:problem,
+        photo:photo,
+        location:location,
+        address:address,
+        mo_no:mo_no,
+
       })
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -53,44 +103,62 @@ export default class LoginView extends Component {
       }).catch((error) => {
         console.error(error);
       });
-              // }).then((response) => response.json())
-              // .then((responseJson) => {
-              //   if(responseJson==='Register Successfully')
-              //   {
-              //   //ToastAndroid.show(responseJson);
-              //   Alert.alert('sucess');
-              //   this.props.navigation.push("login");   }
-              //   else{
-              //     Alert.alert('Error');
-              //   }  
-              // }).catch((error) => {
-              //   console.error(error);
-              // });
+    // }).then((response) => response.json())
+    // .then((responseJson) => {
+    //   if(responseJson==='Register Successfully')
+    //   {
+    //   //ToastAndroid.show(responseJson);
+    //   Alert.alert('sucess');
+    //   this.props.navigation.push("login");   }
+    //   else{
+    //     Alert.alert('Error');
+    //   }  
+    // }).catch((error) => {
+    //   console.error(error);
+    // });
   }
 
   render() {
-    let data=[{
-          value:'Food',
-        },{
-          value:'Health',
-        },{ 
-          value:'Blood',
-        }];
+    let data = [{
+      value: 'Food',
+    }, {
+      value: 'Health',
+    }, {
+      value: 'Blood',
+    }];
     return (
       <View style={styles.container}>
         <ScrollView>
-        <View style={styles.Dropdown}>
-      <Dropdown 
-            label='Select A Problem'
-            data={data}
-          />
-      </View>
+          <View style={styles.Dropdown}>
+            <Dropdown
+              label='Select A Problem'
+              data={data}
+            />
+          </View>
 
-      <Text> Take A Photo </Text>
+          <View style={styles.MainContainer}>
+            <ScrollView horizontal={true}>
+              <View style={styles.columes} >
+                <View style={styles.rows}>
+                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
 
-      <Text> Location </Text>
+                    <View style={styles.ImageContainer}>
 
-        {/* <View style={styles.inputContainer}>
+                      {this.state.ImageSource === null ? <Text> Select a Photo </Text> :
+                        <Image style={styles.ImageContainer} source={this.state.ImageSource} />
+                      }
+
+                    </View>
+
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+
+          <Text> Location </Text>
+
+          {/* <View style={styles.inputContainer}>
             <TextInput style={styles.inputs}
               placeholder="NGO Name "
               underlineColorAndroid='transparent'
@@ -102,32 +170,24 @@ export default class LoginView extends Component {
               underlineColorAndroid='transparent'
               placeholder="Enter Address"
               // secureTextEntry={true}
-              onChangeText={TextInputAddress => this.setState({ TextInputAddress })}/>
+              onChangeText={ address => this.setState({ address })} />
           </View>
 
           <View style={styles.inputContainer}>
             <TextInput style={styles.inputs}
               placeholder="Mobile Number "
               underlineColorAndroid='transparent'
-              onChangeText={TextInputNName => this.setState({ TextInputMono })}/>
+              onChangeText={Mo_no => this.setState({ Mo_no })} />
           </View>
 
-          {/* Add City &  ngo type  */}
-         
-         {/* <View style={styles.Dropdown}>
-          <Dropdown 
-            label='Select City'
-            data={data}
-          /> */}
-      {/* </View> */}
 
-      <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.UserLoginFunction}>
-          <Text style={styles.loginText}>Post Request</Text>
-        </TouchableHighlight>
-     
+          <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
+            <Text style={styles.loginText}>Post A Request</Text>
+          </TouchableHighlight>
+
         </ScrollView>
       </View>
-       
+
 
 
     );
@@ -141,7 +201,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  
+
+
+  },
+
+  ImageContainer: {
+    borderRadius: 10,
+    width: 180,
+    height: 180,
+    // borderColor: '#9B9B9B',
+    borderWidth: 1 / PixelRatio.get(),
+
+    justifyContent: 'center',
+    // alignItems: 'center',
+    backgroundColor: 'white',
 
   },
   inputContainer: {
@@ -155,7 +228,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
 
-    
+
   },
   inputs: {
     height: 45,
@@ -179,19 +252,19 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   loginButton: {
-    backgroundColor:"#00b",
+    backgroundColor: "#00b",
   },
   loginText: {
     color: 'white',
   },
-  Dropdown:{
-      // color:'green',
-      justifyContent: 'center',
-      padding:10,
-      // color:'black',
-      // backgroundColor: '#FFFFFF',
-     
-  },  
+  Dropdown: {
+    // color:'green',
+    justifyContent: 'center',
+    padding: 10,
+    // color:'black',
+    // backgroundColor: '#FFFFFF',
+
+  },
 });
 
 // import React, { Component } from 'react'
@@ -209,7 +282,7 @@ const styles = StyleSheet.create({
 //   }];
 
 //     return (
-      
+
 
 //         <Dropdown 
 //         label='Select City'
@@ -269,7 +342,7 @@ const styles = StyleSheet.create({
 
 //          <ScrollView>
 
-        
+
 //       <Dropdown
 //       //  textColor="red"
 //        itemColor="blue"
@@ -290,7 +363,7 @@ const styles = StyleSheet.create({
 //         onChangeText={TextInputAddress => this.setState({ TextInputAddress })}/>
 
 //     </View>
-   
+
 //    <View style={styles.Dropdown}>
 //     <Dropdown 
 //       label='Select City'
@@ -353,6 +426,6 @@ const styles = StyleSheet.create({
 //     padding:10,
 //     // color:'black',
 //     // backgroundColor: '#FFFFFF',
-   
+
 // },  
 // });
