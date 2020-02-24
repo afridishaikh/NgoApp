@@ -24,7 +24,7 @@ class Login extends Component {
     const { username } = this.state;
     const { password } = this.state;
 
-    fetch('http://192.168.42.250/ngoapp/user_login.php', {
+    fetch('https://ngoapp3219.000webhostapp.com/db/user_login.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

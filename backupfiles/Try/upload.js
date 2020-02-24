@@ -61,7 +61,7 @@ export default class Project extends Component {
   uploadImageToServer = () => {
 
     // RNFetchBlob.fetch('POST', 'http://192.168.2.102/Project/upload_image.php', {
-      RNFetchBlob.fetch('POST', 'http://192.168.42.250/project/upload_image.php', {
+      RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/upload_image.php', {
       Authorization: "Bearer access-token",
       otherHeader: "foo",
       'Content-Type': 'multipart/form-data',
