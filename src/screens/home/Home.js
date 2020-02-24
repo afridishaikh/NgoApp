@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler} from 'react-native';
 import Slider from './slider'
 
 
 class Home extends Component {
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+}
+handleBackButton(){
+          BackHandler;
+      }
+
   render() {
     return (
 

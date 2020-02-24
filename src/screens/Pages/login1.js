@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-
 import { StyleSheet, Text, View, Button, Image, TextInput, TouchableHighlight, Alert, ImageBackground } from 'react-native';
+import {BackHandler} from 'react-native';
 
-const DismissKeyBoard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-);
 
 class Login extends Component {
   static navigationOptions =
@@ -20,6 +15,8 @@ class Login extends Component {
       password: ''
     }
   }
+
+  
 
   UserLoginFunction = () => {
     const { username } = this.state;
@@ -50,7 +47,37 @@ class Login extends Component {
       }).catch((error) => {
         console.error(error);
       });
+
+      
   }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+}
+handleBackButton(){
+          BackHandler.exitApp();
+      }
+
+//       //Adding BackButton Exit Event
+//   componentDidMount() {
+//     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+// }
+// handleBackButton(){
+//            Alert.alert(
+//         'Exit App',
+//         'Exiting the application?', [{
+//             text: 'Cancel',
+//             onPress: () => console.log('Cancel Pressed'),
+//             style: 'cancel'
+//         }, {
+//             text: 'OK',
+//             onPress: () => BackHandler.exitApp()
+//         }, ], {
+//             cancelable: false
+//         }
+//      )
+//      return true;
+//    }
+
 
   render() {
     return (
