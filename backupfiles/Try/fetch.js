@@ -24,7 +24,10 @@ GetItem (flower_name) {
  
 componentDidMount(){
 
-  return fetch('https://ngoapp.000webhostapp.com/Test/FlowersList.php')
+
+
+  return fetch('https://ngoapp3219.000webhostapp.com/db/FlowersList.php')
+
   .then((response) => response.json())
   .then((responseJson) => {
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
