@@ -1,18 +1,12 @@
 import React, { Component } from 'react'
-
-
-//  import Routes from './src/screens/Routes'
- import Upload from './backupfiles/Try/upload'
-
-// import Fetch from './backupfiles/Try/fetch'
-
-
+// import Routes from './src/screens/Routes'
+//  import Upload from './backupfiles/Try/upload'
+  import Fetch from './backupfiles/Try/fetch'
 export class App extends Component {
   render() {
-     return <Upload/>
-    //  return <Routes/>
-    //return <Fetch/>
-
+    // return <Upload/>
+    // return <Routes />
+     return <Fetch/>
   }
 }
 export default App
@@ -26,8 +20,8 @@ export default App
 // import {View, Text,  StyleSheet, Image ,PermissionsAndroid,Platform} from 'react-native';
 // //import all the components we are going to use.
 // import Geolocation from '@react-native-community/geolocation';
- 
- 
+
+
 // export default class App extends React.Component {
 //   state = {
 //     currentLongitude: 'unknown',//Initial Longitude

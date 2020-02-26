@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Image, TextInput, TouchableHighlight, Alert, ImageBackground } from 'react-native';
-import {BackHandler} from 'react-native';
+import { BackHandler } from 'react-native';
 
 
 class Login extends Component {
-  static navigationOptions =
-    {
-      title: 'Login',
-    };
   constructor(props) {
     super(props)
     this.state = {
@@ -15,14 +11,11 @@ class Login extends Component {
       password: ''
     }
   }
-
-  
-
-  UserLoginFunction = () => {
+UserLoginFunction = () => {
     const { username } = this.state;
     const { password } = this.state;
 
-    fetch('http://192.168.42.250/ngoapp/user_login.php', {
+    fetch('https://ngoapp3219.000webhostapp.com/db/user_login.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -47,36 +40,36 @@ class Login extends Component {
       }).catch((error) => {
         console.error(error);
       });
-
-      
   }
+
+  //Adding BackButton Exit Event
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-}
-handleBackButton(){
-          BackHandler.exitApp();
-      }
+  }
+  handleBackButton() {
+    BackHandler.exitApp();
+  }
 
-//       //Adding BackButton Exit Event
-//   componentDidMount() {
-//     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-// }
-// handleBackButton(){
-//            Alert.alert(
-//         'Exit App',
-//         'Exiting the application?', [{
-//             text: 'Cancel',
-//             onPress: () => console.log('Cancel Pressed'),
-//             style: 'cancel'
-//         }, {
-//             text: 'OK',
-//             onPress: () => BackHandler.exitApp()
-//         }, ], {
-//             cancelable: false
-//         }
-//      )
-//      return true;
-//    }
+  //       //Adding BackButton Exit Event
+  //   componentDidMount() {
+  //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+  // }
+  // handleBackButton(){
+  //            Alert.alert(
+  //         'Exit App',
+  //         'Exiting the application?', [{
+  //             text: 'Cancel',
+  //             onPress: () => console.log('Cancel Pressed'),
+  //             style: 'cancel'
+  //         }, {
+  //             text: 'OK',
+  //             onPress: () => BackHandler.exitApp()
+  //         }, ], {
+  //             cancelable: false
+  //         }
+  //      )
+  //      return true;
+  //    }
 
 
   render() {
@@ -123,11 +116,6 @@ handleBackButton(){
 
           <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Signup')}>
             <Text style={styles.loginText}>Sign UP</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Profile')}>
-            {/* <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}> */}
-            <Text>Profile</Text>
           </TouchableHighlight>
         </View>
 

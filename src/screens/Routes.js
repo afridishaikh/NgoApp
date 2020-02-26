@@ -29,7 +29,7 @@ const AppNavigator = createStackNavigator({
     Login1: {
         screen: Login1,
     },
-    First: {
+    Login: {
         screen: Login,
     },
     Signup: {
@@ -39,7 +39,6 @@ const AppNavigator = createStackNavigator({
     {
         screen: Profile,
     },
-
     Home: { screen: Home },
     Request: { screen: Request },
     List: { screen: List }
@@ -51,39 +50,6 @@ const AppNavigator = createStackNavigator({
         headerMode: 'none'
     })
 
-
-
-
-//     FirstScreen:
-//     {
-//       screen:First,
-//       navigationOptions:{
-//         intialRoute:First,
-//         // title:'splash',
-//         headerShown:false
-//       }
-//     },
-//     Second:{
-//         screen:Second,
-//         navigationOptions:{
-//           // title:'splash',
-//           headerShown:false
-//       },
-//     },
-//       ThirdScreen:{
-//        screen:Login,
-//         navigationOptions:{
-//           // title:'splash',
-//           headerShown:false
-
-//       },
-//     },
-//     example:{
-//         screen: Example,
-//     }
-
-
-//   });
 const AppContainer = createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({

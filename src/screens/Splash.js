@@ -22,7 +22,7 @@ export default class Splash extends Component {
 
   componentDidMount() {
     var that = this;
-    setTimeout(() => { this.props.navigation.navigate("Login1") }, 100);
+    setTimeout(() => { this.props.navigation.navigate("Login1") }, 2000);
   }
 
   render() {

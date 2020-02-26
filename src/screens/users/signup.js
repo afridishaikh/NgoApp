@@ -33,10 +33,7 @@ export default class LoginView extends Component {
     const { TextInputPassword } = this.state;
 
     //The connection And Insert
-
-
     fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
-
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -55,32 +52,32 @@ export default class LoginView extends Component {
       }).catch((error) => {
         console.error(error);
       });
-              // }).then((response) => response.json())
-              // .then((responseJson) => {
-              //   if(responseJson==='Register Successfully')
-              //   {
-              //   //ToastAndroid.show(responseJson);
-              //   Alert.alert('sucess');
-              //   this.props.navigation.push("login");   }
-              //   else{
-              //     Alert.alert('Error');
-              //   }  
-              // }).catch((error) => {
-              //   console.error(error);
-              // });
+    // }).then((response) => response.json())
+    // .then((responseJson) => {
+    //   if(responseJson==='Register Successfully')
+    //   {
+    //   //ToastAndroid.show(responseJson);
+    //   Alert.alert('sucess');
+    //   this.props.navigation.push("login");   }
+    //   else{
+    //     Alert.alert('Error');
+    //   }  
+    // }).catch((error) => {
+    //   console.error(error);
+    // });
   }
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView>
-        
           <View style={styles.inputContainer}>
             <TextInput style={styles.inputs}
               placeholder="Enter Name"
               underlineColorAndroid='transparent'
-              onChangeText={TextInputName => this.setState({ TextInputName })}/>
+              onChangeText={TextInputName => this.setState({ TextInputName })} />
           </View>
+
           <View style={styles.inputContainer}>
             <TextInput style={styles.inputs}
               keyboardType="numeric"
@@ -95,23 +92,24 @@ export default class LoginView extends Component {
               keyboardType="email-address"
               underlineColorAndroid='transparent'
               placeholder="Enter Email"
-              onChangeText={TextInputEmail => this.setState({ TextInputEmail })}/>
+              onChangeText={TextInputEmail => this.setState({ TextInputEmail })} />
           </View>
+
           <View style={styles.inputContainer}>
             <TextInput style={styles.inputs}
               underlineColorAndroid='transparent'
               placeholder="Select Username"
               onChangeText={TextInputUsername => this.setState({ TextInputUsername })} />
           </View>
+
           <View style={styles.inputContainer}>
             <TextInput style={styles.inputs}
               underlineColorAndroid='transparent'
               placeholder="Enter Password"
               secureTextEntry={true}
-              onChangeText={TextInputPassword => this.setState({ TextInputPassword })}/>
-
+              onChangeText={TextInputPassword => this.setState({ TextInputPassword })} />
           </View>
-  
+
           <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
             <Text style={styles.loginText}>Signup</Text>
           </TouchableHighlight>
@@ -120,13 +118,8 @@ export default class LoginView extends Component {
             <Text>Forgot your password?</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-            <Text>Register</Text>
-          </TouchableHighlight>
-      
         </ScrollView>
       </View>
-
 
     );
   }

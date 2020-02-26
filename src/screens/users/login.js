@@ -87,8 +87,6 @@ class Login extends Component {
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 
-        
-
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
           <Text>Forgot your password?</Text>
         </TouchableHighlight>
@@ -98,7 +96,6 @@ class Login extends Component {
         </TouchableHighlight>
 
          <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Profile')}>
-        {/* <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}> */}
           <Text>Profile</Text>
         </TouchableHighlight>
         </View>
