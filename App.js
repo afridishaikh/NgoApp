@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-// import Routes from './src/screens/Routes'
-//  import Upload from './backupfiles/Try/upload'
-  import Fetch from './backupfiles/Try/fetch'
+ import Routes from './src/screens/Routes'
+  import Signup from './src/screens/Users/n_signup'
 export class App extends Component {
   render() {
-    // return <Upload/>
-    // return <Routes />
-     return <Fetch/>
+  
+        return <Routes />
+        // return <Signup/>
+
   }
 }
 export default App

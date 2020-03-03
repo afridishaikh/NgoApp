@@ -33,7 +33,9 @@ export default class LoginView extends Component {
     const { TextInputPassword } = this.state;
 
     //The connection And Insert
-    fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
+    // fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
+      fetch('https://ngoapp.000webhostapp.com/ngoapp/signup.php', {
+    
       method: 'POST',
       headers: {
         'Accept': 'application/json',
