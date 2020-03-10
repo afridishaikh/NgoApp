@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler} from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
 import Slider from './slider'
 
 
@@ -15,6 +15,7 @@ handleBackButton(){
     return (
 
       <View style={styles.container}>
+        <ImageBackground source={require('../../assets/bg.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}>
         <View style={styles.slider}>
           <Slider />
         </View>
@@ -36,7 +37,9 @@ handleBackButton(){
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
           <Text style={styles.loginText}>Donate to NGO</Text>
         </TouchableHighlight>
-      </View>
+        </ImageBackground>
+        </View>
+    
 
     );
   }

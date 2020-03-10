@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
- import Routes from './src/screens/Routes'
-  import Signup from './src/screens/Users/n_signup'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Routes from './src/screens/Routes'
+import Signup from './src/screens/Users/n_signup'
+import Modal from './backupfiles/Try/Modal'
+import Call from './backupfiles/Try/call'
+import Ui from './backupfiles/Try/UI'
 export class App extends Component {
   render() {
-  
-        return <Routes />
-        // return <Signup/>
+    return <Routes />
+    // return <Modal />
 
+    //  return <Call/>
+    // return <Ui/>
   }
 }
 export default App
@@ -177,8 +182,3 @@ export default App
 
 // //make this component available to the app
 // export default App;
-
-
-
-
-

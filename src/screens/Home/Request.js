@@ -1,431 +1,290 @@
 import React, { Component } from 'react';
-import { Dropdown } from 'react-native-material-dropdown'
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    Button,
+    TouchableHighlight,
+    Image,
+    Alert,
+    ScrollView,
+    TouchableOpacity,
+    PixelRatio,
+    ImageBackground,
+    Platform,
+} from 'react-native';
+import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-// import ScrollView from 'react-native-gesture-handler' 
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  TouchableHighlight,
-  Image,
-  Alert,
-  ScrollView,
-  PixelRatio,
-  TouchableOpacity
-} from 'react-native';
-// import { black } from 'react-native-paper/lib/typescript/src/styles/colors';
 
-// const { navigate } = this.props.navigation;
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 export default class LoginView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            ImageSource: null,
+            data: null,
 
-  constructor(props) {
-    super(props);
-    this.state = {
-  
-      problem:'',
-      photo:'',
-      location:'',
-      address:'',
-      mo_no:''
-      // ImageSource: null,
-      // data: null,
-      // Image_TAG: ''
+            Problem: '',
+            Location: '',
+            Address: '',
+            Mo_no: '',
+        }
     }
-  }
+    selectPhotoTapped() {
+        const options = {
+            quality: 1.0,
+            maxWidth: 500,
+            maxHeight: 500,
+            storageOptions: {
+                skipBackup: true
+            }
+        }
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+            if (response.didCancel) {
+                console.log('User cancelled photo picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                let source = { uri: response.uri };
 
-
-  selectPhotoTapped() {
-    const options = {
-      quality: 1.0,
-      maxWidth: 500,
-      maxHeight: 500,
-      storageOptions: {
-        skipBackup: true
-      }
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled photo picker');
-      }
-      else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      }
-      else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      }
-      else {
-        let source = { uri: response.uri };
-
-        this.setState({
-
-          ImageSource: source,
-          data: response.data
-
+                this.setState({
+                    ImageSource: source,
+                    data: response.data
+                });
+            }
         });
-      }
-    });
-  }
-
-
-  InsertDataToServer = () => {
-    const { problem } = this.state;
-    const { photo } = this.state;
-    const { location } = this.state;
-    const { address } = this.state;
-    const { mo_no } = this.state;
+    }
+    InsertDataToServer = () => {
 
 
 
-    //The connection And Insert
-    fetch('http://192.168.42.250/ngoapp/request.php', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        problem:problem,
-        photo:photo,
-        location:location,
-        address:address,
-        mo_no:mo_no,
 
-      })
-    }).then((response) => response.json())
-      .then((responseJson) => {
-        Alert.alert(responseJson);
-      }).catch((error) => {
-        console.error(error);
-      });
-    // }).then((response) => response.json())
-    // .then((responseJson) => {
-    //   if(responseJson==='Register Successfully')
-    //   {
-    //   //ToastAndroid.show(responseJson);
-    //   Alert.alert('sucess');
-    //   this.props.navigation.push("login");   }
-    //   else{
-    //     Alert.alert('Error');
-    //   }  
-    // }).catch((error) => {
-    //   console.error(error);
-    // });
-  }
+        // RNFetchBlob.fetch('POST', 'https://ngoapp.000webhostapp.com/ngoapp/n_signup.php', {
+            RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/request.php', {
+           
+            Authorization: "Bearer access-token",
+            otherHeader: "foo",
+            'Content-Type': 'multipart/form-data',
+        }, [
+            { name: 'problem', data: this.state.Problem },
+            { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data },
+            { name: 'location', data: this.state.Location },
+            { name: 'address', data: this.state.Address },
+            { name: 'mo_no', data: this.state.Mo_no },
 
-  render() {
-    let data = [{
-      value: 'Food',
-    }, {
-      value: 'Health',
-    }, {
-      value: 'Blood',
-    }];
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.Dropdown}>
-            <Dropdown
-              label='Select A Problem'
-              data={data}
-            />
-          </View>
+        ]).then((resp) => {
+            var tempMSG = resp.data;
+            tempMSG = tempMSG.replace(/^"|"$/g, '');
+            Alert.alert(tempMSG);
+        }).catch((error) => {
+            console.error(error);
+        });
 
-          <View style={styles.MainContainer}>
-            <ScrollView horizontal={true}>
-              <View style={styles.columes} >
-                <View style={styles.rows}>
-                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+    }
 
-                    <View style={styles.ImageContainer}>
 
-                      {this.state.ImageSource === null ? <Text> Select a Photo </Text> :
-                        <Image style={styles.ImageContainer} source={this.state.ImageSource} />
-                      }
+    render() {
 
+        let Problem = [{
+            value: 'Food',
+        }, {
+            value: 'Health',
+        }, {
+            value: 'Clothes',
+        }, {
+            value: 'Poverty',
+        }, {
+            value: 'Blood'
+        }];
+
+
+        return (
+            <View style={styles.container}>
+                <ScrollView  showsVerticalScrollIndicator={false} >
+
+                <View style={styles.Dropdown}>
+                    <Dropdown
+                        label='Choose Problem'
+                        data={Problem}
+                        onChangeText={Problem => this.setState({ Problem })}
+                    />
                     </View>
 
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
-          </View>
+                    <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                        <View style={styles.ImageContainer}>
+                            <Icon style={styles.Icon} name="camera" size={50} color="#000" />
+                            {this.state.ImageSource === null ? <Text>Choose A Photo</Text> :
+                                <Image style={styles.ImageContainer} source={this.state.ImageSource} />
+                            }
+                        </View>
+                    </TouchableOpacity>
 
-          <Text> Location </Text>
+                    <View style={styles.inputContainer}>
+                        <Icon style={styles.Icon} name="pencil" size={25} color="#000" />
+                        <TextInput style={styles.inputs}
+                            inlineImageLeft='username'
+                            inlineImagePadding={2}
+                            underlineColorAndroid='transparent'
+                            placeholder="Location"
+                            underlineColorAndroid='transparent'
+                            onChangeText={Location => this.setState({ Location })} />
+                    </View>
 
-          {/* <View style={styles.inputContainer}>
-            <TextInput style={styles.inputs}
-              placeholder="NGO Name "
-              underlineColorAndroid='transparent'
-              onChangeText={TextInputNName => this.setState({ TextInputNName })}/>
-          </View> */}
+         
 
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.inputs}
-              underlineColorAndroid='transparent'
-              placeholder="Enter Address"
-              // secureTextEntry={true}
-              onChangeText={ address => this.setState({ address })} />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.inputs}
-              placeholder="Mobile Number "
-              underlineColorAndroid='transparent'
-              onChangeText={Mo_no => this.setState({ Mo_no })} />
-          </View>
-
-
-          <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
-            <Text style={styles.loginText}>Post A Request</Text>
-          </TouchableHighlight>
-
-        </ScrollView>
-      </View>
+                    <View style={styles.inputContainer}>
+                        <Icon style={styles.Icon} name="map-marker" size={25} color="#000" />
+                        <TextInput style={styles.inputs}
+                            placeholder="Address"
+                            keyboardType="email-address"
+                            underlineColorAndroid='transparent'
+                            onChangeText={Address => this.setState({ Address })} />
+                    </View>
 
 
 
-    );
-  }
+    
+
+                    <View style={styles.inputContainer}>
+                        <Icon style={styles.Icon} name="mobile" size={30} color="#000" />
+                        <TextInput style={styles.inputs}
+                            keyboardType="numeric"
+                            underlineColorAndroid='transparent'
+                            placeholder="Mobile Number"
+                            onChangeText={Mo_no => this.setState({ Mo_no })} />
+                    </View>
+
+
+
+
+    
+
+                    <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
+                        <Text style={styles.loginText}>Post A Request</Text>
+                    </TouchableHighlight>
+                </ScrollView>
+            </View>
+
+        );
+    }
 }
-// export default Request
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    container: {
+        flex: 1,
+        padding:20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFF8E1',
+    },
+    inputContainer: {
+        width: 300,
+        height: 50,
+        marginBottom: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomColor:'black',
+        // backgroundColor:'grey',
+        borderColor: 'purple',
+        borderWidth: 2,
+        borderRadius: 23,  
+    },
+    Dropdown: {
+        height: 60,
+        justifyContent: 'center',
+        borderColor: 'purple',
+        borderBottomColor:'black',
+        borderWidth: 2,
+        borderRadius: 23,
+        padding:10
+    },
+    Icon: {
+        padding: 15,
+    },
+    inputs: {
+        flex: 1,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingLeft: 0,
+        justifyContent:'center',
+        color:'blue',
+        // fontFamily:'arial',
+        alignContent:"center",
+    },
 
+    ImageContainer: {
+        borderRadius: 10,
+        width: 300,
+        height: 250,
+        borderColor: '#9B9B9B',
+        borderWidth: 10 / PixelRatio.get(),
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#3641',
+        marginTop: 20,
+        marginBottom: 25
+    },
 
-  },
+    TextInputStyle: {
+        textAlign: 'center',
+        height: 40,
+        width: '80%',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#028b53',
+        marginTop: 20
+    },
 
-  ImageContainer: {
-    borderRadius: 10,
-    width: 180,
-    height: 180,
-    // borderColor: '#9B9B9B',
-    borderWidth: 1 / PixelRatio.get(),
+    button: {
 
-    justifyContent: 'center',
-    // alignItems: 'center',
-    backgroundColor: 'white',
+        width: '80%',
+        backgroundColor: '#00BCD4',
+        borderRadius: 7,
+        marginTop: 20
+    },
 
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 30,
-    borderBottomWidth: 1,
-    width: 250,
-    height: 45,
-    margin: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
+    TextStyle: {
+        color: '#fff',
+        textAlign: 'center',
+        padding: 10
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#DCDCDC',
+    },
+  
+    inputIcon: {
+        width: 30,
+        height: 30,
+        marginLeft: 15,
+        justifyContent: 'center'
+    },
+    buttonContainer: {
+        height: 45,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+        width: 250,
+        borderRadius: 30,
+    },
+    loginButton: {
+        backgroundColor: 'red'// "#00b5ec",
+    },
+    loginText: {
+        color: 'white',
+    }
 
-
-  },
-  inputs: {
-    height: 45,
-    marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
-    flex: 1,
-  },
-  inputIcon: {
-    width: 30,
-    height: 30,
-    marginLeft: 15,
-    justifyContent: 'center'
-  },
-  buttonContainer: {
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-  },
-  loginButton: {
-    backgroundColor: "#00b",
-  },
-  loginText: {
-    color: 'white',
-  },
-  Dropdown: {
-    // color:'green',
-    justifyContent: 'center',
-    padding: 10,
-    // color:'black',
-    // backgroundColor: '#FFFFFF',
-
-  },
-});
-
-// import React, { Component } from 'react'
-// import { Text, View ,StyleSheet,styles} from 'react-native'
-// import {Dropdown} from  'react-native-material-dropdown'
-// // import reactNativeModalDropdown from 'react-native-modal-dropdown'
-// export class Request extends Component {
-//   render() {
-//     let data=[{
-//     value:'Anand',
-//   },{
-//     value:'Borsad',
-//   },{ 
-//     value:'Surat',
-//   }];
-
-//     return (
-
-
-//         <Dropdown 
-//         label='Select City'
-//         data={data}
-//         />
-
-//     );
-//   }
-// }
-// export default Request 
-
-
-// import React, { Component } from 'react';
-// import {
-//   StyleSheet,
-//   Text,
-//   View,
-//   TextInput,
-//   Button,
-//   TouchableHighlight,
-//   Image,
-//   Alert,
-//   ScrollView
-// } from 'react-native';
-// import {Dropdown} from  'react-native-material-dropdown'
-
-// // const { navigate } = this.props.navigation;
-// export default class LoginView extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       name: '',
-//       username: '',
-//       mo_no: '',
-//       address: '',
-//       city: '',
-//       password: '',
-//     }
-//   }
-//   onClickListener = (viewId) => {
-//     Alert.alert("Alert", "Button pressed " + viewId);
-//   }
-
-
-//   render() {
-//     let data=[{
-//       value:'Food',
-//     },{
-//       value:'Clothes',
-//     },{ 
-//       value:'Blood',
-//     },
-//   ];
-
-//     return (
-//       //  <View style={styles.container}>
-
-//          <ScrollView>
-
-
-//       <Dropdown
-//       //  textColor="red"
-//        itemColor="blue"
-//        dropdownPosition="2"
-//             label='Select A Problem'
-//             data={data}
-//           />
-
-
-//         </ScrollView>
-//       // </View>
-
-//       <View style={styles.inputContainer}>
-//       <TextInput style={styles.inputs}
-//         underlineColorAndroid='transparent'
-//         placeholder="Enter Address"
-//         // secureTextEntry={true}
-//         onChangeText={TextInputAddress => this.setState({ TextInputAddress })}/>
-
-//     </View>
-
-//    <View style={styles.Dropdown}>
-//     <Dropdown 
-//       label='Select City'
-//       data={data}
-//     />
-// </View>
-
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#DCDCDC',
-//   },
-//   inputContainer: {
-//     borderBottomColor: '#F5FCFF',
-//     backgroundColor: '#FFFFFF',
-//     borderRadius: 30,
-//     borderBottomWidth: 1,
-//     width: 250,
-//     height: 45,
-//     marginBottom: 20,
-//     flexDirection: 'row',
-//     alignItems: 'center'
-//   },
-//   inputs: {
-//     height: 45,
-//     marginLeft: 16,
-//     borderBottomColor: '#FFFFFF',
-//     flex: 1,
-//   },
-//   inputIcon: {
-//     width: 30,
-//     height: 30,
-//     marginLeft: 15,
-//     justifyContent: 'center'
-//   },
-//   buttonContainer: {
-//     height: 45,
-//     flexDirection: 'row',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     marginBottom: 20,
-//     width: 250,
-//     borderRadius: 30,
-//   },
-//   loginButton: {
-//     backgroundColor: 'red'// "#00b5ec",
-//   },
-//   loginText: {
-//     color: 'white',
-//   },
-//   Dropdown:{
-//     color:'green',
-//     justifyContent: 'center',
-//     padding:10,
-//     // color:'black',
-//     // backgroundColor: '#FFFFFF',
-
-// },  
-// });
+  });

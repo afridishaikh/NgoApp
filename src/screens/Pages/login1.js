@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Image, TextInput, TouchableHighlight, Alert, ImageBackground } from 'react-native';
 import { BackHandler } from 'react-native';
 
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 class Login extends Component {
   constructor(props) {
     super(props)
@@ -11,7 +11,7 @@ class Login extends Component {
       password: ''
     }
   }
-UserLoginFunction = () => {
+  UserLoginFunction = () => {
     const { username } = this.state;
     const { password } = this.state;
 
@@ -50,28 +50,6 @@ UserLoginFunction = () => {
     BackHandler.exitApp();
   }
 
-  //       //Adding BackButton Exit Event
-  //   componentDidMount() {
-  //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-  // }
-  // handleBackButton(){
-  //            Alert.alert(
-  //         'Exit App',
-  //         'Exiting the application?', [{
-  //             text: 'Cancel',
-  //             onPress: () => console.log('Cancel Pressed'),
-  //             style: 'cancel'
-  //         }, {
-  //             text: 'OK',
-  //             onPress: () => BackHandler.exitApp()
-  //         }, ], {
-  //             cancelable: false
-  //         }
-  //      )
-  //      return true;
-  //    }
-
-
   render() {
     return (
       // <View style={styes.imagecontainer}>
@@ -80,14 +58,28 @@ UserLoginFunction = () => {
       //   {this.props.children}
       // </View>
 
+
       <View style={styles.container}>
-        <Text style={{ color: '#121456', fontSize: 25, textDecorationLine: 'underline' }}
-          onPress={() => this.props.navigation.push('TabNavigator')}>Skip
-             </Text>
+
+<TouchableHighlight style={[{    height: 30,
+    flexDirection: 'row-reverse',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginBottom: 20,
+    width: 70,
+    borderRadius: 30,}, styles.loginButton]} onPress={() => this.props.navigation.navigate('TabNavigator')}>
+            <Text style={styles.loginText}>Skip</Text>
+          </TouchableHighlight>
+
+         {/* <Text style={{ color: '#121456', fontSize: 25, textDecorationLine: 'underline' }}
+           onPress={() => this.props.navigation.navigate('TabNavigator')}>Skip
+         </Text> */}
+
         {/* <ImageBackground source={require('../../assets/images/bg.jpg')} style={{width: '100%', height: '100%'}}> */}
+      
         <View style={styles.container}>
           <View style={styles.inputContainer}>
-            <Image style={styles.inputIcon} source={require('../../assets/icons/user.png')} />
+            <Icon style={styles.Icon} name="user" size={25} color="#000" />
             <TextInput style={styles.inputs}
               placeholder="Username"
               keyboardType="email-address"
@@ -96,7 +88,7 @@ UserLoginFunction = () => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Image style={styles.inputIcon} source={{ uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db' }} />
+            <Icon style={styles.Icon} name="lock" size={25} color="#000" />
             <TextInput style={styles.inputs}
               placeholder="Password"
               secureTextEntry={true}
@@ -107,8 +99,6 @@ UserLoginFunction = () => {
           <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.UserLoginFunction}>
             <Text style={styles.loginText}>Login</Text>
           </TouchableHighlight>
-
-
 
           <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
             <Text>Forgot your password?</Text>
@@ -123,7 +113,6 @@ UserLoginFunction = () => {
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -142,6 +131,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  Icon: {
+    padding: 15,
   },
   inputs: {
     height: 45,
@@ -174,5 +166,4 @@ const styles = StyleSheet.create({
     color: 'white',
   }
 });
-
 export default Login;
