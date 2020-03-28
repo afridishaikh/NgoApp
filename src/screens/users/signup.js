@@ -11,6 +11,8 @@ import {
   ScrollView
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 // const { navigate } = this.props.navigation;
 export default class LoginView extends Component {
 
@@ -72,8 +74,8 @@ export default class LoginView extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView>
           <View style={styles.inputContainer}>
+          <Icon style={styles.Icon} name="pencil" size={25} color="grey" />
             <TextInput style={styles.inputs}
               placeholder="Enter Name"
               underlineColorAndroid='transparent'
@@ -81,6 +83,7 @@ export default class LoginView extends Component {
           </View>
 
           <View style={styles.inputContainer}>
+          <Icon style={styles.Icon} name="mobile" size={35} color="grey" />
             <TextInput style={styles.inputs}
               keyboardType="numeric"
               underlineColorAndroid='transparent'
@@ -89,6 +92,7 @@ export default class LoginView extends Component {
           </View>
 
           <View style={styles.inputContainer}>
+          <Icon style={styles.Icon} name="envelope" size={22} color="grey" />
             <TextInput style={styles.inputs}
               placeholder="Mobile Number"
               keyboardType="email-address"
@@ -98,6 +102,7 @@ export default class LoginView extends Component {
           </View>
 
           <View style={styles.inputContainer}>
+          <Icon style={styles.Icon} name="user" size={25} color="grey" />
             <TextInput style={styles.inputs}
               underlineColorAndroid='transparent'
               placeholder="Select Username"
@@ -105,6 +110,7 @@ export default class LoginView extends Component {
           </View>
 
           <View style={styles.inputContainer}>
+          <Icon style={styles.Icon} name="lock" size={25} color="grey" />
             <TextInput style={styles.inputs}
               underlineColorAndroid='transparent'
               placeholder="Enter Password"
@@ -115,35 +121,35 @@ export default class LoginView extends Component {
           <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
             <Text style={styles.loginText}>Signup</Text>
           </TouchableHighlight>
-
-          <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-            <Text>Forgot your password?</Text>
-          </TouchableHighlight>
-
-        </ScrollView>
       </View>
 
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // marginTop:80,
+    justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: '#DCDCDC',
+
+    // backgroundColor: '#DCDCDC',
   },
   inputContainer: {
-    borderBottomColor: '#F5FCFF',
+    // borderBottomColor: '#F5FCFF',
     backgroundColor: '#FFFFFF',
     borderRadius: 30,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     width: 250,
     height: 45,
     marginBottom: 20,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'black'
+  },
+  Icon: {
+    padding: 15,
   },
   inputs: {
     height: 45,
@@ -167,7 +173,31 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   loginButton: {
-    backgroundColor: 'red'// "#00b5ec",
+    width:150,
+ backgroundColor: "#980953",
+    borderWidth: 2,
+    borderColor: '#000'
+  },
+  SkipButton: {
+    height: 37,
+    marginTop: 30,
+    marginRight: '70%',
+    flexDirection: 'row-reverse',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    borderRadius: 30,
+    opacity:20,
+    backgroundColor: '#980953',
+    borderWidth: 2,
+    borderColor: 'black',
+    
+  },
+  signupButton: {
+    width:150,
+    backgroundColor: "skyblue",
+    borderWidth: 2,
+    borderColor: 'black'
   },
   loginText: {
     color: 'white',

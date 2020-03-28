@@ -33,19 +33,17 @@ class Login extends Component {
       })
     }).then((response) => response.json())
       .then((responseJson) => {
-        // this.props.navigation.push('Menu');
+        // this.props.navigation.push('Profile');
         // this.props.navigation('Menu');
         // If server response message same as Data Matched
-        if (responseJson != 'Data Matched') {
+        if (responseJson === 'Login Success') {
           // ToastAndroid.show('Login Successfull' ,ToastAndroid.SHORT);
           //Then open Profile activity and send user email to profile activity.
-          Alert.alert(responseJson);
-          // Alert.alert('success');
-        
+          Alert.alert('success');
+          this.props.navigation.push('Ntabs');
         }
         else {
-      
-          this.props.navigation.push('NHome');
+          Alert.alert(responseJson);
         }
       }).catch((error) => {
         console.error(error);
@@ -87,7 +85,9 @@ class Login extends Component {
             <Text>Forgot your password?</Text>
           </TouchableHighlight>
 
-
+          <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Nsignup')}>
+              <Text style={{ color: 'black', fontWeight: 'bold' }}>Sign Up</Text>
+            </TouchableHighlight>
         </View>
 
 
@@ -100,30 +100,35 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
   container: {
+
     flex: 1,
-    justifyContent: 'center',
+    // marginTop:80,
+    justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: '#DCDCDC',
+
+    // backgroundColor: '#DCDCDC',
   },
   inputContainer: {
-    borderBottomColor: '#F5FCFF',
+    // borderBottomColor: '#F5FCFF',
     backgroundColor: '#FFFFFF',
     borderRadius: 30,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     width: 250,
     height: 45,
     marginBottom: 20,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'black'
+  },
+  Icon: {
+    padding: 15,
   },
   inputs: {
     height: 45,
     marginLeft: 16,
     borderBottomColor: '#FFFFFF',
     flex: 1,
-  },
-  Icon: {
-    padding: 15,
   },
   inputIcon: {
     width: 30,
@@ -141,14 +146,34 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   loginButton: {
-    backgroundColor: "#00b5ec",
+    width:150,
+ backgroundColor: "#980953",
+    borderWidth: 2,
+    borderColor: '#000'
+  },
+  SkipButton: {
+    height: 37,
+    marginTop: 30,
+    marginRight: '70%',
+    flexDirection: 'row-reverse',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    borderRadius: 30,
+    opacity:20,
+    backgroundColor: '#980953',
+    borderWidth: 2,
+    borderColor: 'black',
+    
   },
   signupButton: {
-    backgroundColor: "#980953",
+    width:150,
+    backgroundColor: "skyblue",
+    borderWidth: 2,
+    borderColor: 'black'
   },
   loginText: {
     color: 'white',
   }
 });
-
 export default Login;

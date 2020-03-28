@@ -16,18 +16,18 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 //Import all the screens for Drawer
-import TabNavigator from './TabNavigator';
+import Utabs from '../Pages/UTabs'
+import Home from '../Home/Home'
 import Screen3 from './screen3';
 import Login1 from './login1';
-
-
-// ComponentWillMount(){
-//   BackHandler.addEventListener('hardwareBackPress', function(){
-//     return true;
-//   });
-// }
-
-
+import Ntabs from '../Pages/NTabs'
+import Nlogin from '../Users/n_login'
+import Login from '../Users/login'
+import Nsignup from '../Users/n_signup'
+import Signup from '../Users/signup'
+import Request from '../Home/Request'
+import List from '../Home/List'
+import Gallery from '../Home/Gallery'
 //Navigation Drawer Structure for all screen
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
@@ -35,21 +35,12 @@ class NavigationDrawerStructure extends Component {
     //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
   };
-  // ComponentWillMount() {
-  //   BackHandler.addEventListener('hardwareBackPress', function () {
-  //     return true;
-  //   }
-  //   );
-  // }
+
   render() {
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-          {/* <Image
-            source={require('../../assets/icons/drawer.png')}
-            style={{ width: 30, height: 30, marginLeft: 5 }}
-          /> */}
-           <Icon name="bars" style={styles.Icon} size={25} color="#fff" />
+          <Icon name="bars" style={styles.Icon} size={25} color="#fff" />
         </TouchableOpacity>
       </View>
     );
@@ -60,10 +51,9 @@ class NavigationDrawerStructure extends Component {
 const FirstActivity_StackNavigator = createStackNavigator({
   //All the screen from the Screen1 will be indexed here
   First: {
-    screen: TabNavigator,
+    screen: Home,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-
       title: 'NGO App',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
@@ -74,17 +64,73 @@ const FirstActivity_StackNavigator = createStackNavigator({
       headerTintColor: "white",
     }),
   },
+  Second: {
+    screen: Utabs,
+    navigationOptions: ({ navigation }) => ({
+      // header: null,
+      title: 'NGO App',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#694fad',
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerTintColor: "white",
+    }),
+  },
+  Login: {
+    screen: Login,
+    // headerStyle: {
+    //   backgroundColor: '#694fad',
+    //   shadowOpacity: 0,
+    //   elevation: 0,
+    // },
+    // headerTintColor: "yellow",
+  },
+  Nlogin: {
+    screen: Nlogin,
+  },
+  Ntabs: {
+    screen: Ntabs,
+    navigationOptions: ({ navigation }) => ({
+      // header: null,
+      title: 'NGO App',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#694fad',
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerTintColor: "white",
+    }),
+  },
+  Nsignup: {
+    screen: Nsignup,
+},
+Signup: {
+  screen: Signup,
+},
+Request:{
+  screen: Request,
+},
+List:{
+  screen: List,
+},
+Gallery:{
+  screen: Gallery,
+},
 });
+
+
 
 //Stack Navigator for Second Option of Navigation Drawer
 const Screen2_StackNavigator = createStackNavigator({
   //All the screen from the Screen2 will be indexed here
   Second: {
-    screen: Screen3,
+    screen: Login1,
     navigationOptions: ({ navigation }) => ({
-      title: 'Demo Screen 2',
+      title: 'Login As NGO',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-
       headerStyle: {
         backgroundColor: '#FF9800',
       },
@@ -93,11 +139,13 @@ const Screen2_StackNavigator = createStackNavigator({
   },
 });
 
+
+
 //Stack Navigator for Third Option of Navigation Drawer
 const Screen3_StackNavigator = createStackNavigator({
   //All the screen from the Screen3 will be indexed here
   Third: {
-    screen: Screen3,
+    screen: Login1,
     navigationOptions: ({ navigation }) => ({
       title: 'Demo Screen 3',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
@@ -125,7 +173,7 @@ const DrawerNavigator = createDrawerNavigator({
     //Title
     screen: Screen2_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'About Us',
+      drawerLabel: 'Login As NGO',
       drawerIcon: ({ tintColor }) => <Icon style={[{ color: tintColor }]} size={25} name={'user'} />
     },
   },
@@ -134,7 +182,7 @@ const DrawerNavigator = createDrawerNavigator({
     //Title
     screen: Screen3_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'Option 3',
+      drawerLabel: 'About Us',
     },
   },
 });
@@ -142,9 +190,9 @@ export default createAppContainer(DrawerNavigator);
 
 
 const styles = StyleSheet.create({
-  header:{
+  header: {
     backgroundColor: "#00BFFF",
-    height:200,
+    height: 200,
   },
   avatar: {
     width: 130,
@@ -152,52 +200,52 @@ const styles = StyleSheet.create({
     borderRadius: 63,
     borderWidth: 4,
     borderColor: "white",
-    marginBottom:10,
-    alignSelf:'center',
+    marginBottom: 10,
+    alignSelf: 'center',
     position: 'absolute',
-    marginTop:130
+    marginTop: 130
   },
-  Icon:{
-    paddingLeft:10
+  Icon: {
+    paddingLeft: 10
   },
-  name:{
-    fontSize:22,
-    color:"#FFFFFF",
-    fontWeight:'600',
+  name: {
+    fontSize: 22,
+    color: "#FFFFFF",
+    fontWeight: '600',
   },
-  body:{
-    marginTop:40,
+  body: {
+    marginTop: 40,
   },
   bodyContent: {
     flex: 1,
     alignItems: 'center',
-    padding:30,
+    padding: 30,
   },
-  name:{
-    fontSize:28,
+  name: {
+    fontSize: 28,
     color: "#696969",
     fontWeight: "600"
   },
-  info:{
-    fontSize:16,
+  info: {
+    fontSize: 16,
     color: "#00BFFF",
-    marginTop:10
+    marginTop: 10
   },
-  description:{
-    fontSize:16,
+  description: {
+    fontSize: 16,
     color: "#696969",
-    marginTop:10,
+    marginTop: 10,
     textAlign: 'center'
   },
   buttonContainer: {
-    marginTop:10,
-    height:45,
+    marginTop: 10,
+    height: 45,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom:20,
-    width:250,
-    borderRadius:30,
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30,
     backgroundColor: "#00BFFF",
   },
 });

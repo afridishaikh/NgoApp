@@ -7,16 +7,12 @@ import Splash from './Splash';
 import Drawer from './Pages/Drawer';
 import Login1 from './Pages/login1';
 import Login from './Users/login';
-// import Signup from './Users/signup'
+import Signup from './Users/signup'
 import Profile from './Users/Profile';
 import Home from './Home/Home';
-// import Request from './Home/Request';
+import Request from './Home/Request';
 import List from './Home/List'
-import Ntabs from './Pages/NTabs'
-import UHome from './Home/UHome'
-import Utabs from './Pages/UTabs'
-import Nsignup from './Users/n_signup'
-// import Request from './Home/Request'
+import RList from './Home/ReqList'
 
 export default class Routes extends Component {
     render() {
@@ -28,7 +24,7 @@ const AppNavigator = createStackNavigator({
     Splash: {
         screen: Splash
     },
-    Drawer: {
+    TabNavigator: {
         screen: Drawer,
     },
     Login1: {
@@ -37,31 +33,16 @@ const AppNavigator = createStackNavigator({
     Login: {
         screen: Login,
     },
-    // Signup: {
-    //     screen: Signup,
-    // },
+    Signup: {
+        screen: Signup,
+    },
     Profile:
     {
         screen: Profile,
     },
-    Ntabs:
-    {
-        screen: Ntabs,
-    },
-    UHome:
-    {
-        screen: UHome,
-    },
-    Utabs:
-    {
-        screen: Utabs,
-    },
-    // Nsignup: {
-    //     screen: Nsignup,
-    // },
     Home: { screen: Home },
-    // Request: { screen: Request },
-    // Request: { screen: RList }
+    Request: { screen: Request },
+    List: { screen: List }
 },
     //Navigation Options
     {

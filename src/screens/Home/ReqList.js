@@ -1,7 +1,8 @@
 
 import React, { Component } from 'react';
-import { Text, Platform, StyleSheet, View, FlatList, ActivityIndicator, Linking, Image, Modal, TouchableOpacity, BackHandler ,ImageBackground } from 'react-native';
+import { Text, Platform, StyleSheet, View, FlatList, ActivityIndicator, Linking, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 
 export default class App extends Component {
@@ -14,9 +15,11 @@ export default class App extends Component {
       TempImageURL: ''
     }
   }
+
+  
 //Fetching data from server
   componentDidMount() {
-    return fetch('https://ngoapp3219.000webhostapp.com/db/ngo_list.php')
+    return fetch('https://ngoapp3219.000webhostapp.com/db/ReqList.php')
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
@@ -31,15 +34,13 @@ export default class App extends Component {
       });
   }
 // For Modaal Storing and Defining Parameters , which will store the server data 
-  ShowModalFunction(visible, image, name, address, mo_no,category,city) {
+  ShowModalFunction(visible, image, name, address, mo_no) {
     this.setState({
       ModalVisibleStatus: visible,
       Image: image,
       Iname: name,
       Naddress: address,
-      Nmo_no: mo_no,
-      NCategory: category,
-      Ncity : city
+      Nmo_no: mo_no
     });
   }
 
@@ -58,8 +59,6 @@ export default class App extends Component {
     )
   }
 // The loading Circle
-
-
   render() {
     if (this.state.isLoading) {
       return (
@@ -75,15 +74,12 @@ export default class App extends Component {
           data={this.state.dataSource}
           ItemSeparatorComponent={this.renderSeprator}
           renderItem={({ item }) =>
-
-
-            <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.image, item.name, item.address, item.mo_no,item.category,item.city)} >
-
+            <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.image, item.name, item.address, item.mo_no)} >
               <Image style={{ width: 100, height: 100, margin: 5, flexDirection: 'row' }} source={{ uri: item.image }} />
-              <Text style={{ fontSize: 15, color: 'black', }}>Name:
+              <Text style={{ fontSize: 15, color: 'black', }}>Problem:
                          </Text>
               <Text style={{ fontSize: 18, color: 'orange', marginBottom: 15, flexDirection: 'row' }}>
-                {item.name}
+                {item.problem}
               </Text>
             </TouchableOpacity>
           }
@@ -99,9 +95,7 @@ export default class App extends Component {
                 visible={this.state.ModalVisibleStatus}
                 onRequestClose={() => { this.ShowModalFunction(!this.state.ModalVisibleStatus) }} >
                 <View style={styles.modalView}>
-
                   <Image style={styles.mainImage} source={{ uri: this.state.Image }} />
-
                   <TouchableOpacity
                     activeOpacity={0.5}
                     style={styles.TouchableOpacity_Style}
@@ -111,42 +105,27 @@ export default class App extends Component {
 
                 <View style={{ flex: 2 }}>
 
-                  <Text style={styles .modalFont}>Name:
+                  <Text style={{ fontSize: 15, color: 'black', }}>Name:
                          </Text>
-                  <Text style={styles .modalText}>
+                  <Text style={{ fontSize: 18, color: 'blue', marginBottom: 1 }}>
                     {this.state.Iname}
                   </Text>
 
-                  <Text style={styles .modalFont}>Address:
+                  <Text style={{ fontSize: 15, color: 'black', }}>Address:
                          </Text>
-                  <Text style={styles .modalText}>
+                  <Text style={{ fontSize: 18, color: 'orange', marginBottom: 15 }}>
                     {this.state.Naddress}
                   </Text>
 
-                  <Text style={styles .modalFont}>Mobile: </Text>
-                  <Text style={styles .modalText}>
+                  <Text style={{ fontSize: 15, color: 'black', }}>Mobile: </Text>
+                  <Text style={{ fontSize: 18, color: 'orange', marginBottom: 15 }}>
                     {this.state.Nmo_no}
                   </Text>
-
-                  
-                  <Text style={styles .modalFont}>Type Of NGO: </Text>
-                  <Text style={styles .modalText}>
-                    {this.state.NCategory}
-                  </Text>
-
-                  <Text style={styles .modalFont}>City: </Text>
-                  <Text style={styles .modalText}>
-                    {this.state.Ncity}
-                  </Text>
-                
-
                 </View>
-
 
                 <View>
                   <TouchableOpacity onPress={() => { this.dialCall(this.state.Nmo_no) }} activeOpacity={0.7} style={styles.buttonn} >
                   <Icon style={{paddingLeft:50}} name="phone" size={35} color="#fff" />
-                    {/* <Text style={styles.TextStyle}>Call Now</Text> */}
                   </TouchableOpacity>
                 </View>
               </Modal>
@@ -182,6 +161,7 @@ const styles = StyleSheet.create({
   },
 
   mainImage: {
+
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
@@ -197,17 +177,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     backgroundColor: 'black'
+
   },
-  modalFont: {
-    fontSize: 15,
-     color: 'black', 
-    
-  },
-  modalText: {
-    fontSize: 15,
-     color: 'blue',
-     marginBottom: 15 
-  },
+
   TouchableOpacity_Style: {
 
     width: 25,

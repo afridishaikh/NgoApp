@@ -32,7 +32,7 @@ class Login extends Component {
           // ToastAndroid.show('Login Successfull' ,ToastAndroid.SHORT);
           //Then open Profile activity and send user email to profile activity.
           Alert.alert('success');
-          this.props.navigation.push('Profile');
+          this.props.navigation.push('Drawer');
         }
         else {
           Alert.alert(responseJson);
@@ -42,73 +42,69 @@ class Login extends Component {
       });
   }
 
-  //Adding BackButton Exit Event
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-  }
-  handleBackButton() {
-    BackHandler.exitApp();
-  }
+  // //Adding BackButton Exit Event
+  // componentDidMount() {
+  //   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+  // }
+  // handleBackButton() {
+  //   BackHandler.exitApp();
+  // }
 
   render() {
     return (
-      // <View style={styes.imagecontainer}>
-      //   <Image style={styles.bgImage}
-      //   source={this.props.imageSource} />
-      //   {this.props.children}
-      // </View>
+
+
 
 
       <View style={styles.container}>
 
-<TouchableHighlight style={[{    height: 30,
-    flexDirection: 'row-reverse',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // marginBottom: 20,
-    width: 70,
-    borderRadius: 30,}, styles.loginButton]} onPress={() => this.props.navigation.navigate('TabNavigator')}>
+        <ImageBackground source={require('../../assets/bg.jpg')} style={{ width: '100%', height: '100%', alignItems: 'center' }}>
+
+          <TouchableHighlight  style={styles.SkipButton} onPress={() => this.props.navigation.navigate('Drawer')}>
             <Text style={styles.loginText}>Skip</Text>
           </TouchableHighlight>
 
-         {/* <Text style={{ color: '#121456', fontSize: 25, textDecorationLine: 'underline' }}
+          {/* <Text style={{ color: '#121456', fontSize: 25, textDecorationLine: 'underline' }}
            onPress={() => this.props.navigation.navigate('TabNavigator')}>Skip
          </Text> */}
 
-        {/* <ImageBackground source={require('../../assets/images/bg.jpg')} style={{width: '100%', height: '100%'}}> */}
-      
-        <View style={styles.container}>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.Icon} name="user" size={25} color="#000" />
-            <TextInput style={styles.inputs}
-              placeholder="Username"
-              keyboardType="email-address"
-              underlineColorAndroid='transparent'
-              onChangeText={(username) => this.setState({ username })} />
+          {/* <ImageBackground source={require('../../assets/images/bg.jpg')} style={{width: '100%', height: '100%'}}> */}
+
+          <View style={styles.container}>
+            <View style={styles.inputContainer}>
+              <Icon style={styles.Icon} name="user" size={25} color="grey" />
+              <TextInput style={styles.inputs}
+                placeholder="Username"
+                keyboardType="email-address"
+                underlineColorAndroid='transparent'
+                onChangeText={(username) => this.setState({ username })} />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Icon style={styles.Icon} name="lock" size={25} color="grey" />
+              <TextInput style={styles.inputs}
+                placeholder="Password"
+                secureTextEntry={true}
+                underlineColorAndroid='transparent'
+                onChangeText={(password) => this.setState({ password })} />
+            </View>
+
+            <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.UserLoginFunction}>
+              <Text style={[styles.loginText, { fontWeight: 'bold' }]}>Login</Text>
+            </TouchableHighlight>
+
+            {/* <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
+           */}
+
+            <TouchableHighlight style={styles.buttonContainer}>
+              <Text style={{ textDecorationLine: 'underline', fontSize: 18, fontWeight: 'bold' }}>Forgot your password ?</Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Signup')}>
+              <Text style={{ color: 'black', fontWeight: 'bold' }}>Sign Up</Text>
+            </TouchableHighlight>
           </View>
-
-          <View style={styles.inputContainer}>
-            <Icon style={styles.Icon} name="lock" size={25} color="#000" />
-            <TextInput style={styles.inputs}
-              placeholder="Password"
-              secureTextEntry={true}
-              underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({ password })} />
-          </View>
-
-          <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.UserLoginFunction}>
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-            <Text>Forgot your password?</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('Signup')}>
-            <Text style={styles.loginText}>Sign UP</Text>
-          </TouchableHighlight>
-        </View>
-
+        </ImageBackground>
       </View>
     );
   }
@@ -119,18 +115,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#DCDCDC',
+    // backgroundColor: '#DCDCDC',
   },
   inputContainer: {
-    borderBottomColor: '#F5FCFF',
+    // borderBottomColor: '#F5FCFF',
     backgroundColor: '#FFFFFF',
     borderRadius: 30,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     width: 250,
     height: 45,
     marginBottom: 20,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'black'
   },
   Icon: {
     padding: 15,
@@ -157,10 +155,31 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   loginButton: {
-    backgroundColor: "#00b5ec",
+    width:150,
+ backgroundColor: "#980953",
+    borderWidth: 2,
+    borderColor: 'black'
+  },
+  SkipButton: {
+    height: 37,
+    marginTop: 30,
+    marginRight: '70%',
+    flexDirection: 'row-reverse',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    borderRadius: 30,
+    opacity:20,
+    backgroundColor: '#980953',
+    borderWidth: 2,
+    borderColor: 'black',
+    
   },
   signupButton: {
-    backgroundColor: "#980953",
+    width:150,
+    backgroundColor: "skyblue",
+    borderWidth: 2,
+    borderColor: 'black'
   },
   loginText: {
     color: 'white',

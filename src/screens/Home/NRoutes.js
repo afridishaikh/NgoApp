@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Home from './Home' ;
-import Request from './Request';
+// import Request from './Request';
 import List from './List';
 import NHome from './NHome';
 // import RList from './ReqList'
@@ -12,7 +12,7 @@ const MyProject = createStackNavigator(
 {
 
  Home: { screen: Home},
- Request: {screen: Request},
+//  Request: {screen: Request},
  List: {screen: List},
  NHome:{screen: NHome},
 //  RList:{screen: RList},
@@ -21,7 +21,7 @@ UHome: {screen: UHome},
 
 },
 {
-    initialRouteName:'UHome',
+    initialRouteName:'NHome',
     headerMode:'none',
     
   })

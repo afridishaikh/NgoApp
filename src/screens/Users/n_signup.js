@@ -17,7 +17,6 @@ import {
 import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class LoginView extends Component {
@@ -66,14 +65,12 @@ export default class LoginView extends Component {
             }
         });
     }
+
+    //Function to send all data to server
     InsertDataToServer = () => {
-
-
-
-
         // RNFetchBlob.fetch('POST', 'https://ngoapp.000webhostapp.com/ngoapp/n_signup.php', {
-            RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/ngo_signup.php', {
-           
+        RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/ngo_signup.php', {
+
             Authorization: "Bearer access-token",
             otherHeader: "foo",
             'Content-Type': 'multipart/form-data',
@@ -92,10 +89,10 @@ export default class LoginView extends Component {
             var tempMSG = resp.data;
             tempMSG = tempMSG.replace(/^"|"$/g, '');
             Alert.alert(tempMSG);
+            this.props.navigation.push('Nlogin');
         }).catch((error) => {
             console.error(error);
         });
-
     }
 
 
@@ -126,106 +123,103 @@ export default class LoginView extends Component {
             {
                 value: 'Ahmedabad'
             },
-
-
         ]
         return (
-            <View>
-                      <ImageBackground source={require('../../assets/bg.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.inputContainer}>
-                        <Icon style={styles.Icon} name="pencil" size={25} color="#000" />
-                        <TextInput style={styles.inputs}
-                            inlineImageLeft='username'
-                            inlineImagePadding={2}
-                            underlineColorAndroid='transparent'
-                            placeholder="Enter NGO Name"
-                            underlineColorAndroid='transparent'
-                            onChangeText={Name => this.setState({ Name })} />
-                    </View>
+            <ImageBackground source={require('../../assets/bg.jpg')} style={{ width: '100%', height: '100%', alignItems: 'center' }}>
 
-                    <View style={styles.inputContainer}>
-                        <Icon style={styles.Icon} name="user" size={25} color="#000" />
-                        <TextInput style={styles.inputs}
-                            underlineColorAndroid='transparent'
-                            placeholder="Username"
-                            onChangeText={Username => this.setState({ Username })} />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Icon style={styles.Icon} name="lock" size={25} color="#000" />
-                        <TextInput style={styles.inputs}
-                            underlineColorAndroid='transparent'
-                            placeholder="Password"
-                            secureTextEntry={true}
-                            onChangeText={Password => this.setState({ Password })} />
-                    </View>
-
-                    <View style={styles.Dropdown}>
-                        {/* <Icon style={styles.Icon} name="user" color="#000"/> */}
-                        <Dropdown
-                            label='Choose Category'
-                            data={category}
-                            onChangeText={Category => this.setState({ Category })}
-                        />
-                    </View>
-
-
-                    <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-                        <View style={styles.ImageContainer}>
-                            {/* <Icon style={styles.Icon} name="camera" size={50} color="#000" /> */}
-                            {this.state.ImageSource === null ? <Text>Choose A Photo</Text> :
-                                <Image style={styles.ImageContainer} source={this.state.ImageSource} />
-                            }
+                <View style={styles.Container}>
+                    <ScrollView style={{ padding: 30 }}>
+                        <View style={styles.inputContainer}>
+                            <Icon style={styles.Icon} name="pencil" size={25} color="#000" />
+                            <TextInput style={styles.inputs}
+                                inlineImageLeft='username'
+                                inlineImagePadding={2}
+                                underlineColorAndroid='transparent'
+                                placeholder="Enter NGO Name"
+                                underlineColorAndroid='transparent'
+                                onChangeText={Name => this.setState({ Name })} />
                         </View>
-                    </TouchableOpacity>
 
-                    <View style={styles.inputContainer}>
-                        <Icon style={styles.Icon} name="mobile" size={30} color="#000" />
-                        <TextInput style={styles.inputs}
-                            keyboardType="numeric"
-                            underlineColorAndroid='transparent'
-                            placeholder="Mobile Number"
-                            onChangeText={Mo_no => this.setState({ Mo_no })} />
-                    </View>
+                        <View style={styles.inputContainer}>
+                            <Icon style={styles.Icon} name="user" size={25} color="#000" />
+                            <TextInput style={styles.inputs}
+                                underlineColorAndroid='transparent'
+                                placeholder="Username"
+                                onChangeText={Username => this.setState({ Username })} />
+                        </View>
 
-                    <View style={styles.inputContainer}>
-                        <Icon style={styles.Icon} name="envelope" size={20} color="#000" />
-                        <TextInput style={styles.inputs}
-                            placeholder="Email Address"
-                            keyboardType="email-address"
-                            underlineColorAndroid='transparent'
-                            onChangeText={Email => this.setState({ Email })} />
-                    </View>
+                        <View style={styles.inputContainer}>
+                            <Icon style={styles.Icon} name="lock" size={25} color="#000" />
+                            <TextInput style={styles.inputs}
+                                underlineColorAndroid='transparent'
+                                placeholder="Password"
+                                secureTextEntry={true}
+                                onChangeText={Password => this.setState({ Password })} />
+                        </View>
+
+                        <View style={styles.Dropdown}>
+                            {/* <Icon style={styles.Icon} name="user" color="#000"/> */}
+                            <Dropdown
+                                label='Choose Category'
+                                data={category}
+                                onChangeText={Category => this.setState({ Category })}
+                            />
+                        </View>
 
 
-                    <View style={styles.inputContainer}>
-                        <Icon style={styles.Icon} name="map-marker" size={25} color="#000" />
-                        <TextInput style={styles.inputs}
-                            placeholder="Address"
-                            keyboardType="email-address"
-                            underlineColorAndroid='transparent'
-                            onChangeText={Address => this.setState({ Address })} />
-                    </View>
+                        <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                            <View style={styles.ImageContainer}>
+                                {/* <Icon style={styles.Icon} name="camera" size={50} color="#000" /> */}
+                                {this.state.ImageSource === null ?  <Icon style={styles.Icon} name="camera" size={50} color="grey" />  :
+                                    <Image style={styles.ImageContainer} source={this.state.ImageSource} />
+                                }
+                            </View>
+                        </TouchableOpacity>
 
-                    <View style={styles.Dropdown}>
-                    <Dropdown
-                        label='Choose City'
-                        data={city}
-                        onChangeText={City => this.setState({ City })}
-                    />
-                    </View>
+                        <View style={styles.inputContainer}>
+                            <Icon style={styles.Icon} name="mobile" size={30} color="#000" />
+                            <TextInput style={styles.inputs}
+                                keyboardType="numeric"
+                                underlineColorAndroid='transparent'
+                                placeholder="Mobile Number"
+                                onChangeText={Mo_no => this.setState({ Mo_no })} />
+                        </View>
 
-                    <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
-                        <Text style={styles.loginText}>Signup</Text>
-                    </TouchableHighlight>
+                        <View style={styles.inputContainer}>
+                            <Icon style={styles.Icon} name="envelope" size={20} color="#000" />
+                            <TextInput style={styles.inputs}
+                                placeholder="Email Address"
+                                keyboardType="email-address"
+                                underlineColorAndroid='transparent'
+                                onChangeText={Email => this.setState({ Email })} />
+                        </View>
 
-                    <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Nlogin')}>
-                        <Text style={styles.loginText}>Login Instead</Text>
-                    </TouchableHighlight>
-                </ScrollView>
-                </ImageBackground>
-            </View>
+
+                        <View style={styles.inputContainer}>
+                            <Icon style={styles.Icon} name="map-marker" size={25} color="#000" />
+                            <TextInput style={styles.inputs}
+                                placeholder="Address"
+                                keyboardType="email-address"
+                                underlineColorAndroid='transparent'
+                                onChangeText={Address => this.setState({ Address })} />
+                        </View>
+
+                        <View style={styles.Dropdown}>
+                            <Dropdown
+                                label='Choose City'
+                                data={city}
+                                onChangeText={City => this.setState({ City })}
+                            />
+                        </View>
+
+                        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
+                            <Text style={styles.loginText}>Signup</Text>
+                        </TouchableHighlight>
+
+                    </ScrollView>
+                </View>
+
+            </ImageBackground>
 
         );
     }
@@ -234,10 +228,11 @@ export default class LoginView extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // padding:20,
+        padding:20,
+        // margin:200,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFF8E1',
+        // backgroundColor: '#FFF8E1',
     },
     inputContainer: {
         width: 300,
@@ -245,21 +240,20 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         flexDirection: 'row',
         alignItems: 'center',
-        borderBottomColor:'black',
-        backgroundColor:'grey',
-        borderColor: 'purple',
+        backgroundColor: 'white',
+        borderColor: 'black',
         borderWidth: 2,
-        borderRadius: 23,  
+        borderRadius: 23,
     },
     Dropdown: {
         height: 60,
         justifyContent: 'center',
-        borderColor: 'purple',
-        borderBottomColor:'black',
-        backgroundColor:'grey',
+        borderColor: 'black',
+        // borderBottomColor: 'black',
+        backgroundColor: 'white',
         borderWidth: 2,
         borderRadius: 23,
-        padding:10
+        padding: 10
     },
     Icon: {
         padding: 15,
@@ -270,21 +264,22 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 0,
-        justifyContent:'center',
-        color:'blue',
+        justifyContent: 'center',
+        // color:'blue',
         // fontFamily:'arial',
-        alignContent:"center",
+        alignContent: "center",
     },
 
     ImageContainer: {
         borderRadius: 10,
         width: 300,
-        height: 250,
-        borderColor: '#9B9B9B',
+        height: 200,
+        // borderColor: '#9B9B9B',
         borderWidth: 10 / PixelRatio.get(),
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#3641',
+        backgroundColor: 'white',
         marginTop: 20,
         marginBottom: 25
     },
@@ -316,9 +311,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#DCDCDC',
+        // backgroundColor: '#DCDCDC',
     },
-  
+
     inputIcon: {
         width: 30,
         height: 30,
@@ -335,7 +330,9 @@ const styles = StyleSheet.create({
         borderRadius: 30,
     },
     loginButton: {
-        backgroundColor: 'red'// "#00b5ec",
+        backgroundColor: 'red',// "#00b5ec",
+        margin:20,
+        marginBottom:100.
     },
     loginText: {
         color: 'white',

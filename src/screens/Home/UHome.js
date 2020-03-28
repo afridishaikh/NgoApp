@@ -1,45 +1,55 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
+import { SafeAreaView,StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
 import Slider from './slider'
 
-export default class Home extends Component {
-      //Adding BackButton Exit Event
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-  }
-  handleBackButton() {
-    BackHandler.exitApp();
-  }
 
+class Home extends Component {
+//   componentDidMount() {
+//     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+// }
+// handleBackButton(){
+//           BackHandler;
+//       }
+
+  //Adding BackButton Exit Event
+  
+  // componentDidMount() {
+  //   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+  // }
+  // handleBackButton() {
+  //   BackHandler.exitApp();
+  // }
   render() {
     return (
 
-      <View style={styles.container}>
-        {/* <ImageBackground source={require('../../assets/bg.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}> */}
+      // <View style={styles.container}>
+      <SafeAreaView>
+
+        <ImageBackground source={require('../../assets/bg1.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}>
         <View style={styles.slider}>
-          {/* <Slider /> */}
+          <Slider />
         </View>
-        <Text> This is NGO's Side Screen </Text>
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Request')}>
-          <Text style={styles.loginText}>Requests</Text>
+          <Text style={styles.loginText}>Post A Request</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>Top NGO</Text>
+          <Text style={styles.loginText}>List Of NGO</Text>
         </TouchableHighlight>
       
       
    
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>Gallery</Text>
+          <Text style={styles.loginText}>Option 3</Text>
         </TouchableHighlight>
 
         
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>Donation History</Text>
+          <Text style={styles.loginText}>Donate to NGO</Text>
         </TouchableHighlight>
-        {/* </ImageBackground> */}
-        </View>
+        </ImageBackground>
+        </SafeAreaView>
+        // </View>
     
 
     );
@@ -73,3 +83,5 @@ const styles = StyleSheet.create({
     flex: 1, 
   }
 });
+
+export default Home;

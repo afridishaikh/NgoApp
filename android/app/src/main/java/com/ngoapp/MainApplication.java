@@ -1,5 +1,8 @@
 package com.ngoapp;
 
+
+// import com.airbnb.android.react.maps.MapsPackage;-
+
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
@@ -45,6 +48,16 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
   }
+
+
+// //added for map
+//   @Override
+// protected List<ReactPackage> getPackages() {
+//    return Arrays.<ReactPackage>asList(
+//       new MainReactPackage(),
+//       new MapsPackage()
+//    );
+// }
 
   /**
    * Loads Flipper in React Native templates.

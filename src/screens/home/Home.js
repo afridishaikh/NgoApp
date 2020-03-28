@@ -1,44 +1,48 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
+import { SafeAreaView,StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
 import Slider from './slider'
 
 
 class Home extends Component {
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-}
-handleBackButton(){
-          BackHandler;
-      }
-
   render() {
     return (
 
-      <View style={styles.container}>
-        <ImageBackground source={require('../../assets/bg.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}>
+      // <View style={styles.container}>
+      <SafeAreaView>
+
+        <ImageBackground source={require('../../assets/bg1.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}>
         <View style={styles.slider}>
           <Slider />
         </View>
-        <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Request')}>
+
+        {/* <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Request')}>
           <Text style={styles.loginText}>Post A Request</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
 
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
           <Text style={styles.loginText}>List Of NGO</Text>
         </TouchableHighlight>
+
+
+        <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Gallery')}>
+          <Text style={styles.loginText}>Image Gallery</Text>
+        </TouchableHighlight>
       
       
-   
-        <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>Option 3</Text>
+        <View style={{ flexDirection: 'row',alignItems:'center',alignContent:'center'}}>
+        <TouchableHighlight style={[styles.buttonCon, styles.Button2]} onPress={() => this.props.navigation.navigate('Login')}>
+          <Text style={styles.loginText}>Login As User</Text>
         </TouchableHighlight>
 
-        
-        <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>Donate to NGO</Text>
+        <Text style={{fontWeight:'bold',letterSpacing:2,textDecorationLine:'underline'}}>OR</Text>
+
+        <TouchableHighlight style={[styles.buttonCon, styles.Button2]} onPress={() => this.props.navigation.navigate('Nlogin')}>
+          <Text style={styles.loginText}>Login As NGO</Text>
         </TouchableHighlight>
-        </ImageBackground>
         </View>
+        </ImageBackground>
+        </SafeAreaView>
+        // </View>
     
 
     );
@@ -61,8 +65,25 @@ const styles = StyleSheet.create({
     width: 250,
     borderRadius: 30,
   },
+  buttonCon: {
+    height: 50,
+    // flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30,
+    // marginLeft:10,
+    margin:30,
+    width: 120,
+    borderRadius: 10,
+  },
   Button: {
     backgroundColor: "#980953",
+ 
+  },
+  Button2: {
+    backgroundColor: "green",
+    borderWidth: 2,
+    borderColor: 'black'
   },
   loginText: {
     color: 'white',

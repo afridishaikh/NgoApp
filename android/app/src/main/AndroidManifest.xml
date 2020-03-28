@@ -13,6 +13,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      
 
 
       <activity
@@ -27,6 +28,14 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+<!-- map -->
+      <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyC2fETy8OBy5bRAHekd7dW4yImc22wvK8M"/>
+      <!-- You will also only need to add this uses-libray tag -->
+           <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
     </application>
 
 </manifest>
