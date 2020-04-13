@@ -1,290 +1,379 @@
+// //MY MAIN
 import React, { Component } from 'react'
-
 import Routes from './src/screens/Routes'
-import UI  from './backupfiles/Try/UI'
-import Login from './backupfiles/Try/loginn.js'
-import Req from './src/screens/Home/Request'
-import Map from './src/screens/Home/location'
+import Home from './src/screens/Home/Card'
 export class App extends Component {
   render() {
-    return <Routes/>
-    // return <Req/>
-    // return <Map/>
-      // return <UI />
-   //  return <Login/>
+
+    return <Routes />
+    // return <Home />
   }
 }
 export default App
 
-// import React, { useState, useEffect } from 'react';
-// import {
-//    View,
-//    StyleSheet,
-//    Dimensions,
-//    PermissionsAndroid,
-//    Button,
-//    Text,
-//    ActivityIndicator,
-//    TextInput
-// } from 'react-native';
-
-// import Geolocation from '@react-native-community/geolocation';
-// import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-
-// const intialState = {
-//    latitude: null,
-//    longitude: null,
-//    latitudeDelta: 0.0040,
-//    longitudeDelta: 0.0035,
+ 
+// import React, {Component} from 'react';
+// import {View,Text,Button} from 'react-native'; 
+// import RNUpiPayment from 'react-native-upi-pay';
+ 
+// /*
+//     npm install react-native-upi-pay
+//     react-native link
+// */
+ 
+// export default class App extends Component{
+//     constructor(props){
+//         super();
+//         this.state={
+//             Status:"", 
+//             txnId:"",
+//             GOOGLE_PAY:'GOOGLE_PAY',
+//             PHONEPE:'PHONEPE',
+//             PAYTM:'PAYTM',
+//             message:""
+//         }
+//     }
+//     render(){
+//         that=this;
+//         function floo(paymentApp){
+//             RNUpiPayment.initializePayment({
+//                 vpa: 'something@bank',  		//your upi address like 12345464896@okhdfcbank
+//                 payeeName: ' abc',   			// payee name 
+//                 amount: '1',				//amount
+//                 transactionNote:'Testing Upi',		//note of transaction
+//                 transactionRef: 'aasf-332-aoei-fn'	//some refs to aknowledge the transaction
+//             },paymentApp,successCallback,failureCallback);
+//         }
+//         function failureCallback(data){
+//             console.log(data)
+//             // in case no action taken
+//             if (data['status']=="FAILURE"){
+//                 that.setState({Status:"FAILURE"})
+//                 that.setState({message:data['message']});
+//             }
+//             // in case of googlePay
+//             else if (data['Status']=="FAILURE"){
+//                 that.setState({Status:"FAILURE"})
+//                 that.setState({message:"app closed without doing payment"});;
+//             }
+//             // in case of phonepe
+//             else if (data['Status']=="Failed"){
+//                 that.setState({Status:"FAILURE"});
+//                 that.setState({message:"app closed without doing payment"});
+//             }
+//             // in case of phonepe
+//             else if(data['Status']=="Submitted"){
+//                 that.setState({Status:"FAILURE"});
+//                 that.setState({message:"transaction done but pending"});
+//             }
+//             // any other case than above mentioned
+//             else{
+//                 that.setState({Status:"FAILURE"});
+//                 that.setState({message:data[Status]});
+//             }
+//         }
+//         function successCallback(data){
+//             //
+//             console.log(data);
+//             that.setState({Status:"SUCCESS"});
+//             that.setState({txnId:data['txnId']});
+//             that.setState({message:"Succccessfull payment"});
+//         }
+//         return (
+//         <View style={{alignItems:"center",justifyContent:"center",flex:1}}>
+//         <View style={{flexDirection:'row',padding:5}}>
+//             <Button
+//             title="Google pay"
+//             onPress={() => {floo(this.state.GOOGLE_PAY)}}
+//             />
+ 
+//             <Button
+//             title="Phone pe"
+//             onPress={() => {floo(this.state.PHONEPE)}}
+//             />
+//             <Button
+//             title="PAYTM"
+//             onPress={() => {floo(this.state.PAYTM)}}
+//             />
+//         </View>
+ 
+//         <Text>{this.state.Status+" "+this.state.txnId}</Text>
+//         <Text>{this.state.message}</Text>
+//         </View>
+//         );
+//     }
 // }
-
-// const App = () => {
-//    const [currentPosition, setCurrentPosition] = useState(intialState);
-
-//    useEffect(() => {
-//       Geolocation.getCurrentPosition(
-//          position => {
-//             //  alert(JSON.stringify(position))
-//             console.log(JSON.stringify(position))
-//             const { latitude, longitude } = position.coords;
-//             setCurrentPosition({
-//                ...currentPosition,
-//                latitude,
-//                longitude
-//             })
-//          },
-//          //  error => this.setState({error: error.message}),
-//          error => alert(error.message),
-//          { enableHighAccuracy: true, timeout: 20000, maximumAge: 2000 }
-//       );
-//    }, [])
-//    return currentPosition.latitude ? (
-//       <View style={styles.container}>
-//          <MapView
-//             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-//             style={styles.map}
-//             showsUserLocation
-//             initialRegion={currentPosition}
-//          >
-//             {/* <Marker coordinate={this.state} /> */}
-
-//          </MapView>
-//          <View>
-//          {/* <Button title='Show me number' onpress={alert(JSON.stringify(currentPosition))} /> */}
-//           </View>
-//           <Text> latitude : {(JSON.stringify(currentPosition.latitude))} longitude: {(JSON.stringify(currentPosition.longitude))}</Text>
-
-//           {/* <TextInput title= {(JSON.stringify(currentPosition.latitude))} /> */}
-
-//       </View>
-//    )
-//       :
-//       <ActivityIndicator style={{ flex: 1 }} animating size="large" />
-// }
+ 
+ 
+// // TODO: What to do with the module?
+// RNReactNativeUpiPay;
 
 
-// const styles = StyleSheet.create({
-//    container: {
-//       position: 'absolute',
-//       top: 0,
-//       left: 0,
-//       right: 0,
-//       bottom: 0,
-//       justifyContent: 'flex-end',
-//       alignItems: 'center',
-//    },
-//    map: {
-//       position: 'absolute',
-//       top: 0,
-//       left: 0,
-//       right: 0,
-//       bottom: 0,
-//    },
-// });
-// export default App;
-
-// 0000000000000000000000000000000000000000000000000000
-
-// /*This is an Example of React Native Map*/
 // import React from 'react';
-// import { StyleSheet, Text, View, TextInput } from 'react-native';
-// import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
-// import Geolocation from '@react-native-community/geolocation';
+// import { StyleSheet, Text, View, Image, TextInput, Dimensions, ScrollView, 
+// CheckBox, TouchableOpacity } from 'react-native';
+// // import logo from './image/Logo.png'
 
-
+// const { width: WIDTH } = Dimensions.get('window')
 
 // export default class App extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       Clatitude: 22.6761,
-//       Clongitude: 72.925821,
-//       latitudeDelta: 1.555,
-//       longitudeDelta: 1.555,
-//       error: null
+//   constructor(){
+//     super();
+//     this.state={
+//       check:false,
+//       email: '',
 //     };
+   
 //   }
 
-//   componentDidMount() {
-//     Geolocation.getCurrentPosition(
-//       position => {
-//         this.setState({
-//           Clatitude: position.coords.latitude,
-//           Clongitude: position.coords.longitude,
-//           error: null
-//         });
-//       }, error => this.setState({ error: error.message }),
-//       { enableHighAccuracy: true, timeout: 20000, maximumAge: 2000 });
 
+
+// //   validates = () => { 
+
+// //     let text = this.state.email; 
+// //     let emailError = this.state.emails;
+// //     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ; 
+// //     if(reg.test(text) === false) 
+// //     { 
+// //     console.warn("Invalid email")
+// //     this.setState({email:text}) 
+// //     return false; 
+// //     } 
+// //     else { 
+// //     this.setState({email:text}) 
+// //     console.log("Email is Correct"); 
+// //     } 
+// // } 
+
+// validate = (text) => {
+//   console.log(text);
+//   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+//   if (reg.test(text) === false) {
+//     console.log("Email is Not Correct");
+//     this.setState({ email: text })
+//     return false;
 //   }
-
-//   render() {
-//     // var mapStyle=[{"elementType": "geometry", "stylers": [{"color": "#242f3e"}]},{"elementType": "labels.text.fill","stylers": [{"color": "#746855"}]},{"elementType": "labels.text.stroke","stylers": [{"color": "#242f3e"}]},{"featureType": "administrative.locality","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},{"featureType": "poi","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},{"featureType": "poi.park","elementType": "geometry","stylers": [{"color": "#263c3f"}]},{"featureType": "poi.park","elementType": "labels.text.fill","stylers": [{"color": "#6b9a76"}]},{"featureType": "road","elementType": "geometry","stylers": [{"color": "#38414e"}]},{"featureType": "road","elementType": "geometry.stroke","stylers": [{"color": "#212a37"}]},{"featureType": "road","elementType": "labels.text.fill","stylers": [{"color": "#9ca5b3"}]},{"featureType": "road.highway","elementType": "geometry","stylers": [{"color": "#746855"}]},{"featureType": "road.highway","elementType": "geometry.stroke","stylers": [{"color": "#1f2835"}]},{"featureType": "road.highway","elementType": "labels.text.fill","stylers": [{"color": "#f3d19c"}]},{"featureType": "transit","elementType": "geometry","stylers": [{"color": "#2f3948"}]},{"featureType": "transit.station","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},{"featureType": "water","elementType": "geometry","stylers": [{"color": "#17263c"}]},{"featureType": "water","elementType": "labels.text.fill","stylers": [{"color": "#515c6d"}]},{"featureType": "water","elementType": "labels.text.stroke","stylers": [{"color": "#17263c"}]}];
-//     return (
-
-//       <View style={styles.container}>
-
-//         <MapView
-//           style={styles.map}
-//           showsUserLocation={true}
-//           showsMyLocationButton={true}
-//           followUserLocation={true}
-//           initialRegion={{
-//             latitude: this.state.Clatitude,
-//             longitude: this.state.Clongitude,
-//             latitudeDelta: 0.009,
-//             longitudeDelta: 0.004,
-//           }
-//           }
-//         // customMapStyle={mapStyle}
-//         >
-//           <Marker
-//             draggable
-//             coordinate={{
-//               latitude: this.state.Clatitude,
-//               longitude: this.state.Clongitude,
-//             }}
-//             onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
-//             title={'Test Marker'}
-//             description={'This is a description of the marker'}
-//           />
-//         </MapView>
-//         <Text> lol: {JSON.stringify(this.state.Clatitude,this.state.Clongitude)}</Text>
-//       </View>
-
-//     );
+//   else {
+//     this.setState({ email: text })
+//     console.log("Email is Correct");
 //   }
 // }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     alignItems: 'center',
-//     justifyContent: 'flex-end',
-//   },
-//   map: {
-
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//   },
-// });
-
-
-// /*This is an Example of React Native Map*/
-// import React from 'react';
-// import { StyleSheet, Text, View, TextInput } from 'react-native';
-// import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
-// import Geolocation from '@react-native-community/geolocation';
-
-
-
-// export default class App extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       Clatitude: 22.6761,
-//       Clongitude: 72.925821,
-//       latitudeDelta: 1.555,
-//       longitudeDelta: 1.555,
-//       error: null
-//     };
-//   }
-
-//   componentDidMount() {
-//     Geolocation.getCurrentPosition(
-//       position => {
-//         this.setState({
-//           Clatitude: position.coords.latitude,
-//           Clongitude: position.coords.longitude,
-//           error: null
-//         });
-//       }, error => this.setState({ error: error.message }),
-//       { enableHighAccuracy: true, timeout: 20000, maximumAge: 2000 });
-
-//   }
-
 //   render() {
-//     // var mapStyle=[{"elementType": "geometry", "stylers": [{"color": "#242f3e"}]},{"elementType": "labels.text.fill","stylers": [{"color": "#746855"}]},{"elementType": "labels.text.stroke","stylers": [{"color": "#242f3e"}]},{"featureType": "administrative.locality","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},{"featureType": "poi","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},{"featureType": "poi.park","elementType": "geometry","stylers": [{"color": "#263c3f"}]},{"featureType": "poi.park","elementType": "labels.text.fill","stylers": [{"color": "#6b9a76"}]},{"featureType": "road","elementType": "geometry","stylers": [{"color": "#38414e"}]},{"featureType": "road","elementType": "geometry.stroke","stylers": [{"color": "#212a37"}]},{"featureType": "road","elementType": "labels.text.fill","stylers": [{"color": "#9ca5b3"}]},{"featureType": "road.highway","elementType": "geometry","stylers": [{"color": "#746855"}]},{"featureType": "road.highway","elementType": "geometry.stroke","stylers": [{"color": "#1f2835"}]},{"featureType": "road.highway","elementType": "labels.text.fill","stylers": [{"color": "#f3d19c"}]},{"featureType": "transit","elementType": "geometry","stylers": [{"color": "#2f3948"}]},{"featureType": "transit.station","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},{"featureType": "water","elementType": "geometry","stylers": [{"color": "#17263c"}]},{"featureType": "water","elementType": "labels.text.fill","stylers": [{"color": "#515c6d"}]},{"featureType": "water","elementType": "labels.text.stroke","stylers": [{"color": "#17263c"}]}];
 //     return (
+//       <TextInput
+//       placeholder="Email ID"
+//       onChangeText={(text) => this.validate(text)}
+//       value={this.state.email}
+//     />
+  
 
-//       <View style={styles.container}>
-
-//         <MapView
-//           style={styles.map}
-//           showsUserLocation={true}
-//           showsMyLocationButton={true}
-//           followUserLocation={true}
-//           initialRegion={{
-//             latitude: this.state.Clatitude,
-//             longitude: this.state.Clongitude,
-//             latitudeDelta: 0.009,
-//             longitudeDelta: 0.004,
-//           }
-//           }
-//         // customMapStyle={mapStyle}
-//         >
-//           <Marker
-//             draggable
-//             coordinate={{
-//               latitude: this.state.Clatitude,
-//               longitude: this.state.Clongitude,
-//             }}
-//             onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
-//             title={'Test Marker'}
-//             description={'This is a description of the marker'}
-//           />
-//         </MapView>
-//         <Text> lol: {JSON.stringify(this.state.Clatitude,this.state.Clongitude)}</Text>
-//       </View>
-
-//     );
+// );
 //   }
 // }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     alignItems: 'center',
-//     justifyContent: 'flex-end',
-//   },
-//   map: {
 
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//   },
-// });
+
+// ////WORKING
+// // 'use strict';
+// // import React, {Component}  from 'react';
+// // import {View, Text, TextInput,StyleSheet, TouchableHighlight} from 'react-native';
+// // import ValidationComponent from 'react-native-form-validator';
+// // import Icon from 'react-native-vector-icons/FontAwesome';
+
+
+
+// // // export class App extends Component {
+// // //   render() {
+
+// // //     return <FormTest />
+// // //     // return <Login />
+// // //   }
+// // // }
+// // // export default App
+
+
+
+// // export default class FormTest extends ValidationComponent {
+
+// //   constructor(props) {
+// //     super(props);
+// //     // this.state = {name : "My name", email: "tibtib@gmail.com", number:"56", date: "2017-03-01"};
+// //     this.state = {       
+// //     Name: '',
+// //     InputMono: '',
+// //     InputEmail: '',
+// //     InputUsername: '',
+// //     InputPassword: '' };
+// //   }
+
+// //   _onPressButton = () => {
+// //     this.validate({
+// //     Name: { minlength: 6, maxlength: 7, required: true },
+// //     // InputEmail: { email: true ,required: true},
+// //     // InputMono: { numbers: true ,required: true},
+// //     // InputUsername: { minlength: 3, maxlength: 7, required: true },
+// //     // InputPassword: { minlength: 6, maxlength: 20, required: true },
+// //     });
+    
+// //     const { Name } = this.state;
+// //     const { TextInputMono } = this.state;
+// //     const { TextInputEmail } = this.state;
+// //     const { TextInputUsername } = this.state;
+// //     const { TextInputPassword } = this.state;
+
+// //     //The connection And Insert
+// //       fetch('https://ngoapp.000webhostapp.com/ngoapp/signup.php', {
+    
+// //       method: 'POST',
+// //       headers: {
+// //         'Accept': 'application/json',
+// //         'Content-Type': 'application/json'
+// //       },
+// //       body: JSON.stringify({
+// //         name: Name,
+// //         mo_no: TextInputMono,
+// //         email: TextInputEmail,
+// //         username: TextInputUsername,
+// //         password: TextInputPassword
+// //       })
+// //     }).then((response) => response.json())
+// //       .then((responseJson) => {
+// //         Alert.alert(responseJson);
+// //         this.props.navigation.goBack();
+// //       }).catch((error) => {
+// //         console.error(error);
+// //       });
+// //     }
+// //   render() {
+// //       return (
+// //         <View>
+
+          
+// //           <View style={styles.inputContainer}>
+// //           <Icon style={styles.Icon} name="pencil" size={25} color="grey" />
+// //             <TextInput style={styles.inputs}
+// //               placeholder="Enter Your Full Name."
+// //               // placeholderTextColor='#023e56'
+// //               underlineColorAndroid='transparent'
+// //               ref="Names"
+// //               onChangeText={Name => this.setState({ Name })} value={this.state.Name} />
+// //           </View>
+
+// //           <Text>
+// //             {this.getErrorMessages()}
+// //           </Text>
+
+
+
+// //           <TextInput ref="name" onChangeText={(name) => this.setState({name})} value={this.state.name} />
+// //           <TextInput ref="email" onChangeText={(email) => this.setState({email})} value={this.state.email} />
+// //           <TextInput ref="number" onChangeText={(number) => this.setState({number})} value={this.state.number} />
+// //           <TextInput ref="date" onChangeText={(date) => this.setState({date})} value={this.state.date} />
+// //           {this.isFieldInError('date') && this.getErrorsInField('date').map(errorMessage => <Text>{errorMessage}</Text>) }
+
+// //           <TouchableHighlight onPress={this._onPressButton}>
+// //             <Text>Submit</Text>
+// //           </TouchableHighlight>
+
+// //           <Text>
+// //             {this.getErrorMessages()}
+// //           </Text>
+// //         </View>
+// //       );
+// //   }
+
+// // }
+
+
+
+// // const styles = StyleSheet.create({
+// //   container: {
+// //     flex: 1,
+// //     justifyContent: 'center',
+// //     alignItems: 'center',
+// //     // marginBottom:50,
+// //     marginTop:10
+
+// //     // backgroundColor: '#DCDCDC',
+// //   },
+// //     container2: {
+// //     flex: 1,
+// //     justifyContent: 'center',
+// //     alignItems: 'center',
+// //     marginBottom:50,
+// //     marginTop:10
+
+// //     // backgroundColor: '#DCDCDC',
+// //   },
+// //   inputContainer: {
+// //     // borderBottomColor: '#F5FCFF',
+// //     backgroundColor: '#FFFFFF',
+// //     borderRadius: 30,
+// //     // borderBottomWidth: 1,
+// //     width: 250,
+// //     height: 45,
+// //     marginBottom: 20,
+// //     flexDirection: 'row',
+// //     alignItems: 'center',
+// //     borderWidth: 2,
+// //     borderColor: 'black'
+// //   },
+// //   Icon: {
+// //     padding: 12,
+// //   },
+// //   inputs: {
+// //     height: 45,
+// //     marginLeft: 16,
+// //     borderBottomColor: '#FFFFFF',
+// //     flex: 1,
+// //   },
+// //   inputIcon: {
+// //     width: 30,
+// //     height: 30,
+// //     marginLeft: 15,
+// //     justifyContent: 'center'
+// //   },
+// //   buttonContainer: {
+// //     height: 45,
+// //     flexDirection: 'row',
+// //     justifyContent: 'center',
+// //     alignItems: 'center',
+// //     marginBottom: 20,
+// //     width: 250,
+// //     borderRadius: 30,
+// //   },
+// //   loginButton: {
+// //     width:150,
+// //  backgroundColor: "#980953",
+// //     borderWidth: 2,
+// //     borderColor: '#000'
+// //   },
+// //   SkipButton: {
+// //     height: 37,
+// //     marginTop: 30,
+// //     marginRight: '70%',
+// //     flexDirection: 'row-reverse',
+// //     justifyContent: 'center',
+// //     alignItems: 'center',
+// //     width: 80,
+// //     borderRadius: 30,
+// //     opacity:20,
+// //     backgroundColor: '#980953',
+// //     borderWidth: 2,
+// //     borderColor: 'black',
+    
+// //   },
+// //   signupButton: {
+// //     width:150,
+// //     backgroundColor: "skyblue",
+// //     borderWidth: 2,
+// //     borderColor: 'black'
+// //   },
+// //   loginText: {
+// //     color: 'white',
+// //   }
+// // });
+
+
 

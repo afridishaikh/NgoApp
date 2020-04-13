@@ -1,30 +1,20 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  TouchableHighlight,
-  Image,
-  Alert,
-  ScrollView
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { StyleSheet, Text,  ScrollView,BackHandler,View, Dimensions,KeyboardAvoidingView,Platform,Button, Image, TextInput, TouchableHighlight, Alert, ImageBackground } from 'react-native';
 
-// const { navigate } = this.props.navigation;
-export default class LoginView extends Component {
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
+
+import Icon from 'react-native-vector-icons/FontAwesome';
+class Login extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      TextInputName: '',
-      TextInputMono: '',
-      TextInputEmail: '',
-      TextInputUsername: '',
-      TextInputPassword: ''
+        TextInputName: '',
+        TextInputMono: '',
+        TextInputEmail: '',
+        TextInputUsername: '',
+        TextInputPassword: ''
     }
   }
-
 
   InsertDataToServer = () => {
     const { TextInputName } = this.state;
@@ -33,22 +23,8 @@ export default class LoginView extends Component {
     const { TextInputUsername } = this.state;
     const { TextInputPassword } = this.state;
 
-    let text = this.state.TextInputEmail; 
-        // let emailError = this.state.TextInputEmail;
-        console.warn(text);
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ; 
-        if(reg.test(text) === false) 
-        { 
-        console.warn("Invalid email")
-        this.setState({TextInputEmail:text}) 
-        return false; 
-        } 
-        else { 
-        this.setState({TextInputEmail:text}) 
-        console.log("Email is Correct"); 
-        } 
-
-if(TextInputEmail){    
+    //The connection And Insert
+    // fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
       fetch('https://ngoapp.000webhostapp.com/ngoapp/signup.php', {
     
       method: 'POST',
@@ -66,58 +42,34 @@ if(TextInputEmail){
     }).then((response) => response.json())
       .then((responseJson) => {
         Alert.alert(responseJson);
-        this.props.navigation.goBack();
+        this.props.navigation.replace('Drawer');
       }).catch((error) => {
         console.error(error);
       });
-    }
-    else
-    {
-
-    }
   }
 
-
-  // InsertDataToServer = () => {
-  //   const { TextInputName } = this.state;
-  //   const { TextInputMono } = this.state;
-  //   const { TextInputEmail } = this.state;
-  //   const { TextInputUsername } = this.state;
-  //   const { TextInputPassword } = this.state;
-
-  //   //The connection And Insert
-  //   // fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
-
-
-  //     fetch('https://ngoapp.000webhostapp.com/ngoapp/signup.php', {
-    
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       name: TextInputName,
-  //       mo_no: TextInputMono,
-  //       email: TextInputEmail,
-  //       username: TextInputUsername,
-  //       password: TextInputPassword
-  //     })
-  //   }).then((response) => response.json())
-  //     .then((responseJson) => {
-  //       Alert.alert(responseJson);
-  //       this.props.navigation.goBack();
-  //     }).catch((error) => {
-  //       console.error(error);
-  //     });
+  // //Adding BackButton Exit Event
+  // componentDidMount() {
+  //   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+  // }
+  // handleBackButton() {
+  //   BackHandler.exitApp();
   // }
 
   render() {
     return (
+
+        <ImageBackground source={require('../../assets/bg.jpg')} style={ styles.backgroundImage}>
       <View style={styles.container}>
-         
 
 
+
+
+            <View>
+          <TouchableHighlight  style={styles.SkipButton} onPress={() => this.props.navigation.replace('Home')}>
+            <Text style={styles.loginText}>Skip</Text>
+          </TouchableHighlight>
+            </View>
           {/* <Text style={{ color: '#121456', fontSize: 25, textDecorationLine: 'underline' }}
            onPress={() => this.props.navigation.navigate('TabNavigator')}>Skip
          </Text> */}
@@ -126,38 +78,36 @@ if(TextInputEmail){
 
  
          
-          <ScrollView style={{ paddingRight: 60,paddingLeft: 60 }} >
+          <ScrollView style={{ padding: 25,marginBottom:100 }} >
        
-          <View style={styles.container2}>
+          <View style={styles.container}>
     
        
 
              <View style={styles.inputContainer}>
           <Icon style={styles.Icon} name="pencil" size={25} color="grey" />
             <TextInput style={styles.inputs}
-              placeholder="Enter Your Full Name."
-              // placeholderTextColor='#023e56'
+              placeholder="Enter Name"
               underlineColorAndroid='transparent'
               onChangeText={TextInputName => this.setState({ TextInputName })} />
           </View>
 
           <View style={styles.inputContainer}>
           <Icon style={styles.Icon} name="mobile" size={35} color="grey" />
-          <Text>+91</Text>
             <TextInput style={styles.inputs}
               keyboardType="numeric"
               underlineColorAndroid='transparent'
               placeholder="Enter Mobile Number"
-              maxLength={10}
               onChangeText={TextInputMono => this.setState({ TextInputMono })} />
           </View>
 
           <View style={styles.inputContainer}>
           <Icon style={styles.Icon} name="envelope" size={22} color="grey" />
             <TextInput style={styles.inputs}
+              placeholder="Mobile Number"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              placeholder="Enter Your Email"
+              placeholder="Enter Email"
               onChangeText={TextInputEmail => this.setState({ TextInputEmail })} />
           </View>
 
@@ -165,7 +115,7 @@ if(TextInputEmail){
           <Icon style={styles.Icon} name="user" size={25} color="grey" />
             <TextInput style={styles.inputs}
               underlineColorAndroid='transparent'
-              placeholder="Choose Username"
+              placeholder="Select Username"
               onChangeText={TextInputUsername => this.setState({ TextInputUsername })} />
           </View>
 
@@ -175,7 +125,6 @@ if(TextInputEmail){
               underlineColorAndroid='transparent'
               placeholder="Enter Password"
               secureTextEntry={true}
-              
               onChangeText={TextInputPassword => this.setState({ TextInputPassword })} />
           </View>
  
@@ -193,27 +142,19 @@ if(TextInputEmail){
 
    
       </View>
-
+      </ImageBackground>
+   
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // marginBottom:50,
+    marginBottom:10,
     marginTop:10
-
-    // backgroundColor: '#DCDCDC',
-  },
-    container2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:50,
-    marginTop:10
-
     // backgroundColor: '#DCDCDC',
   },
   inputContainer: {
@@ -230,7 +171,7 @@ const styles = StyleSheet.create({
     borderColor: 'black'
   },
   Icon: {
-    padding: 12,
+    padding: 15,
   },
   inputs: {
     height: 45,
@@ -244,6 +185,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     justifyContent: 'center'
   },
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+},
   buttonContainer: {
     height: 45,
     flexDirection: 'row',
@@ -257,7 +205,7 @@ const styles = StyleSheet.create({
     width:150,
  backgroundColor: "#980953",
     borderWidth: 2,
-    borderColor: '#000'
+    borderColor: 'black',
   },
   SkipButton: {
     height: 37,
@@ -284,6 +232,4 @@ const styles = StyleSheet.create({
     color: 'white',
   }
 });
-
-
-
+export default Login;

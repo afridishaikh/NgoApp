@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Text, Platform, StyleSheet, View, FlatList, Button, ActivityIndicator, Linking, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import openMap from 'react-native-open-maps';
-
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class App extends Component {
 
@@ -12,27 +12,77 @@ export default class App extends Component {
     this.state = {
       isLoading: true,
       ModalVisibleStatus: false,
-      TempImageURL: ''
+      TempImageURL: '',
+
+   username:''
+    // password:'ad'
     }
   }
 
 
-  //Fetching data from server
+  //To store AsyncStorage value in state.
   componentDidMount() {
-    return fetch('https://ngoapp3219.000webhostapp.com/db/ReqList.php')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson
-        }, function () {
-          // In this block you can do something with new state.
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    AsyncStorage.getItem('any_key_here').then(value =>
+      //AsyncStorage returns a promise so adding a callback to get the value
+      this.setState({ username: value , isLoading:false})
+      //Setting the value in Text  
+    );
   }
+
+//downloaded example
+//   componentDidMount() {
+//     this.fetchUser(this.state.username);
+//  }
+ 
+//  function fetchUser(username) {
+//     let url = `https://api.github.com/users/${username}`;
+//     this.fetchApi(url);
+//  };
+ 
+//  function fetchApi(url) {
+//     fetch(url)
+//     .then((res) => res.json())
+//        .... some data that is being fetched .... 
+//     });
+//  };
+
+  UserLoginFunction = () => {
+
+    AsyncStorage.getItem('any_key_here').then(value =>
+      //AsyncStorage returns a promise so adding a callback to get the value
+      this.setState({ username: value , isLoading:false})
+      //Setting the value in Text  
+    );
+  const { username } = this.state;
+  console.warn(username)
+  fetch('https://ngoapp3219.000webhostapp.com/db/profile.php', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: username,
+    })
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson[0].username == username) {
+        this.setState({
+          dataSource: responseJson
+
+          })
+        }
+        else{
+            alert('Please Login Again');
+            //alert for the empty InputText
+          }
+      }
+    ).catch((error) => {
+      console.error(error);
+    });
+}
+
+
   // For Modal Storing and Defining Parameters , which will store the server data 
   ShowModalFunction(visible, image, name, address, mo_no, latitude, longitude) {
     this.setState({
@@ -46,37 +96,6 @@ export default class App extends Component {
     });
   }
 
-  //function to make call and store the mo_no
-  dialCall = (number) => {
-    let phoneNumber = '';
-    if (Platform.OS === 'android') { phoneNumber = `tel:${number}`; }
-    else { phoneNumber = `telprompt:${number}`; }
-    Linking.openURL(phoneNumber);
-  };
-
-  _goToYosemite = (lat, long) => {
-    // console.warn(lat)
-    // openMap({ latitude: parseFloat(lat), longitude: parseFloat(long),query: 'Yosemite Trails' });
-    JSON.stringify(lat)
-    JSON.stringify(long)
-    //When you use 100percent of your brain lol
-    let a = lat
-    let b = long
-    let c = a + ',' + b
-    openMap({ query: c });
-  };
-
-  // _goToYosemite() {
-  //   openMap({ latitude: this.state.Latitude, longitude: this.state.Longitude });
-  // }
-
-  // making Seprators between the Flatlist
-  renderSeprator = () => {
-    return (
-      <View style={{ height: 2, width: "100%", backgroundColor: 'black' }}>
-      </View>
-    )
-  }
 
   // The Activityindicator
   render() {
@@ -84,11 +103,27 @@ export default class App extends Component {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" />
+          
+         <TouchableOpacity
+          onPress={this.UserLoginFunction}
+          style={styles.button}>
+          <Text style={styles.buttonText}> SAVE VALUE </Text>
+        </TouchableOpacity>
+
         </View>
       );
     }
     return (
+      // console.warn(this.state.username),
       <View style={{ flex: 1, flexDirection: 'row', marginBottom: 3 }}>
+         
+         <Text style={styles.text}> lol: {this.state.username} </Text>
+
+         <TouchableOpacity
+          onPress={this.UserLoginFunction}
+          style={styles.button}>
+          <Text style={styles.buttonText}> SAVE VALUE </Text>
+        </TouchableOpacity>
 
         <FlatList
           data={this.state.dataSource}
@@ -99,7 +134,7 @@ export default class App extends Component {
               <Text style={{ fontSize: 15, color: 'black', }}>Problem:
                          </Text>
               <Text style={{ fontSize: 18, color: 'orange', marginBottom: 15, flexDirection: 'row' }}>
-                {item.problem}
+                {item.name}
               </Text>
             </TouchableOpacity>
           }

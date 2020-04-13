@@ -22,14 +22,14 @@ export default class Splash extends Component {
 
   componentDidMount() {
     var that = this;
-    setTimeout(() => { this.props.navigation.navigate("Login1") }, 2000);
+    setTimeout(() => { this.props.navigation.replace("Drawer") }, 1500);
   }
 
   render() {
     let Splash_Screen = (
       <View style={styles.SplashScreen_RootView}>
         <View style={styles.SplashScreen_ChildView}>
-          <Image source={require('../assets/Logo.png')}
+          <Image source={require('../../assets/Logo.png')}
             style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />
         </View>
       </View>)

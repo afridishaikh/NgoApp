@@ -89,7 +89,7 @@ export default class LoginView extends Component {
             var tempMSG = resp.data;
             tempMSG = tempMSG.replace(/^"|"$/g, '');
             Alert.alert(tempMSG);
-            this.props.navigation.push('Nlogin');
+            this.props.navigation.replace('Nlogin');
         }).catch((error) => {
             console.error(error);
         });

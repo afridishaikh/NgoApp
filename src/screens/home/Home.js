@@ -1,14 +1,40 @@
 import React, { Component } from 'react';
-import { SafeAreaView,StyleSheet, Text, View, Button, Image, TextInput, ScrollView, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
+import { SafeAreaView,StyleSheet, Text, View, Button, Image, TextInput, ScrollView,TouchableOpacity, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
 import Slider from './slider'
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 class Home extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isLoading: true,
+      ModalVisibleStatus: false,
+      TempImageURL: '',
+
+   username:''
+    // password:'ad'
+    }
+  }
+
+
+  //To store AsyncStorage value in state.
+  componentDidMount() {
+    AsyncStorage.getItem('any_key_here').then(value =>
+      //AsyncStorage returns a promise so adding a callback to get the value
+      this.setState({ username: value , isLoading:false})
+      //Setting the value in Text  
+    );
+  }
+
   render() {
+    
     return (
 
       // <View style={styles.container}>
       <SafeAreaView>
+
+
 
         <ImageBackground source={require('../../assets/bg1.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}>
         <View style={styles.slider}>
@@ -19,6 +45,8 @@ class Home extends Component {
           <Text style={styles.loginText}>Post A Request</Text>
         </TouchableHighlight> */}
 
+           
+
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
           <Text style={styles.loginText}>List Of NGO</Text>
         </TouchableHighlight>
@@ -27,8 +55,7 @@ class Home extends Component {
         <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Gallery')}>
           <Text style={styles.loginText}>Image Gallery</Text>
         </TouchableHighlight>
-      
-      
+
         <View style={{ flexDirection: 'row',alignItems:'center',alignContent:'center'}}>
         <TouchableHighlight style={[styles.buttonCon, styles.Button2]} onPress={() => this.props.navigation.navigate('Login')}>
           <Text style={styles.loginText}>Login As User</Text>
@@ -39,6 +66,8 @@ class Home extends Component {
         <TouchableHighlight style={[styles.buttonCon, styles.Button2]} onPress={() => this.props.navigation.navigate('Nlogin')}>
           <Text style={styles.loginText}>Login As NGO</Text>
         </TouchableHighlight>
+     
+
         </View>
         </ImageBackground>
         </SafeAreaView>
@@ -47,6 +76,14 @@ class Home extends Component {
 
     );
   }
+  getValueFunction = () => {
+    // console.warn(value)
+    //function to get the value from AsyncStorage
+    AsyncStorage.getItem('IsLoggedIN').then(value =>
+      //AsyncStorage returns a promise so adding a callback to get the value
+      this.setState({ getValue: value })
+      //Setting the value in Text 
+    );}
 }
 
 const styles = StyleSheet.create({
