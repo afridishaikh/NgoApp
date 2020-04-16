@@ -249,7 +249,7 @@
 // export default Login;
 
 
-// Async Storage NEW
+// Async Storage NEW VALIDATION
 import React, { Component } from 'react';
 import { StyleSheet,
    Text, 
@@ -262,11 +262,13 @@ import { StyleSheet,
       TextInput, 
       TouchableHighlight,
        Alert, 
-       ImageBackground } from 'react-native';
+       ImageBackground,
+      animating,
+    ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const userInfo={username:'admin', password:'admin'}
+
 
 class Login extends Component {
   constructor(props) {
@@ -274,7 +276,8 @@ class Login extends Component {
     this.state = {
       username:'',
       password:'',
-      user:''
+      user:'',
+      loading:false
     }
   }
 
@@ -283,6 +286,15 @@ class Login extends Component {
   UserLoginFunction = () => {
     const { username } = this.state;
     const { password } = this.state;
+
+
+      if(username=='' || password=='')  {
+        Alert.alert('Input Fields Should not be Empty !')
+      }
+       else { 
+        this.setState({
+          loading: true,
+      });
     fetch('https://ngoapp3219.000webhostapp.com/db/user_login.php', {
       // fetch('http://192.168.42.250/ngoapp/user_login.php', {
       method: 'POST',
@@ -309,11 +321,16 @@ class Login extends Component {
         }
         else {
           Alert.alert(responseJson);
+          this.setState({
+            loading: false,
+        });
         }
       }).catch((error) => {
         // console.error(error);
-        Alert.alert('Netwrok Error')
+        Alert.alert('Netwrok Error !')
+
       });
+    }
   }
   
 
@@ -371,6 +388,16 @@ class Login extends Component {
           <Text style={styles.loginText}>Signup</Text>
         </TouchableHighlight> 
 
+
+
+        {this.state.loading &&
+         <ActivityIndicator
+               animating = {animating}
+               color = '#bc2b78'
+               size = "large"
+               loading={this.state.loading}
+               />
+    }
       
          {/* <TouchableOpacity
           onPress={this.saveValueFunction}
@@ -403,26 +430,7 @@ class Login extends Component {
 
     )
   }
-  // _login = async() => {
-  //   if(userInfo.username===this.state.username && userInfo.password===this.state.password )
-  //   {
-  //     // alert('Logged in')
-  //     await AsyncStorage.setItem('isLoggedIn','1');
-  //     this.props.navigation.navigate('App')
-  //   }
-  //   else
-  //   {
-  //     alert('Fail');
-  //   }
-  // }
-  getValueFunction = () => {
-    console.warn('calling')
-    //function to get the value from AsyncStorage
-    AsyncStorage.getItem('IsLoggedIN').then(value =>
-      //AsyncStorage returns a promise so adding a callback to get the value
-      this.setState({ getValue: value })
-      //Setting the value in Text 
-    );}
+
 }
 
 const styles = StyleSheet.create({

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 
-export class AboutUs extends Component {
+export class HowToUse extends Component {
     render() {
         return (
             <View>
-                <Text> AbOut US </Text>
+                <Text> How to Use </Text>
             </View>
         )
     }
 }
 
-export default AboutUs
+export default HowToUse

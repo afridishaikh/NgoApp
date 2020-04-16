@@ -13,6 +13,8 @@ import {
     PixelRatio,
     ImageBackground,
     Platform,
+    ActivityIndicator,
+    animating
 } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker';
@@ -32,7 +34,8 @@ export default class LoginView extends Component {
             Address: '',
             City: '',
             Username: '',
-            Password: ''
+            Password: '',
+            loading:false
         }
     }
     selectPhotoTapped() {
@@ -68,9 +71,43 @@ export default class LoginView extends Component {
 
     //Function to send all data to server
     InsertDataToServer = () => {
-        // RNFetchBlob.fetch('POST', 'https://ngoapp.000webhostapp.com/ngoapp/n_signup.php', {
+    //   VALIDATION
+        let phoneno = /^[0]?[6789]\d{9}$/;
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ 
+        // console.warn(this.state.Name)
+          if(this.state.Name=='' || this.state.Address=='' || this.state.Username==''|| this.state.City=='' || this.state.Category=='')  {
+            Alert.alert('Input Field should not be Empty !')
+          }
+          else if(this.state.Password.length <=6) 
+          { 
+          Alert.alert('Password Must Be Greater than 6 Characters !');
+       //    this.setState({Password:text}) 
+          return false; 
+          } 
+          else if(this.state.ImageSource==null || this.state.data==null) 
+          { 
+          Alert.alert('You must Upload Your NGO image !');
+       //    this.setState({Password:text}) 
+          return false; 
+          } 
+          else if(phoneno.test(this.state.Mo_no) === false) 
+          { 
+          Alert.alert('Mobile Number is Invalid !');
+        //   this.setState({Mo_no:text}) 
+          return false; 
+          } 
+          else if(reg.test(this.state.Email) === false) 
+           { 
+           Alert.alert('Email Address is Invalid !');
+        //    this.setState({Email:text}) 
+           return false; 
+           } 
+    
+           else { 
+            this.setState({
+                loading: true,
+            });
         RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/ngo_signup.php', {
-
             Authorization: "Bearer access-token",
             otherHeader: "foo",
             'Content-Type': 'multipart/form-data',
@@ -87,12 +124,18 @@ export default class LoginView extends Component {
 
         ]).then((resp) => {
             var tempMSG = resp.data;
-            tempMSG = tempMSG.replace(/^"|"$/g, '');
+            tempMSG = tempMSG.replace(/\"/g, "");
             Alert.alert(tempMSG);
-            this.props.navigation.replace('Nlogin');
+            // this.props.navigation.replace('Nlogin');
+            this.props.navigation.goBack();
+            this.setState({
+                loading: false,
+            });
         }).catch((error) => {
-            console.error(error);
+            // console.error(error);
+            Alert.alert('Network Error !')
         });
+    }
     }
 
 
@@ -145,6 +188,7 @@ export default class LoginView extends Component {
                             <TextInput style={styles.inputs}
                                 underlineColorAndroid='transparent'
                                 placeholder="Username"
+                                autoCapitalize='none'
                                 onChangeText={Username => this.setState({ Username })} />
                         </View>
 
@@ -182,6 +226,7 @@ export default class LoginView extends Component {
                                 keyboardType="numeric"
                                 underlineColorAndroid='transparent'
                                 placeholder="Mobile Number"
+                                maxLength={10}
                                 onChangeText={Mo_no => this.setState({ Mo_no })} />
                         </View>
 
@@ -190,6 +235,7 @@ export default class LoginView extends Component {
                             <TextInput style={styles.inputs}
                                 placeholder="Email Address"
                                 keyboardType="email-address"
+                                autoCapitalize='none'
                                 underlineColorAndroid='transparent'
                                 onChangeText={Email => this.setState({ Email })} />
                         </View>
@@ -216,7 +262,18 @@ export default class LoginView extends Component {
                             <Text style={styles.loginText}>Signup</Text>
                         </TouchableHighlight>
 
+                        
+  
                     </ScrollView>
+                    {this.state.loading &&
+         <ActivityIndicator
+               animating = {animating}
+               color = '#bc2b78'
+               size = "large"
+               loading={this.state.loading}
+               />
+    }
+
                 </View>
 
             </ImageBackground>

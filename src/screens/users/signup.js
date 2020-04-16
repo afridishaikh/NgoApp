@@ -8,7 +8,9 @@ import {
   TouchableHighlight,
   Image,
   Alert,
-  ScrollView
+  ScrollView,
+  ActivityIndicator,
+  animating
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -21,10 +23,10 @@ export default class LoginView extends Component {
       TextInputMono: '',
       TextInputEmail: '',
       TextInputUsername: '',
-      TextInputPassword: ''
+      TextInputPassword: '',
+      loading:false
     }
   }
-
 
   InsertDataToServer = () => {
     const { TextInputName } = this.state;
@@ -33,24 +35,34 @@ export default class LoginView extends Component {
     const { TextInputUsername } = this.state;
     const { TextInputPassword } = this.state;
 
-    let text = this.state.TextInputEmail; 
-        // let emailError = this.state.TextInputEmail;
-        console.warn(text);
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ; 
-        if(reg.test(text) === false) 
-        { 
-        console.warn("Invalid email")
-        this.setState({TextInputEmail:text}) 
-        return false; 
-        } 
-        else { 
-        this.setState({TextInputEmail:text}) 
-        console.log("Email is Correct"); 
-        } 
+// Perfect validation
+  
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let phoneno = /^[0]?[6789]\d{9}$/;
 
-if(TextInputEmail){    
-      fetch('https://ngoapp.000webhostapp.com/ngoapp/signup.php', {
-    
+      if(TextInputName=='' ||TextInputMono=='' || TextInputEmail=='' ||TextInputUsername=='' || TextInputPassword=='')  {
+        Alert.alert('Input Fields should not be Empty !')
+      }
+      else if(phoneno.test(this.state.TextInputMono) === false) {
+      Alert.alert('Mobile Number is Invalid !');
+      return false; 
+      } 
+      else if(reg.test(this.state.TextInputEmail) === false) 
+       { 
+       Alert.alert('Email Address is Invalid !');
+       return false; 
+       } 
+       else if(this.state.TextInputPassword.length <=6) 
+       { 
+       Alert.alert('Password Must Be Greater than 6 Characters !')
+       return false; 
+       } 
+       else { 
+        this.setState({
+          loading: true,
+      });
+      //  this.setState({TextInputEmail:text}) 
+        fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -66,56 +78,23 @@ if(TextInputEmail){
     }).then((response) => response.json())
       .then((responseJson) => {
         Alert.alert(responseJson);
+        this.setState({
+          loading: false,
+      });
         this.props.navigation.goBack();
       }).catch((error) => {
-        console.error(error);
+        // console.error(error);
+        Alert.alert('Network Error !')
       });
-    }
-    else
-    {
-
-    }
-  }
-
-
-  // InsertDataToServer = () => {
-  //   const { TextInputName } = this.state;
-  //   const { TextInputMono } = this.state;
-  //   const { TextInputEmail } = this.state;
-  //   const { TextInputUsername } = this.state;
-  //   const { TextInputPassword } = this.state;
-
-  //   //The connection And Insert
-  //   // fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
-
-
-  //     fetch('https://ngoapp.000webhostapp.com/ngoapp/signup.php', {
-    
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       name: TextInputName,
-  //       mo_no: TextInputMono,
-  //       email: TextInputEmail,
-  //       username: TextInputUsername,
-  //       password: TextInputPassword
-  //     })
-  //   }).then((response) => response.json())
-  //     .then((responseJson) => {
-  //       Alert.alert(responseJson);
-  //       this.props.navigation.goBack();
-  //     }).catch((error) => {
-  //       console.error(error);
-  //     });
-  // }
+       } 
+      }
+ 
 
   render() {
     return (
       <View style={styles.container}>
          
+
 
 
           {/* <Text style={{ color: '#121456', fontSize: 25, textDecorationLine: 'underline' }}
@@ -131,7 +110,7 @@ if(TextInputEmail){
           <View style={styles.container2}>
     
        
-
+ 
              <View style={styles.inputContainer}>
           <Icon style={styles.Icon} name="pencil" size={25} color="grey" />
             <TextInput style={styles.inputs}
@@ -166,6 +145,7 @@ if(TextInputEmail){
             <TextInput style={styles.inputs}
               underlineColorAndroid='transparent'
               placeholder="Choose Username"
+              autoCapitalize='none'
               onChangeText={TextInputUsername => this.setState({ TextInputUsername })} />
           </View>
 
@@ -175,7 +155,6 @@ if(TextInputEmail){
               underlineColorAndroid='transparent'
               placeholder="Enter Password"
               secureTextEntry={true}
-              
               onChangeText={TextInputPassword => this.setState({ TextInputPassword })} />
           </View>
  
@@ -183,6 +162,16 @@ if(TextInputEmail){
           <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.InsertDataToServer}>
             <Text style={styles.loginText}>Signup</Text>
           </TouchableHighlight>
+
+          {this.state.loading &&
+         <ActivityIndicator
+               animating = {animating}
+               color = '#bc2b78'
+               size = "large"
+               loading={this.state.loading}
+               />
+    }
+
 
 
           </View>

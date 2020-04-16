@@ -1,3 +1,4 @@
+// //Sending data with NULL so Trackimng can Done
 import React, { Component, useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -16,41 +17,33 @@ import {
   Platform,
   SafeAreaView,
   ActivityIndicator,
+  animating
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
-
 import Geolocation from '@react-native-community/geolocation';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-
 import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-// import Map from './map'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class LoginView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       userid : '',
-  
       ImageSource: null,
       data: null,
-
       latitude: null,
       longitude: null,
-
       Problem: '',
-      Location: '',
+      // Location: '',
       Address: '',
       Mo_no: '',
+      loading:false
     }
   }
-
-  
-
 
   //To select Photo
   selectPhotoTapped() {
@@ -86,13 +79,9 @@ export default class LoginView extends Component {
 
   //Function To get current location on map
   componentDidMount = () => {
-
-
-      //To store AsyncStorage value in state.
+  
       AsyncStorage.getItem('username').then(value =>
-        //AsyncStorage returns a promise so adding a callback to get the value
         this.setState({ userid: value})
-        //Setting the value in Text  
       );
 
 
@@ -152,6 +141,32 @@ export default class LoginView extends Component {
 
   //Functio That will send data to server
   InsertDataToServer = () => {
+     //   VALIDATION
+     let phoneno = /^[0]?[6789]\d{9}$/;
+     // console.warn(this.state.Name)
+       if(this.state.userid==''||this.state.Problem=='' || this.state.Address=='' || this.state.Mo_no=='')  {
+         Alert.alert('Input Field should not be Empty !')
+       }
+    
+       else if(this.state.ImageSource==null || this.state.data==null) 
+       { 
+       Alert.alert('You must Upload Your NGO image !');
+       return false; 
+       } 
+       else if(this.state.latitude==null || this.state.longitude==null) 
+       { 
+       Alert.alert('Please turn ON Your GPS !');
+       return false; 
+       } 
+       else if(phoneno.test(this.state.Mo_no) === false) 
+       { 
+       Alert.alert('Mobile Number is Invalid !'); 
+       return false; 
+       } 
+        else { 
+          this.setState({
+            loading: true,
+        });
     RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/request.php', {
       Authorization: "Bearer access-token",
       otherHeader: "foo",
@@ -169,13 +184,16 @@ export default class LoginView extends Component {
 
     ]).then((resp) => {
       var tempMSG = resp.data;
-      // tempMSG = tempMSG.replace(/^"|"$/g, '');
       tempMSG = tempMSG.replace(/\"/g, "");
       Alert.alert(tempMSG);
-    }).catch((error) => {
-      console.error(error);
+      this.setState({
+        loading: false,
     });
-
+    }).catch((error) => {
+      // console.error(error);
+      Alert.alert('Network Error !')
+    });
+  }
   }
 
 
@@ -197,6 +215,16 @@ export default class LoginView extends Component {
       // <SafeAreaView style={styles.container}>
        <View style={styles.container}>
         <ScrollView style={{ padding: 25 }} >
+
+          
+        {this.state.loading &&
+         <ActivityIndicator
+               animating = {animating}
+               color = '#bc2b78'
+               size = "large"
+               loading={this.state.loading}
+               />
+    }
 
           <View style={styles.Dropdown}>
             <Dropdown
@@ -259,6 +287,7 @@ export default class LoginView extends Component {
               keyboardType="numeric"
               underlineColorAndroid='transparent'
               placeholder="Mobile Number"
+              maxLength={10}
               onChangeText={Mo_no => this.setState({ Mo_no })} />
           </View>
 
@@ -399,7 +428,7 @@ const styles = StyleSheet.create({
 
 
 
-// // Backup
+//PERFECT 
 // import React, { Component, useState, useEffect } from 'react';
 // import {
 //   StyleSheet,
@@ -451,15 +480,7 @@ const styles = StyleSheet.create({
 //     }
 //   }
 
-//     //To store AsyncStorage value in state.
-
-//       // AsyncStorage.getItem('username').then(value =>
-//       //   //AsyncStorage returns a promise so adding a callback to get the value
-//       //   this.setState({ userid: value})
-//       //   //Setting the value in Text  
-
-//         // this.setState({ userid: 'lol'})
-//       // );
+  
 
 
 //   //To select Photo
@@ -496,7 +517,17 @@ const styles = StyleSheet.create({
 
 //   //Function To get current location on map
 //   componentDidMount = () => {
-//     this.setState({ userid: 'lol'})
+
+
+//       //To store AsyncStorage value in state.
+//       AsyncStorage.getItem('username').then(value =>
+//         //AsyncStorage returns a promise so adding a callback to get the value
+//         this.setState({ userid: value})
+//         //Setting the value in Text  
+//       );
+
+
+//     //For Grant Location Service
 //     var that = this;
 //     //Checking for the permission just after component loaded
 //     if (Platform.OS === 'ios') {
@@ -552,15 +583,12 @@ const styles = StyleSheet.create({
 
 //   //Functio That will send data to server
 //   InsertDataToServer = () => {
-//     console.warn(this.state.userid)
-
-//     // console.warn(this.state.latitude)
-//     // RNFetchBlob.fetch('POST', 'https://ngoapp.000webhostapp.com/ngoapp/n_signup.php', {
 //     RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/request.php', {
 //       Authorization: "Bearer access-token",
 //       otherHeader: "foo",
 //       'Content-Type': 'multipart/form-data',
 //     }, [
+//       { name: 'username', data: this.state.userid },
 //       { name: 'problem', data: this.state.Problem },
 //       { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data },
 
@@ -572,7 +600,8 @@ const styles = StyleSheet.create({
 
 //     ]).then((resp) => {
 //       var tempMSG = resp.data;
-//       tempMSG = tempMSG.replace(/^"|"$/g, '');
+//       // tempMSG = tempMSG.replace(/^"|"$/g, '');
+//       tempMSG = tempMSG.replace(/\"/g, "");
 //       Alert.alert(tempMSG);
 //     }).catch((error) => {
 //       console.error(error);
@@ -608,7 +637,7 @@ const styles = StyleSheet.create({
 //             />
 //           </View>
 
-//           <Text style={styles.text}> lol: {this.state.userid} </Text>
+//           {/* <Text style={styles.text}> lol: {this.state.userid} </Text> */}
 
 //           <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
 //             <View style={styles.ImageContainer}>
