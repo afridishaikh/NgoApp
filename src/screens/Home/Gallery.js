@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, View, FlatList, ActivityIndicator, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
+import { Platform, StyleSheet, View, FlatList, Text, ActivityIndicator, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
 export default class App extends Component{
     constructor()
     {
@@ -22,7 +22,8 @@ export default class App extends Component{
                });
              })
              .catch((error) => {
-               console.error(error);
+              //  console.error(error);
+              Alert.alert('Network Error !');
              });
          }
  
@@ -30,7 +31,9 @@ export default class App extends Component{
     {
       this.setState({
         ModalVisibleStatus: visible,
-        TempImageURL : imageURL})
+        TempImageURL : imageURL,
+   
+      })
     }
     
     render() {
@@ -47,13 +50,14 @@ export default class App extends Component{
          <FlatList
             data={ this.state.dataSource }
             renderItem={({item}) => 
-              <View style={{flex:1, flexDirection: 'column', margin:1 }}> 
-                <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.image)} >
-                  <Image style={styles.imageThumbnail} source = {{ uri: item.image }} />
+              <View style={{flex:1, flexDirection: 'column', margin:10 }}> 
+                <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.N_img)} >
+                  <Image style={styles.imageThumbnail} source = {{ uri: item.N_img }} />
                 </TouchableOpacity>
+
               </View> 
             }
-            numColumns = { 3 }
+            numColumns = { 2 }
             keyExtractor={(item, index) => index}
            />
            {
@@ -66,7 +70,8 @@ export default class App extends Component{
               visible={this.state.ModalVisibleStatus}
               onRequestClose={ () => { this.ShowModalFunction(!this.state.ModalVisibleStatus)} } >
                 <View style={styles.modalView}>
-                    <Image style={styles.mainImage} source = {{ uri: this.state.TempImageURL }} />
+                
+                    <Image style={styles.openImage} source = {{ uri: this.state.TempImageURL }} />
                  <TouchableOpacity 
                         activeOpacity = { 0.5 }
                         style={styles.TouchableOpacity_Style}
@@ -95,19 +100,20 @@ export default class App extends Component{
    imageThumbnail: {
      justifyContent: 'center',
      alignItems: 'center',
-     height: 180,
-     width:150,
+     height: 200,
+     width:155,
      position:"relative",
-     resizeMode:"contain"
+     resizeMode:"contain",
+     borderColor:'black',
+     borderWidth:3,
    },
  
-   mainImage:{
- 
+   openImage:{
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    width:'98%',
-    resizeMode : 'contain'
+    width:'100%',
+    resizeMode : 'contain',
  
    },
  

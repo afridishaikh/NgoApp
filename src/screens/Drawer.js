@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StatusBar,
-  Dimensions
+  Dimensions,
+  animating
 } from 'react-native'
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -36,6 +37,7 @@ import Feedback from './Pages/Feedback'
 import AboutUs from './Pages/AboutUs'
 import UStatus from './Home/UStatus'
 import NStatus from './Home/NStatus'
+import Donate from './Home/Donate'
 import CustomSidebarMenu from './CustomSidebarMenu';
 
 //To open and close the Drawer
@@ -158,6 +160,19 @@ const NewUser = createStackNavigator({
       headerTintColor: "white",
     }),
   },
+  How: {
+    screen: How,
+    navigationOptions: ({ navigation }) => ({
+      // header: null,
+      title: 'Signup As NGO',
+      headerStyle: {
+        backgroundColor: '#694fad',
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerTintColor: "white",
+    }),
+  },
 });
 
 const NewuserNav = createDrawerNavigator({
@@ -245,6 +260,19 @@ const NGOUser = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       // header: null,
       title: 'Profile',
+      headerStyle: {
+        backgroundColor: '#694fad',
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerTintColor: "white",
+    }),
+  },
+  How: {
+    screen: How,
+    navigationOptions: ({ navigation }) => ({
+      // header: null,
+      title: 'Signup As NGO',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -351,8 +379,35 @@ const ExistUser = createStackNavigator({
       headerTintColor: "white",
     }),
   },
-
+  Donate: {
+    screen: Donate,
+    navigationOptions: ({ navigation }) => ({
+      // header: null,
+      title: 'Gallery',
+      headerStyle: {
+        backgroundColor: '#694fad',
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerTintColor: "white",
+    }),
+  },
+  How: {
+    screen: How,
+    navigationOptions: ({ navigation }) => ({
+      // header: null,
+      title: 'Signup As NGO',
+      headerStyle: {
+        backgroundColor: '#694fad',
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerTintColor: "white",
+    }),
+  },
 });
+
+
 //Drawer Navigator for the Navigation Drawer / Sidebar
 const UserNav = createDrawerNavigator({
   //Drawer Optons and indexing
@@ -388,10 +443,14 @@ class AuthLoadingScreen extends Component {
 
   render() {
     return (
-      <View sytyle={{ flex: 1, justifyContent: 'Center' }}>
-        <ActivityIndicator />
-        <StatusBar barStyle="default" />
-      </View>
+      <View sytyle={{flex:1, justifyContent: 'center', alignItems: 'center'} }>
+        
+          <ActivityIndicator
+                    animating={animating}
+                    color='#bc2b78'
+                    size={30}
+                  />
+       </View>
     )
   }
   _loadData = async () => {

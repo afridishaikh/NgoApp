@@ -1,18 +1,11 @@
-//This is an example code for Navigation Drawer with Custom Side bar//
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
-// import { Icon } from 'react-native-elements';
+import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 export default class CustomSidebarMenu extends Component {
   constructor() {
     super();
 
-
-    this.state = {username: null};
-    
-
-    //Setting up the Main Top Large Image of the Custom Sidebar
     this.proileImage =
       'https://aboutreact.com/wp-content/uploads/2018/07/sample_img.png';
     this.items = [
@@ -22,22 +15,22 @@ export default class CustomSidebarMenu extends Component {
         screenToNavigate: 'Screen1',
       },
       {
-        navOptionThumb: 'image',
+        navOptionThumb: 'list-ul',
         navOptionName: 'NGO List',
         screenToNavigate: 'Screen2',
       },
       {
-        navOptionThumb: 'build',
+        navOptionThumb: 'question-circle',
         navOptionName: 'How to Use ?',
         screenToNavigate: 'Screen3',
       },
       {
-        navOptionThumb: 'pencil',
+        navOptionThumb: 'comments',
         navOptionName: 'Feedback',
         screenToNavigate: 'Screen4',
       },
       {
-        navOptionThumb: 'pencil',
+        navOptionThumb: 'address-card',
         navOptionName: 'About Us',
         screenToNavigate: 'Screen5',
       },
@@ -46,28 +39,18 @@ export default class CustomSidebarMenu extends Component {
  
 
   }
-
-  componentDidMount() {
-    AsyncStorage.getItem('username').then(value =>
-      //AsyncStorage returns a promise so adding a callback to get the value
-      this.setState({ username: value})
-      //Setting the value in Text  
-    );
-  }
-
   
   render() {
     return (
       <View style={styles.sideMenuContainer}>
-        {/*Top Large Image */}
+        
         <Image
-          source={{ uri: this.proileImage }}
+          source={require('../assets/images/bgdra.bmp')}
           style={styles.sideMenuProfileIcon}
         />
 
-<Text style={styles.text}> username: {this.state.username} </Text>
 
-        {/*Divider between Top Image and Sidebar Option*/}
+  
         <View
           style={{
             width: '100%',
@@ -79,7 +62,7 @@ export default class CustomSidebarMenu extends Component {
         {/*Setting up Navigation Options from option array using loop*/}
         <View style={{ width: '100%' }}>
           {this.items.map((item, key) => (
-            <View
+            <TouchableOpacity
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -87,22 +70,26 @@ export default class CustomSidebarMenu extends Component {
                 paddingBottom: 10,
                 backgroundColor: global.currentScreenIndex === key ? '#e0dbdb' : '#ffffff',
               }}
-              key={key}>
+
+              key={key}
+              onPress={() => {
+                global.currentScreenIndex = key;
+                this.props.navigation.navigate(item.screenToNavigate);
+              }}
+              >
               <View style={{ marginRight: 10, marginLeft: 20 }}>
                 <Icon name={item.navOptionThumb} size={25} color="#808080" />
               </View>
               <Text
                 style={{
                   fontSize: 15,
-                  color: global.currentScreenIndex === key ? 'red' : 'black',
+                  color: global.currentScreenIndex === key ? '#00aaff' : 'black',
                 }}
-                onPress={() => {
-                  global.currentScreenIndex = key;
-                  this.props.navigation.navigate(item.screenToNavigate);
-                }}>
+    
+                >
                 {item.navOptionName}
               </Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </View>
@@ -113,15 +100,15 @@ const styles = StyleSheet.create({
   sideMenuContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'grey',
+    backgroundColor: 'white',
     alignItems: 'center',
-    paddingTop: 20,
+    // paddingTop: 20,
   },
   sideMenuProfileIcon: {
     resizeMode: 'center',
-    width: 150,
-    height: 150,
-    marginTop: 20,
-    borderRadius: 150 / 2,
+    width: '100%',
+    height: 140,
+    // marginTop: 20,
+    // borderRadius: 150 / 2,
   },
 });

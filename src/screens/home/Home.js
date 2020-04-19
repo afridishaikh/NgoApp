@@ -1,89 +1,63 @@
 import React, { Component } from 'react';
-import { SafeAreaView,StyleSheet, Text, View, Button, Image, TextInput, ScrollView,TouchableOpacity, TouchableHighlight ,BackHandler,ImageBackground} from 'react-native';
+import {
+  SafeAreaView, StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  TouchableHighlight,
+  BackHandler,
+  ImageBackground
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from "react-native-vector-icons/FontAwesome5";
+import { IconButton, Colors } from 'react-native-paper';
 import Slider from './slider'
-import AsyncStorage from '@react-native-community/async-storage';
-
 
 class Home extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isLoading: true,
-      ModalVisibleStatus: false,
-      TempImageURL: '',
-
-   username:''
-    // password:'ad'
-    }
-  }
-
-
-  //To store AsyncStorage value in state.
-  componentDidMount() {
-    AsyncStorage.getItem('any_key_here').then(value =>
-      //AsyncStorage returns a promise so adding a callback to get the value
-      this.setState({ username: value , isLoading:false})
-      //Setting the value in Text  
-    );
-  }
-
   render() {
-    
     return (
-
-      // <View style={styles.container}>
-      <SafeAreaView>
-
-
-
-        <ImageBackground source={require('../../assets/bg1.jpg')} style={{width:'100%',height:'100%',alignItems:'center'}}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.slider}>
           <Slider />
         </View>
+        
+        <TouchableOpacity style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
+          <Text style={styles.buttonText}>NGO List</Text>
+        </TouchableOpacity>
+        
+            
+        <TouchableOpacity style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Gallery')}>
+          <Text style={styles.buttonText}>Image Gallery</Text>
+        </TouchableOpacity>
 
-        {/* <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Request')}>
-          <Text style={styles.loginText}>Post A Request</Text>
-        </TouchableHighlight> */}
-
-           
-
-        <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('List')}>
-          <Text style={styles.loginText}>List Of NGO</Text>
+        <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('How')}>
+          <Text style={styles.buttonText}>How to Use ?</Text>
         </TouchableHighlight>
 
+        <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center' }}>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Gallery')}>
-          <Text style={styles.loginText}>Image Gallery</Text>
-        </TouchableHighlight>
+                  <TouchableOpacity style={[styles.buttonCon, styles.Button2]} activeOpacity={0.7} onPress={() => this.props.navigation.navigate('Login')} >
+                    <Icon name="user" size={17} color="#fff" />
+                    <Text style={styles.buttonText}>Login as User</Text>
+                  </TouchableOpacity>
+         
+          <Text style={{ fontWeight: 'bold', letterSpacing: 2 }}>OR</Text>
+          <TouchableOpacity style={[styles.buttonCon, styles.Button2]} activeOpacity={0.7} onPress={() => this.props.navigation.navigate('Nlogin')}>
+                    <Icon name="users" size={17} color="#fff"  />
+                    <Text style={styles.buttonText}>Login as NGO</Text>
+                  </TouchableOpacity>
+         
 
-        <View style={{ flexDirection: 'row',alignItems:'center',alignContent:'center'}}>
-        <TouchableHighlight style={[styles.buttonCon, styles.Button2]} onPress={() => this.props.navigation.navigate('Login')}>
-          <Text style={styles.loginText}>Login As User</Text>
-        </TouchableHighlight>
-
-        <Text style={{fontWeight:'bold',letterSpacing:2,textDecorationLine:'underline'}}>OR</Text>
-
-        <TouchableHighlight style={[styles.buttonCon, styles.Button2]} onPress={() => this.props.navigation.navigate('Nlogin')}>
-          <Text style={styles.loginText}>Login As NGO</Text>
-        </TouchableHighlight>
-     
 
         </View>
-        </ImageBackground>
-        </SafeAreaView>
-        // </View>
-    
 
+      </SafeAreaView>
     );
   }
-  getValueFunction = () => {
-    // console.warn(value)
-    //function to get the value from AsyncStorage
-    AsyncStorage.getItem('IsLoggedIN').then(value =>
-      //AsyncStorage returns a promise so adding a callback to get the value
-      this.setState({ getValue: value })
-      //Setting the value in Text 
-    );}
 }
 
 const styles = StyleSheet.create({
@@ -91,7 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#DCDCDC',
+    backgroundColor:'#DCDCDC'
   },
   buttonContainer: {
     height: 50,
@@ -99,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 30,
-    width: 250,
+    width: 230,
     borderRadius: 30,
   },
   buttonCon: {
@@ -109,25 +83,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 30,
     // marginLeft:10,
-    margin:30,
+    margin: 30,
     width: 120,
     borderRadius: 10,
   },
   Button: {
-    backgroundColor: "#980953",
- 
+    backgroundColor: "#694fad",
+
   },
   Button2: {
-    backgroundColor: "green",
+    backgroundColor: "#00ab5e",
     borderWidth: 2,
     borderColor: 'black'
   },
-  loginText: {
+  buttonText: {
     color: 'white',
   },
-  slider:{
-    justifyContent:'center',
-    flex: 1, 
+  slider: {
+    justifyContent: 'center',
+    flex: 1,
   }
 });
 
