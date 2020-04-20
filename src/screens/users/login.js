@@ -49,8 +49,6 @@ class Login extends Component {
   UserLoginFunction = () => {
     const { username } = this.state;
     const { password } = this.state;
-
- 
     if (username == '' || password == '') {
       Alert.alert('Input Fields Should not be Empty !')
     }
@@ -90,6 +88,9 @@ class Login extends Component {
         }).catch((error) => {
           // console.error(error);
           Alert.alert('Netwrok Error !')
+          this.setState({
+            loading: false,
+          });
         });
     }
   }

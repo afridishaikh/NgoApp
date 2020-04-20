@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Text, Platform, StyleSheet, View, FlatList, ActivityIndicator, Linking, Image, Modal, TouchableOpacity, BackHandler ,ImageBackground } from 'react-native';
+import { Text, Platform, StyleSheet, View, FlatList, ActivityIndicator,animating, Linking, Image, Modal, TouchableOpacity, BackHandler ,ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Card } from 'react-native-paper'
 
@@ -64,9 +64,16 @@ export default class App extends Component {
  
     if (this.state.isLoading) {
       return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" />
-        </View>
+        <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
+          <Text>Check Your Network</Text>
+        <Text> Please Wait ...</Text>
+        <ActivityIndicator
+            animating={animating}
+            color='#bc2b78'
+            size={70}
+            loading={this.state.loading}
+        />
+    </View>
       );
     }
     return (
@@ -83,12 +90,12 @@ export default class App extends Component {
                 <View style={{flexDirection:'row'}}>
               <Image style={{ width: 100, height: 100, margin: 5,borderRadius:5, borderWidth:2, borderColor:'black', flexDirection: 'row' }} source={{ uri: item.image }} />
               <View style={{justifyContent:'center',alignContent:'center', marginLeft:20}}>
-              <Text style={{ fontSize: 15, color: 'black', }}>NGO Name:
+              <Text style={{ fontSize: 15, color: 'black', }}>NGO Name
                          </Text>
               <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
                 {item.name}
               </Text>
-              <Text style={{ fontSize: 15, color: 'black', }}>NGO Service Type:
+              <Text style={{ fontSize: 15, color: 'black', }}>NGO Service
                          </Text>
               <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
                 {item.category}
@@ -252,7 +259,7 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 120,
     flexDirection: 'row',
-    backgroundColor: '#f7f12f',
+    backgroundColor: '#e0d238',
     alignItems: 'center',
     borderWidth:2,
     borderBottomColor:'black'

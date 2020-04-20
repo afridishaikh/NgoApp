@@ -26,10 +26,14 @@ export default class App extends Component {
             //AsyncStorage returns a promise so adding a callback to get the value
             this.setState({ userid: value }),
         );
+        
+        this.setState({
+            isLoading: true,
+        })
+
         return fetch('https://ngoapp3219.000webhostapp.com/db/update/donation.php')
             .then((response) => response.json())
             .then((responseJson) => {
-
                 if (responseJson === 'Invalid') {
                     Alert.alert('No any NGO Found with UPI !');
                     this.props.navigation.goBack();
@@ -37,15 +41,17 @@ export default class App extends Component {
                 else {
                     this.setState({
                         dataSource: responseJson,
-                        loading: false,
+                        isLoading: false,
                     })
-                }
-                
-               
+                }       
             })
             .catch((error) => {
                 // console.error(error);
             Alert.alert('Network Error !');
+            this.setState({
+                isLoading: false,
+            });
+            this.props.navigation.goBack();
             });
     }
 
@@ -114,6 +120,9 @@ export default class App extends Component {
                                             <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20, marginTop: 70 }}>
                                                 <Text style={{ fontSize: 15, color: 'black', }}>NGO Name:
                          </Text>
+                         <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                                                {item.name}
+                                            </Text>
                                                 <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
                                                     {item.problem}
                                                 </Text>

@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
   },
   sideMenuProfileIcon: {
     resizeMode: 'center',
-    width: '100%',
-    height: 140,
+    width: 490,
+    height: 155,
     // marginTop: 20,
     // borderRadius: 150 / 2,
   },

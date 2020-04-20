@@ -28,7 +28,6 @@ import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 
 export default class LoginView extends Component {
   constructor(props) {
@@ -215,7 +214,7 @@ export default class LoginView extends Component {
         <ScrollView style={{ padding: 25 }} >
           <View style={[styles.Dropdown,{marginBottom:20}]}>
             <Dropdown
-              label='Choose Problem'
+              label='Select a Problem'
               data={Problem}
               onChangeText={Problem => this.setState({ Problem })}
             />

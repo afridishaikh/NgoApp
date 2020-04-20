@@ -79,7 +79,10 @@ class Login extends Component {
           }
         }).catch((error) => {
           // console.error(error);
-          Alert.alert('Netwrok Error')
+          Alert.alert('Netwrok Error !')
+          this.setState({
+            loading: false,
+          });
         });
     }
   }

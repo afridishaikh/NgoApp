@@ -73,7 +73,7 @@ export default class App extends Component {
       Alert.alert(tempMSG);
     }).catch((error) => {
       // console.error(error);
-      Alert.alert('Network Error!')
+      Alert.alert('Network Error !')
     });
   }
 
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 120,
     flexDirection: 'row',
-    backgroundColor: '#f7f12f',
+    backgroundColor: '#e0d238',
     alignItems: 'center',
     borderWidth: 2,
     borderBottomColor: 'black'

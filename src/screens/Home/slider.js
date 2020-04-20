@@ -9,11 +9,10 @@ export default class Slider extends Component {
     super(props);
     this.state = {
       images: [
-        require('../../assets/Slider/1.png'),
-        require('../../assets/Slider/2.png'),
+        require('../../assets/Slider/1.jpg'),
+        require('../../assets/Slider/2.jpg'),
         require('../../assets/Slider/3.jpg'),
-        
-        require('../../assets/Logo.png'),
+        require('../../assets/Slider/4.jpg'),
       ]
     };
   }

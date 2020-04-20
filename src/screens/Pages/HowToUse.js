@@ -24,7 +24,7 @@ export default class HowToUse extends Component {
                 <Text style={styles.copy2}>User of This App can See details of The NGO and Make contact with NGO.</Text>
                 <Text style={styles.copy2}>Also User can Donate to the NGO.</Text>
                 <Text style={[styles.copy, { fontSize: 15 }]}>STEP 1</Text>
-            <Text style={styles.copy2}>Go To 'Post A Request' And Fill all The details of the Victim or Helpless Person</Text>
+            <Text style={styles.copy2}>Go To 'Post A Request' And Fill all The details of the Victim or Helpless Person.</Text>
 
             <Text style={[styles.copy, { fontSize: 15 }]}>STEP 2</Text>
             <Text style={styles.copy2}>Click 'Send Request' to send Details, The details will be sent to the NGOs.</Text>
@@ -44,7 +44,7 @@ export default class HowToUse extends Component {
             </View>
                     <Text style={styles.copy2}>NGO will Get all the Infromation Of the Person who is Required Help</Text>
                 <Text style={[styles.copy, { fontSize: 15 }]}>STEP 1</Text>
-            <Text style={styles.copy2}>Go To 'Request List' to see the Requests of the Users</Text>
+            <Text style={styles.copy2}>Go To 'Request List' to see the Requests of the Users.</Text>
 
             <Text style={[styles.copy, { fontSize: 15 }]}>STEP 2</Text>
             <Text style={styles.copy2}>Click 'Accept' to accept the Request.</Text>
@@ -54,7 +54,7 @@ export default class HowToUse extends Component {
 
             
             <Text style={[styles.copy, { fontSize: 15 }]}>STEP 4</Text>
-            <Text style={styles.copy2}>NGO has to "Complete" the Request and Attach photo with the Victim to Success the Request.</Text>
+            <Text style={styles.copy2}>NGO has to "Complete" the Request and Attach photo with the Victim to fully complete the Request.</Text>
                 </View>
                 
 

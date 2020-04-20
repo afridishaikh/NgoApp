@@ -50,7 +50,9 @@ export default class HowToUse extends Component {
                             >
                                 <Image style={styles.avatar2} source={require('../../assets/icons/logo/ig.bmp')} />
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={() => Linking.openURL('mailto:mustakimkaji28@gmail.com')}
+                            >
                                 <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.bmp')} />
                             </TouchableOpacity>
 

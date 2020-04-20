@@ -131,6 +131,9 @@ export default class LoginView extends Component {
             }).catch((error) => {
                 // console.error(error);
                 Alert.alert('Network Error !')
+                this.setState({
+                    loading: false,
+                  });
             });
         }
     }

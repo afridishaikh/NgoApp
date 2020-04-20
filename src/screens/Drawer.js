@@ -64,7 +64,6 @@ const NewUser = createStackNavigator({
     screen: First,
     navigationOptions: ({ navigation }) => ({
       header: null,
-      title: 'NGO App',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
     }),
   },
@@ -72,7 +71,7 @@ const NewUser = createStackNavigator({
     screen: Home,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'NGO App',
+      title: 'Pukaar - Help a Helpless',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#694fad',
@@ -99,7 +98,7 @@ const NewUser = createStackNavigator({
     screen: Gallery,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Gallery',
+      title: 'Image Gallery',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -112,7 +111,7 @@ const NewUser = createStackNavigator({
     screen: Login,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Login As User',
+      title: 'Login as User',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -125,7 +124,7 @@ const NewUser = createStackNavigator({
     screen: Nlogin,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Login As NGO',
+      title: 'Login as NGO',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -138,7 +137,7 @@ const NewUser = createStackNavigator({
     screen: Signup,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Signup As User',
+      title: 'Signup as User',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -151,7 +150,7 @@ const NewUser = createStackNavigator({
     screen: Nsignup,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Signup As NGO',
+      title: 'Signup as NGO',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -164,7 +163,7 @@ const NewUser = createStackNavigator({
     screen: How,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Signup As NGO',
+      title: 'How to Use ?',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -206,7 +205,7 @@ const NGOUser = createStackNavigator({
     screen: NHome,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'NGO App',
+      title:'Pukaar - Help a Helpless',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#694fad',
@@ -220,7 +219,7 @@ const NGOUser = createStackNavigator({
     screen: List,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'List OF NGO',
+      title: 'NGO List',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -233,7 +232,7 @@ const NGOUser = createStackNavigator({
     screen: Gallery,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Gallery',
+      title: 'Image Gallery',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -246,7 +245,7 @@ const NGOUser = createStackNavigator({
     screen: ReqList,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'List of Requests',
+      title: 'Request List',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -259,7 +258,7 @@ const NGOUser = createStackNavigator({
     screen: NStatus,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Profile',
+      title: 'Your Activity',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -272,7 +271,7 @@ const NGOUser = createStackNavigator({
     screen: How,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Signup As NGO',
+      title: 'How to Use ?',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -314,7 +313,7 @@ const ExistUser = createStackNavigator({
     screen: UHome,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'NGO App',
+      title: 'Pukaar - Help a Helpless',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#694fad',
@@ -329,7 +328,7 @@ const ExistUser = createStackNavigator({
     screen: Request,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Post A Request',
+      title: 'Post a Request',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -343,7 +342,7 @@ const ExistUser = createStackNavigator({
     screen: List,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'List of NGO',
+      title: 'NGO List',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -357,7 +356,7 @@ const ExistUser = createStackNavigator({
     screen: Gallery,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Gallery',
+      title: 'Image Gallery',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -370,7 +369,7 @@ const ExistUser = createStackNavigator({
     screen: UStatus,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Profile',
+      title: 'Your Activity',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -383,7 +382,7 @@ const ExistUser = createStackNavigator({
     screen: Donate,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Gallery',
+      title: 'Donate to NGO',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,
@@ -396,7 +395,7 @@ const ExistUser = createStackNavigator({
     screen: How,
     navigationOptions: ({ navigation }) => ({
       // header: null,
-      title: 'Signup As NGO',
+      title: 'How to Use ?',
       headerStyle: {
         backgroundColor: '#694fad',
         shadowOpacity: 0,

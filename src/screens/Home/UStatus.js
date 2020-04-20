@@ -17,7 +17,8 @@ import {
     BackHandler,
     ImageBackground,
     animating,
-    Linking
+    Linking,
+    Dimensions
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -86,6 +87,10 @@ class Home extends Component {
             ).catch((error) => {
                 // console.error(error);
                 Alert.alert('Network Error !')
+                this.setState({
+                    loading: false,
+                    ModalVisibleStatus: false,
+                })
             });
     }
 
@@ -122,8 +127,12 @@ class Home extends Component {
                 console.warn(responseJson)
             }
             ).catch((error) => {
-                console.error(error);
-                // Alert.alert('Network Error !')
+                // console.error(error);
+                Alert.alert('Network Error !');
+                this.setState({
+                    loading: false,
+                    sentModal: false,
+                })
 
             });
     }
@@ -160,7 +169,11 @@ class Home extends Component {
             }
             ).catch((error) => {
                 // console.error(error);
-                Alert.alert('Network Error !')
+                Alert.alert('Network Error !');
+                this.setState({
+                    loading: false,
+                    ModalComplete: false,
+                })
             });
     }
 
@@ -242,6 +255,7 @@ class Home extends Component {
             );
         }
         return (
+            <ImageBackground source={require('../../assets/bg.jpg')} style={styles.backgroundImage}>
             <View style={styles.container}>
 
 
@@ -467,7 +481,7 @@ class Home extends Component {
 
             </View>
 
-
+</ImageBackground>
         );
     }
 }
@@ -536,11 +550,19 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
 
+    backgroundImage: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+      },
+
     mycard: {
         margin: 5,
         height: 120,
         flexDirection: 'row',
-        backgroundColor: '#f7f12f',
+        backgroundColor: '#e0d238',
         alignItems: 'center',
         borderWidth: 2,
         borderBottomColor: 'black'

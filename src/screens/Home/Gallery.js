@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, View, FlatList, Text, ActivityIndicator, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
+import { Platform, StyleSheet, View, FlatList, Text, animating, ActivityIndicator, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
 export default class App extends Component{
     constructor()
     {
@@ -11,6 +11,7 @@ export default class App extends Component{
      }
     }
     componentDidMount() {
+      
       return fetch('https://ngoapp3219.000webhostapp.com/db/Gallery.php')
              .then((response) => response.json())
              .then((responseJson) => {
@@ -39,9 +40,16 @@ export default class App extends Component{
     render() {
         if (this.state.isLoading) {
             return (
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator size="large" />
-              </View>
+              <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
+              <Text>Please Check Your Network</Text>
+            <Text> Please Wait ...</Text>
+            <ActivityIndicator
+                animating={animating}
+                color='#bc2b78'
+                size={70}
+                loading={this.state.loading}
+            />
+        </View>
           );
         }
       return (

@@ -58,20 +58,19 @@ export default class Home extends Component {
       })
     }).then((response) => response.json())
       .then((responseJson) => {
-        if (responseJson[0].username == username) {
-          this.setState({
-            dataSource: responseJson,
-            loading: false,
-            profile: true,
-          })
-        }
-        else {
-          alert('Please Login Again');
-        }
+
+        this.setState({
+          dataSource: responseJson,
+          loading: false,
+          profile: true,
+        })
       }
       ).catch((error) => {
         // console.error(error);
         Alert.alert("Network Error !")
+        this.setState({
+          loading: false
+        })
       });
   }
 
@@ -86,31 +85,44 @@ export default class Home extends Component {
     this.setState({
       loading: true,
     });
-    RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/update/upi.php', {
-      Authorization: "Bearer access-token",
-      otherHeader: "foo",
-      'Content-Type': 'multipart/form-data',
-    }, [
-      { name: 'username', data: this.state.username },
-      { name: 'upi', data: this.state.upidata },
-    ]).then((resp) => {
-      var tempMSG = resp.data;
-      tempMSG = tempMSG.replace(/\"/g, "");
-      Alert.alert(tempMSG);
+
+    if (this.state.upidata == '' || this.state.username == '') {
+      Alert.alert('Input Fields should not be Empty !');
       this.setState({
         loading: false,
-        upimodal:false
+
       })
-    }).catch((error) => {
-      console.error(error);
-    });
+
+    }
+    else {
+      RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/update/upi.php', {
+        Authorization: "Bearer access-token",
+        otherHeader: "foo",
+        'Content-Type': 'multipart/form-data',
+      }, [
+        { name: 'username', data: this.state.username },
+        { name: 'upi', data: this.state.upidata },
+      ]).then((resp) => {
+        var tempMSG = resp.data;
+        tempMSG = tempMSG.replace(/\"/g, "");
+        Alert.alert(tempMSG);
+        this.setState({
+          loading: false,
+          upimodal: false,
+          modal: false,
+        })
+      }).catch((error) => {
+        // console.error(error);
+        Alert.alert('Network Error !')
+      });
+    }
   }
 
   ShowModalFunction(visible, name) {
     this.setState({
       r_id: r_id,
       Iname: name,
-  
+
     });
   }
 
@@ -118,17 +130,18 @@ export default class Home extends Component {
   render() {
     if (this.state.loading) {
       return (
-        
-        <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
-          <Text> Please Wait ...</Text>
-          <ActivityIndicator
-            animating={animating}
-            color='#bc2b78'
-            size={70}
-            loading={this.state.loading}
-          />
-        </View>
-        
+      
+          <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
+            <Text> Please Wait ...</Text>
+            <ActivityIndicator
+              animating={animating}
+              color='#bc2b78'
+              size={70}
+              loading={this.state.loading}
+            />
+          </View>
+    
+
       );
     }
     return (
@@ -137,7 +150,7 @@ export default class Home extends Component {
           <TouchableOpacity onPress={this.profile}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
               <Image style={styles.avatar2} source={require('../../assets/images/user.jpg')} />
-           
+
             </View>
           </TouchableOpacity>
         </View>
@@ -156,7 +169,7 @@ export default class Home extends Component {
             <Text style={styles.loginText}>Image Gallery</Text>
           </TouchableHighlight>
 
-          
+
           <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('How')}>
             <Text style={styles.loginText}>How To Use ?</Text>
           </TouchableHighlight>
@@ -183,14 +196,6 @@ export default class Home extends Component {
                         <Text style={styles.name}> {item.name}</Text>
                       </View>
 
-
-                      {/* <TouchableOpacity style={[styles.buttonContainer2, styles.upiButton]}
-                      onPress={this.upi}
-                    >
-                      <Text style={{ color: 'white' }}>Your UPI</Text>
-                    </TouchableOpacity> */}
-
-
                       <Card style={styles.mycard}>
                         <View style={styles.cardContent}>
                           <Icon style={styles.Icon} name="user" size={20} />
@@ -212,24 +217,26 @@ export default class Home extends Component {
                         </View>
                       </Card>
 
-                      
+
                       <Card style={styles.mycard}>
                         <View style={styles.cardContent}>
                           <Icon style={styles.Icon} name="qrcode" size={20} />
                           <Text style={{ alignItems: 'center', fontSize: 17, paddingTop: 12 }}> {item.upi} </Text>
-                          <View style={{flexDirection:'row', paddingTop:3, paddingLeft:160}}>
+                          <View style={{ flexDirection: 'row', paddingTop: 3, paddingLeft: 160 }}>
 
-                          <TouchableOpacity style={[styles.buttonContainer2, styles.upiButton]}
-                      onPress={this.upi}
-                    >
 
-                      <Text style={{ color: 'white' }}>Your UPI</Text>
-                    </TouchableOpacity>
-                    </View>
+                          </View>
 
                         </View>
                       </Card>
 
+                    </View>
+                    <View style={{ flexDirection: 'row-reverse' }}>
+                      <TouchableOpacity style={[styles.buttonContainer2, styles.upiButton]}
+                        onPress={this.upi}
+                      >
+                        <Text style={{ color: 'white' }}>Your UPI</Text>
+                      </TouchableOpacity>
                     </View>
 
                     <TouchableOpacity style={[styles.buttonContainer, styles.logoutButton]}
@@ -257,41 +264,43 @@ export default class Home extends Component {
                   visible={this.state.upimodal}
                   onRequestClose={() => { this.setState({ upimodal: false }); }} >
 
-            
-
-                <View style={{  flex:1,  justifyContent: 'center',
-    alignItems: 'center'}}>
 
 
-<View style={{
-                        backgroundColor: '#bc2b78',
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                        marginBottom:50,
-                        margin:10,
-                        borderColor:'black',
-                        borderWidth:2
+                  <View style={{
+                    flex: 1, justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+
+
+                    <View style={{
+                      backgroundColor: '#bc2b78',
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                      marginBottom: 50,
+                      margin: 10,
+                      borderColor: 'black',
+                      borderWidth: 2
                     }}>
-                        <Text style={[styles.loginText, { fontSize: 18 }]} >Add or Update Your UPI ID</Text>
+                      <Text style={[styles.loginText, { fontSize: 18 }]} >Add or Update Your UPI ID</Text>
                     </View>
 
-          <Text>*User Will be use this UPI address for the Donation</Text>
+                    <Text>*User Will be use this UPI address for the Donation</Text>
 
-                <View style={styles.inputContainer}>
+                    <View style={styles.inputContainer}>
 
-                  <TextInput style={styles.inputs}
-                    autoCapitalize="none"
-                    placeholder="   Enter Your UPI Address   "
-                    keyboardType="email-address"
-                    underlineColorAndroid='transparent'
-                    onChangeText={(upidata) => this.setState({ upidata })}
-                    value={this.state.upidata} />
-                  </View>
-                  <TouchableOpacity style={[styles.buttonContainer, styles.innUpiButton]}
-                    onPress={this.upiSet}
-                  >
-                    <Text style={{ color: 'white' }}>Update Your UPI</Text>
-                  </TouchableOpacity>
+                      <TextInput style={styles.inputs}
+                        autoCapitalize="none"
+                        placeholder="   Enter Your UPI Address   "
+                        keyboardType="email-address"
+                        underlineColorAndroid='transparent'
+                        onChangeText={(upidata) => this.setState({ upidata })}
+                        value={this.state.upidata} />
+                    </View>
+                    <TouchableOpacity style={[styles.buttonContainer, styles.innUpiButton]}
+                      onPress={this.upiSet}
+                    >
+                      <Text style={{ color: 'white' }}>Update Your UPI</Text>
+                    </TouchableOpacity>
 
                   </View>
 
@@ -309,6 +318,7 @@ export default class Home extends Component {
     );
   }
   _logout = async () => {
+
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
   }
@@ -318,7 +328,7 @@ const styles = StyleSheet.create({
   container1: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor:'#dcdcdc'
+    backgroundColor: '#dcdcdc'
   },
   container2: {
     flex: 2,
@@ -507,7 +517,7 @@ const styles = StyleSheet.create({
 
   buttonContainer2: {
     height: 30,
-    marginLeft:100,
+    marginLeft: 100,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -535,9 +545,8 @@ const styles = StyleSheet.create({
   },
 
   upiButton: {
-    flexDirection:'row-reverse',
     width: 80,
-    marginLeft:100,
+    marginLeft: 100,
     backgroundColor: "#8803fc",
     borderWidth: 2,
     borderColor: '#000'

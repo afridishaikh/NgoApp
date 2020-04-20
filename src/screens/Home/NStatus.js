@@ -16,7 +16,8 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     BackHandler,
-    ImageBackground
+    ImageBackground,
+    Dimensions
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImagePicker from 'react-native-image-picker';
@@ -85,6 +86,10 @@ class Home extends Component {
             ).catch((error) => {
                 // console.error(error);
                 Alert.alert('Network Error !')
+                this.setState({
+                    loading: false,
+                    ModalVisibleStatus: false,
+                })
             });
     }
 
@@ -121,6 +126,10 @@ class Home extends Component {
             ).catch((error) => {
                 // console.error(error);
                 Alert.alert('Network Error !')
+                this.setState({
+                    loading: false,
+                    ModalComplete: false,
+                })
             });
     }
 
@@ -275,6 +284,8 @@ class Home extends Component {
         }
 
         return (
+
+            <ImageBackground source={require('../../assets/bg.jpg')} style={styles.backgroundImage}>
             <View style={styles.container}>
 
 
@@ -479,7 +490,7 @@ class Home extends Component {
 
 
 
-
+</ImageBackground>
 
         );
     }
@@ -546,6 +557,15 @@ const styles = StyleSheet.create({
         borderColor: 'black'
     },
 
+    
+    backgroundImage: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+      },
+
     loginText: {
         color: 'white',
         alignContent: 'center',
@@ -580,7 +600,7 @@ const styles = StyleSheet.create({
         margin: 5,
         height: 120,
         flexDirection: 'row',
-        backgroundColor: '#f7f12f',
+        backgroundColor: '#e0d238',
         alignItems: 'center',
         borderWidth: 2,
         borderBottomColor: 'black'

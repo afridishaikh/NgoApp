@@ -56,20 +56,18 @@ class Home extends Component {
       })
     }).then((response) => response.json())
       .then((responseJson) => {
-        if (responseJson[0].username == username) {
           this.setState({
             dataSource: responseJson,
             loading: false,
             profile:true
           })
-        }
-        else {
-          alert('Please Login Again');
-        }
       }
       ).catch((error) => {
         // console.error(error);
         Alert.alert("Network Error !");
+        this.setState({
+          loading: false
+        })
       });
   }
 
