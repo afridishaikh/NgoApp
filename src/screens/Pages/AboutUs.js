@@ -15,22 +15,22 @@ export default class HowToUse extends Component {
                                 <TouchableOpacity
                                 onPress={ ()=>{ Linking.openURL('https://www.facebook.com/afridishaikh15')}}
                                 >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.bmp')} />
+                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.jpg')} />
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                 onPress={ ()=>{ Linking.openURL('https://www.instagram.com/afridi_shaikh15')}}
                                 >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/ig.bmp')} />
+                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/ig.jpg')} />
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                 onPress={() => Linking.openURL('mailto:afridishaikh1512@gmail.com')}
                                 >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.bmp')} />
+                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.jpg')} />
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                 onPress={ ()=>{ Linking.openURL('https://www.github.com/afridishaikh')}}
                                 >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/git.bmp')} />
+                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/git.jpg')} />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -43,17 +43,17 @@ export default class HowToUse extends Component {
                             <TouchableOpacity
                             onPress={ ()=>{ Linking.openURL('https://www.facebook.com/mustakim.kazi.923')}}
                             >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.bmp')} />
+                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.jpg')} />
                             </TouchableOpacity>
                             <TouchableOpacity
                              onPress={ ()=>{ Linking.openURL('https://www.instagram.com/mr.m.k.kaji')}}
                             >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/ig.bmp')} />
+                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/ig.jpg')} />
                             </TouchableOpacity>
                             <TouchableOpacity
                             onPress={() => Linking.openURL('mailto:mustakimkaji28@gmail.com')}
                             >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.bmp')} />
+                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.jpg')} />
                             </TouchableOpacity>
 
                         </View>
@@ -66,13 +66,13 @@ export default class HowToUse extends Component {
                             <TouchableOpacity
                             onPress={ ()=>{ Linking.openURL('https://www.facebook.com/govind.solanki.98871174')}}
                             >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.bmp')} />
+                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.jpg')} />
                             </TouchableOpacity>
                  
                             <TouchableOpacity
                             onPress={() => Linking.openURL('mailto:solankigovind421@gmail.com')}
                             >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.bmp')} />
+                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.jpg')} />
                             </TouchableOpacity>
                         </View>
                     </View>

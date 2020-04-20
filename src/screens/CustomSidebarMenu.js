@@ -6,8 +6,6 @@ export default class CustomSidebarMenu extends Component {
   constructor() {
     super();
 
-    this.proileImage =
-      'https://aboutreact.com/wp-content/uploads/2018/07/sample_img.png';
     this.items = [
       {
         navOptionThumb: 'home',
@@ -45,7 +43,7 @@ export default class CustomSidebarMenu extends Component {
       <View style={styles.sideMenuContainer}>
         
         <Image
-          source={require('../assets/images/bgdra.bmp')}
+          source={require('../assets/images/bgdra.jpg')}
           style={styles.sideMenuProfileIcon}
         />
 
