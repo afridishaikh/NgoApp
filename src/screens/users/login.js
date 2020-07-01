@@ -1,104 +1,79 @@
-
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  Button,
-  Modal,
-  Image,
-  TouchableOpacity,
   TextInput,
   TouchableHighlight,
   Alert,
-  ImageBackground,
-  animating,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  ToastAndroid,
-  Keyboard,
-  TouchableWithoutFeedback,
   ScrollView,
+  Modal,
+  ActivityIndicator,
+  animating
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
-import { SafeAreaView } from 'react-navigation';
-
-
-const DismissKeyBoard =({children})=>(
-  <TouchableWithoutFeedback onPress={() =>Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-  );
+import  firebase from '../../../config.js';
 
 class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: '',
+      email: '',
       password: '',
       user: '',
       loading: false
     }
   }
 
+  // componentDidMount(){
+  //   const email = 'Harry@test.com';
+  // //   const my = firebase.database().ref("UserData/-M9vL7Djax8WmNeF2818");
+  // //   my.on('value',data=>{
+  // //  console.warn(data.val())  
+  // //   })
+  // const root = firebase.database().ref();
+  // const my = root.child('UserData').orderByChild('email').equalTo(email);
+  //   my.on('value',data=>{
+  //  console.warn(data.val())
+  // //  console.warn(typeof(data))
+  //   })
+  
+  //  }
+  
 
-//Login Function
-  UserLoginFunction = () => {
-    const { username } = this.state;
+  //Login Function
+  Login = () => {
+    const { email } = this.state;
     const { password } = this.state;
-    if (username == '' || password == '') {
+    if (email == '' || password == '') {
       Alert.alert('Input Fields Should not be Empty !')
     }
-    else {
+    else {  
       this.setState({
         loading: true,
       });
-      fetch('https://ngoapp3219.000webhostapp.com/db/user_login.php', {
-        // fetch('http://192.168.42.250/ngoapp/user_login.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        })
-      }).then((response) => response.json())
-        .then((responseJson) => {
-          if (responseJson === 'Data Matched') {
-            AsyncStorage.setItem('username', this.state.username);
-            AsyncStorage.setItem('userType', 'user');
-            // this.setState({ user: '' })
-            Alert.alert('Login Success!');
-            this.props.navigation.navigate('UHome')
-          }
-          else if (this.state.username == '' || this.state.password == '') {
-            Alert.alert('Username or Password is empty.');
-          }
-          else {
-            Alert.alert(responseJson);
-            this.setState({
-              loading: false,
-            });
-          }
-        }).catch((error) => {
-          // console.error(error);
-          Alert.alert('Netwrok Error !')
-          this.setState({
-            loading: false,
-          });
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(()=>{  
+        this.props.navigation.navigate('UHome')
+        AsyncStorage.setItem('userType', 'user');
+        AsyncStorage.setItem('username', this.state.email);
+        this.setState({
+          loading: false,
         });
+      })
+      .catch(error=>{
+        alert(error.message)
+        this.setState({
+          loading: false,
+        });
+      })
     }
   }
 
-
   render() {
     return (
-      
+
       <View style={{flex:1, backgroundColor:'#dcdcdc'}}>
       <ScrollView style={{flex:1 , marginTop:70, backgroundColor:'#dcdcdc'}} >
         <View style={styles.maincontainer}>
@@ -109,8 +84,8 @@ class Login extends Component {
             placeholder="Username"
             keyboardType="email-address"
             underlineColorAndroid='transparent'
-            onChangeText={(username) => this.setState({ username })}
-            value={this.state.username} />
+            onChangeText={(email) => this.setState({ email })}
+            value={this.state.email} />
         </View>
 
         <View style={styles.inputContainer}>
@@ -127,7 +102,7 @@ class Login extends Component {
 
 
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]}
-          onPress={this.UserLoginFunction}>
+          onPress={this.Login}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 
@@ -137,7 +112,6 @@ class Login extends Component {
           onPress={() => this.props.navigation.navigate('Signup')}>
           <Text style={styles.loginText}>Signup</Text>
         </TouchableHighlight>
-
 
         {this.state.loading &&
               <Modal
@@ -155,14 +129,12 @@ class Login extends Component {
                 </View>
               </Modal>
             }
-     
+
         </View>
         </ScrollView>
-
         </View>
     )
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -224,7 +196,6 @@ const styles = StyleSheet.create({
     color: 'white',
   }
 });
-
 export default Login;
 
 

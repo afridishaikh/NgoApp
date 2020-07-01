@@ -19,73 +19,99 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import firebase from '../../../config'
 
 class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: '',
+      email: '',
       password: '',
       user: '',
       loading: false,
     }
   }
 
-
-
-  UserLoginFunction = () => {
-
-    const { username } = this.state;
+  Login = () => {
+    const { email } = this.state;
     const { password } = this.state;
-
-    if (username == '' || password == '') {
+    if (email == '' || password == '') {
       Alert.alert('Input Fields Should not be Empty !')
     }
-    else {
+    else {  
       this.setState({
         loading: true,
       });
-      const { username } = this.state;
-      const { password } = this.state;
-      fetch('https://ngoapp3219.000webhostapp.com/db/ngo_login.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        })
-      }).then((response) => response.json())
-        .then((responseJson) => {
-          if (responseJson === 'Login Success') {
-            AsyncStorage.setItem('username', this.state.username);
-            AsyncStorage.setItem('userType', 'ngo');
-            this.props.navigation.navigate('NHome');
-            Alert.alert('Login Success !');
-          }
-          else if (this.state.username == '' || this.state.password == '') {
-            Alert.alert('Username or Password is empty.');
-            //alert for the empty InputText
-
-          }
-          else {
-            Alert.alert(responseJson);
-            this.setState({
-              loading: false,
-            });
-          }
-        }).catch((error) => {
-          // console.error(error);
-          Alert.alert('Netwrok Error !')
-          this.setState({
-            loading: false,
-          });
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(()=>{  
+        this.props.navigation.navigate('NHome')
+        AsyncStorage.setItem('userType', 'ngo');
+        AsyncStorage.setItem('username', this.state.email);
+        this.setState({
+          loading: false,
         });
+      })
+      .catch(error=>{
+        alert(error.message)
+        this.setState({
+          loading: false,
+        });
+      })
     }
   }
+
+  // UserLoginFunction = () => {
+
+  //   const { username } = this.state;
+  //   const { password } = this.state;
+
+  //   if (username == '' || password == '') {
+  //     Alert.alert('Input Fields Should not be Empty !')
+  //   }
+  //   else {
+  //     this.setState({
+  //       loading: true,
+  //     });
+  //     const { username } = this.state;
+  //     const { password } = this.state;
+  //     fetch('https://ngoapp3219.000webhostapp.com/db/ngo_login.php', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         username: username,
+  //         password: password,
+  //       })
+  //     }).then((response) => response.json())
+  //       .then((responseJson) => {
+  //         if (responseJson === 'Login Success') {
+  //           AsyncStorage.setItem('username', this.state.username);
+  //           AsyncStorage.setItem('userType', 'ngo');
+  //           this.props.navigation.navigate('NHome');
+  //           Alert.alert('Login Success !');
+  //         }
+  //         else if (this.state.username == '' || this.state.password == '') {
+  //           Alert.alert('Username or Password is empty.');
+  //           //alert for the empty InputText
+
+  //         }
+  //         else {
+  //           Alert.alert(responseJson);
+  //           this.setState({
+  //             loading: false,
+  //           });
+  //         }
+  //       }).catch((error) => {
+  //         // console.error(error);
+  //         Alert.alert('Netwrok Error !')
+  //         this.setState({
+  //           loading: false,
+  //         });
+  //       });
+  //   }
+  // }
 
 
   render() {
@@ -100,7 +126,7 @@ class Login extends Component {
                 placeholder="Username"
                 keyboardType="email-address"
                 underlineColorAndroid='transparent'
-                onChangeText={(username) => this.setState({ username })}
+                onChangeText={(email) => this.setState({ email })}
                 value={this.state.username} />
             </View>
 
@@ -123,7 +149,7 @@ class Login extends Component {
 
 
             <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]}
-              onPress={this.UserLoginFunction}
+              onPress={this.Login}
             >
               <Text style={styles.loginText}>Login</Text>
 

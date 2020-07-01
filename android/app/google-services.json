@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "469968586511",
+    "firebase_url": "https://pukaar-c2f79.firebaseio.com",
+    "project_id": "pukaar-c2f79",
+    "storage_bucket": "pukaar-c2f79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469968586511:android:a5f4b3bd45995b5a85607a",
+        "android_client_info": {
+          "package_name": "com.ngoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469968586511-7k1rsjb7b99e8dm8it72t2outv79am7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrHBXxh8bV7qNsAbdmaKPo_11InKb3qiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469968586511-7k1rsjb7b99e8dm8it72t2outv79am7n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

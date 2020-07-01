@@ -239,11 +239,13 @@ export default class Home extends Component {
                       </TouchableOpacity>
                     </View>
 
+<View style={{alignItems:'center'}}>
                     <TouchableOpacity style={[styles.buttonContainer, styles.logoutButton]}
                       onPress={this._logout}
                     >
                       <Text style={{ color: 'white' }}>Logout</Text>
                     </TouchableOpacity>
+                    </View>
 
                   </View>
                 }
@@ -527,7 +529,7 @@ const styles = StyleSheet.create({
 
   logoutButton: {
     margin: 20,
-    marginLeft: 110,
+    // marginLeft: 10,
     marginBottom: 50,
     width: 150,
     backgroundColor: "#8803fc",

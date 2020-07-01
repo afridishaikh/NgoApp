@@ -6,17 +6,21 @@ import openMap from 'react-native-open-maps';
 import AsyncStorage from '@react-native-community/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Card, Button } from 'react-native-paper'
+import firebase from '../../../config'
 
 export default class App extends Component {
 
   constructor() {
     super();
     this.state = {
-      isLoading: true,
+      dataArray:[],
+      
+      dataArray2:[],
+      // isLoading: true,
       ModalVisibleStatus: false,
       TempImageURL: '',
       userid: '',
-      r_id: ''
+      id: ''
     }
   }
 
@@ -30,60 +34,70 @@ export default class App extends Component {
     );
     // console.warn(this.state.userid)
 
-    return fetch('https://ngoapp3219.000webhostapp.com/db/reqList.php')
-      .then((response) => response.json())
-      .then((responseJson) => {
+    // return fetch('https://ngoapp3219.000webhostapp.com/db/reqList.php')
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+
+    //     if (responseJson === 'Invalid') {
+    //       Alert.alert('No any Complete Request found !');
+    //       this.props.navigation.goBack();
+    //   }
+    //   else {
+    //     this.setState({
+    //       isLoading: false,
+    //       dataSource: responseJson
+    //     });
+    //   }
+    //   })
+    //   .catch((error) => {
+    //     // console.error(error);
+    //     Alert.alert('Network Error!')
+    //   });
+
+    // const { username } = this.state;
+    const root = firebase.database().ref();
+    const dataa = root.child('RequestData')
+    // Here is the magic
+      dataa.on('value',Snapshot=>{
+        Snapshot.forEach(item => {
+        this.state.dataArray.push({id:item.key,...item.val()})
+        })
+  
         this.setState({
-          isLoading: false,
-          dataSource: responseJson
-        }, function () {
-          // In this block you can do something with new state.
-        });
-      })
-      .catch((error) => {
-        // console.error(error);
-        Alert.alert('Network Error!')
+          loading:false
+        })
       });
   }
 
 
   //Function That will send data to server
-  Status = (r_id) => {
+  Accept = (id) => {
     this.setState({
-      r_id: r_id,
-      isLoading: true,
+     id: id,
     });
-    console.warn(this.state.r_id)
-    RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/status/pending.php', {
-      Authorization: "Bearer access-token",
-      otherHeader: "foo",
-      'Content-Type': 'multipart/form-data',
-    }, [
-      { name: 'username', data: this.state.userid },
-      { name: 'r_id', data: r_id }
 
-    ]).then((resp) => {
-      var tempMSG = resp.data;
-      // tempMSG = tempMSG.replace(/^"|"$/g, '');
-      tempMSG = tempMSG.replace(/\"/g, "");
-      this.setState({
+    // const id =this.state.id;
 
-        isLoading: false,
+    const root = firebase.database().ref();
+    const dataa = root.child('RequestData').orderByChild('id').equalTo(id);
+    // Here is the magic
+      dataa.on('value',Snapshot=>{
+        Snapshot.forEach(item => {
+        this.state.dataArray2.push({id:item.key,...item.val()})
+        })
+  
+        this.setState({
+          loading:false
+        })
       });
-      Alert.alert(tempMSG);
-    }).catch((error) => {
-      // console.error(error);
-      Alert.alert('Network Error !')
-    });
   }
 
 
   // For Modal Storing and Defining Parameters , which will store the server data 
-  ShowModalFunction(visible, r_id, image, problem, address, mo_no, latitude, longitude) {
+  ShowModalFunction(visible, u_image, problem, address, mo_no, latitude, longitude) {
     this.setState({
-      r_id: r_id,
       ModalVisibleStatus: visible,
-      Image: image,
+      Image: u_image,
       Problem: problem,
       Naddress: address,
       Nmo_no: mo_no,
@@ -113,6 +127,8 @@ export default class App extends Component {
 
   // The Activityindicator
   render() {
+    console.warn(this.state.dataArray2)
+    // console.warn(this.state.dataArray)
 
     if (this.state.isLoading) {
       return (
@@ -131,18 +147,16 @@ export default class App extends Component {
     }
     return (
       <View style={{ flex: 1, flexDirection: 'row', marginBottom: 3 }}>
-
-
         <FlatList
-          data={this.state.dataSource}
+          data={this.state.dataArray}
           ItemSeparatorComponent={this.renderSeprator}
           renderItem={({ item }) =>
             <View>
-              <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.r_id, item.image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
+              <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.u_image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
                 <Card style={styles.mycard}>
                   <View style={{ flexDirection: 'row' }}>
 
-                    <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.image }} />
+                    <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.u_image }} />
                     <View style={{ justifyContent: 'space-evenly', padding: 5 }}>
                       <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20, marginTop: 70 }}>
                         <Text style={{ fontSize: 15, color: 'black', }}>Problem
@@ -152,7 +166,7 @@ export default class App extends Component {
                         </Text>
                     
                       </View>
-                      <Button style={{ marginLeft: 130, marginBottom: 50 }} width={90} uppercase={false} mode="contained" onPress={this.Status.bind(this, item.r_id)}>
+                      <Button style={{ marginLeft: 130, marginBottom: 50 }} width={90} uppercase={false} mode="contained" onPress={this.Accept.bind(this, item.id)}>
                         Accept</Button>
                     </View>
 

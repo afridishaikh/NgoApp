@@ -2,14 +2,9 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Platform,
   View,
-  Text,
-  Image,
   TouchableOpacity,
   ActivityIndicator,
-  StatusBar,
-  Dimensions,
   animating
 } from 'react-native'
 

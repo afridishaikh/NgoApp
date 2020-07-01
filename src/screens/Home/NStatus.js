@@ -328,12 +328,12 @@ class Home extends Component {
                                                 <Text style={{ fontSize: 15, color: 'black', }}>Problem
                          </Text>
                                                 <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                    {item.name}
+                                                    {item.problem}
                                                 </Text>
-                                                <Text style={{ fontSize: 15, color: 'black', }}>NGO Service Type
+                                                <Text style={{ fontSize: 15, color: 'black', }}>Request Sent by:
                          </Text>
                                                 <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                    {item.category}
+                                                    {item.username}
                                                 </Text>
                                             </View>
                                         </View>

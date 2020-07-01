@@ -15,66 +15,111 @@ import {
   TouchableOpacity,
   Image,
   TouchableHighlight,
-  BackHandler,
-  ImageBackground
 } from 'react-native';
+import  firebase from '../../../config.js';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: null,
+      name: '',
+      dataArray:[],
       modal: false,
       loading: false,
-      profile: false
+      profile: false,
     };
   }
+
+
   //To store AsyncStorage value in state.
   componentDidMount() {
     AsyncStorage.getItem('username').then(value =>
       //AsyncStorage returns a promise so adding a callback to get the value
-      this.setState({ username: value, isLoading: false })
-      //Setting the value in Text  
+      this.setState({ username: value, isLoading: false }),
     );
-  }
-  //Function to Open PROFILE
-  profile = () => {
+
+   
     const { username } = this.state;
-    this.setState({
-      modal: true,
-      loading: true,
-      profile: false
-    })
-    fetch('https://ngoapp3219.000webhostapp.com/db/profile.php', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-      })
-    }).then((response) => response.json())
-      .then((responseJson) => {
-          this.setState({
-            dataSource: responseJson,
-            loading: false,
-            profile:true
-          })
-      }
-      ).catch((error) => {
-        // console.error(error);
-        Alert.alert("Network Error !");
-        this.setState({
-          loading: false
+    console.warn(username)
+
+    // // const email = 'Harry@test.com';
+    // const root = firebase.database().ref();
+    // const dataa = root.child('UserData').orderByChild('email').equalTo(username);
+
+    // // Here is the magic
+    //   dataa.on('value',Snapshot=>{
+    //     Snapshot.forEach(item => {
+
+
+          //  AsyncStorage.setItem('u_name', item.val().name);
+
+        // this.state.dataArray.push(item.val().name)
+
+        // this.state.dataArray.push(item.val().name)
+        // let name = JSON.stringify(this.state.dataArray)
+        // let final = name.substring(2,name.length-2)
+        //   // console.warn(final)
+        //   this.setState({
+        //     name: final
+        //   })
+      //   })
+      // });
+
+      // AsyncStorage.setItem('username', this.state.email);
+      // console.warn(this.state.dataArray)
+
+      // this.storename();
+
+  }
+
+  storename = () => {
+    const  username  = this.state.username;
+     const root = firebase.database().ref();
+    const dataa = root.child('UserData').orderByChild('email').equalTo(username);
+    // Here is the magic
+      dataa.on('value',Snapshot=>{
+        Snapshot.forEach(item => {
+          console.warn(item.val())
+           AsyncStorage.setItem('u_name', item.val().name);
+
         })
       });
+
   }
+
+  //Function to Open PROFILE
+  profile = () => {
+    // this.setState({
+    //   loading: true,
+    // });
+    this.setState({
+      loading:true,
+      modal: true,
+      profile: true
+    })
+
+    const { username } = this.state;
+    const root = firebase.database().ref();
+    const dataa = root.child('UserData').orderByChild('email').equalTo(username);
+    // Here is the magic
+      dataa.on('value',Snapshot=>{
+        Snapshot.forEach(item => {
+        this.state.dataArray.push({id:item.key,...item.val()})
+        })
+        // console.warn(this.state.dataArray)
+        this.setState({
+          loading:false
+        })
+      });
+ 
+    }
+  
+      
 
   render() {
     if (this.state.loading) {
       return (
-   
         <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
           <Text> Please Wait ...</Text>
           <ActivityIndicator
@@ -84,7 +129,6 @@ class Home extends Component {
             loading={this.state.loading}
           />
         </View>
-      
       );
     }
     return (
@@ -99,7 +143,7 @@ class Home extends Component {
         </View>
 
         <View style={styles.container2}>
-          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Request')}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => {this.props.navigation.navigate('Request'); this,this.storename()}}>
             <Text style={styles.loginText}>Post A Request</Text>
           </TouchableHighlight>
 
@@ -118,7 +162,8 @@ class Home extends Component {
             <Text style={styles.loginText}>Image Gallery</Text>
           </TouchableHighlight>
 
-
+          {/* ;
+           */}
           <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('Donate')}>
             <Text style={styles.loginText}>Donate to NGO</Text>
           </TouchableHighlight>
@@ -128,9 +173,9 @@ class Home extends Component {
 
         {/* FOR PROFILE */}
         <FlatList
-          data={this.state.dataSource}
+          data={this.state.dataArray}
           ItemSeparatorComponent={this.renderSeprator}
-          renderItem={({ item }) =>
+          renderItem={({item}) =>
 
             <Modal
               transparent={false}
@@ -144,15 +189,15 @@ class Home extends Component {
                   <Image style={styles.avatar} source={require('../../assets/images/user.jpg')} />
                   <View style={styles.body}>
                     <View style={styles.bodyContent}>
-                    <Text style={styles.name}> {item.name}</Text>
+                    <Text style={styles.name}> {item.name} </Text>
                     </View>
 
-                      <Card style={styles.mycard}>
+                      {/* <Card style={styles.mycard}>
                       <View style={styles.cardContent}>
                       <Icon style={styles.Icon} name="user" size={20} />
-                      <Text style={{alignItems:'center', fontSize:17,paddingTop:10}}> {item.username} </Text>
+                      <Text style={{alignItems:'center', fontSize:17,paddingTop:10}}> item.username </Text>
                       </View>
-                      </Card>
+                      </Card> */}
 
                       <Card style={styles.mycard}>
                       <View style={styles.cardContent}>
@@ -169,21 +214,23 @@ class Home extends Component {
                       </Card>
 
                   </View>
-
-                  <TouchableOpacity style={[styles.buttonContainer, styles.signupButton]}
+                  
+                  <View style={{alignItems:'center'}}>
+                  <TouchableOpacity style={[styles.buttonContainer, styles.logoutButton]}
                           onPress={this._logout}
                         >
                           <Text style={{color: 'white'}}>Logout</Text>
                         </TouchableOpacity>
+                  </View>
 
                 </View>
               }
 
 
             </Modal>
-          }
+         }
           keyExtractor={(item, index) => index}
-        />
+        /> 
       </View>
     );
   }
@@ -256,14 +303,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
 },
 
-signupButton: {
-    margin: 20,
-    marginLeft: 110,
-    marginBottom: 50,
-    width: 150,
-    backgroundColor: "#8803fc",
-    borderWidth: 2,
-    borderColor: '#000'
+logoutButton: {
+  margin: 20,
+  marginBottom: 50,
+  width: 150,
+  backgroundColor: "#8803fc",
+  borderWidth: 2,
+  borderColor: '#000'
 },
 
   MainContainer: {
