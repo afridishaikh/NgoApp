@@ -14,11 +14,10 @@ export default class App extends Component {
     super();
     this.state = {
       dataArray:[],
-      
-      dataArray2:[],
       // isLoading: true,
       ModalVisibleStatus: false,
       TempImageURL: '',
+      n_name:'',
       userid: '',
       id: ''
     }
@@ -32,37 +31,18 @@ export default class App extends Component {
       //AsyncStorage returns a promise so adding a callback to get the value
       this.setState({ userid: value }),
     );
-    // console.warn(this.state.userid)
+    AsyncStorage.getItem('n_name').then(value =>
+      this.setState({ n_name: value })
+    );  
 
-    // return fetch('https://ngoapp3219.000webhostapp.com/db/reqList.php')
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-
-    //     if (responseJson === 'Invalid') {
-    //       Alert.alert('No any Complete Request found !');
-    //       this.props.navigation.goBack();
-    //   }
-    //   else {
-    //     this.setState({
-    //       isLoading: false,
-    //       dataSource: responseJson
-    //     });
-    //   }
-    //   })
-    //   .catch((error) => {
-    //     // console.error(error);
-    //     Alert.alert('Network Error!')
-    //   });
-
-    // const { username } = this.state;
     const root = firebase.database().ref();
-    const dataa = root.child('RequestData')
+    // const dataa = root.child('RequestData').orderByChild('status').equalTo('Inactive')
+    const dataa = root.child('RequestData').orderByChild('status')
     // Here is the magic
       dataa.on('value',Snapshot=>{
         Snapshot.forEach(item => {
         this.state.dataArray.push({id:item.key,...item.val()})
         })
-  
         this.setState({
           loading:false
         })
@@ -70,26 +50,15 @@ export default class App extends Component {
   }
 
 
+
   //Function That will send data to server
-  Accept = (id) => {
-    this.setState({
+  Accept = async(id) => {
+   await this.setState({
      id: id,
     });
-
-    // const id =this.state.id;
-
     const root = firebase.database().ref();
-    const dataa = root.child('RequestData').orderByChild('id').equalTo(id);
-    // Here is the magic
-      dataa.on('value',Snapshot=>{
-        Snapshot.forEach(item => {
-        this.state.dataArray2.push({id:item.key,...item.val()})
-        })
-  
-        this.setState({
-          loading:false
-        })
-      });
+    const dataa = root.child('RequestData').child(id)
+        dataa.update({'status':`${this.state.userid}_Active`,'n_name':this.state.n_name,'n_email':this.state.userid})
   }
 
 
@@ -104,7 +73,6 @@ export default class App extends Component {
       Latitude: latitude,
       Longitude: longitude
     });
-    // console.warn(address)
   }
 
   //function to make call and store the mo_no
@@ -127,9 +95,6 @@ export default class App extends Component {
 
   // The Activityindicator
   render() {
-    console.warn(this.state.dataArray2)
-    // console.warn(this.state.dataArray)
-
     if (this.state.isLoading) {
       return (
       

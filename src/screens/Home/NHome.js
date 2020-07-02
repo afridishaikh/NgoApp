@@ -16,6 +16,7 @@ import {
 import { Card } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
+import firebase from '../../../config'
 import RNFetchBlob from 'rn-fetch-blob';
 
 export default class Home extends Component {
@@ -74,6 +75,19 @@ export default class Home extends Component {
       });
   }
 
+  storename = () => {
+    const  username  = this.state.username;
+     const root = firebase.database().ref();
+    const dataa = root.child('NgoData').orderByChild('email').equalTo(username);
+    // Here is the magic
+      dataa.on('value',Snapshot=>{
+        Snapshot.forEach(item => {
+          console.warn(item.val())
+           AsyncStorage.setItem('n_name', item.val().name);
+        })
+      });
+
+  }
 
   upi = () => {
     this.setState({
@@ -156,7 +170,7 @@ export default class Home extends Component {
         </View>
 
         <View style={styles.container2}>
-          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => this.props.navigation.navigate('ReqList')}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => {this.props.navigation.navigate('ReqList'),this,this.storename()}}>
             <Text style={styles.loginText}>Request List</Text>
           </TouchableHighlight>
 

@@ -86,7 +86,40 @@ export default class LoginView extends Component {
   }
   
 
-
+  uploadData = async() => {
+    this.setState({
+      loading : true
+    })
+      const { uri } = this.state.ImageSource;
+      const filename = uri.substring(uri.lastIndexOf('/') + 1);
+      const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+      var storageRef = storage().ref('Requests/'+filename);
+      await  storageRef.putFile(uploadUri);
+      const url = await storageRef.getDownloadURL().catch((error) => {throw error});
+      
+      await firebase.database().ref('RequestData/').push({
+      u_name: this.state.u_name ,
+      u_email: this.state.u_email,
+      problem : this.state.Problem ,
+      u_image: url ,
+      latitude : JSON.stringify(this.state.latitude) ,
+      longitude : JSON.stringify(this.state.longitude) ,
+      address : this.state.Address ,
+      mo_no : this.state.Mo_no ,
+      n_name : 'none',
+      n_email : 'none',
+      n_image : 'none',
+      status : "Inactive"
+      });
+      Alert.alert(
+        'Request Sent !',
+        'Your request has been sent Successfully!'
+      );
+     await  this.setState({
+        loading : false
+      })
+    };
+  
 
   //Function To get current location on map
   componentDidMount = () => {
@@ -148,44 +181,6 @@ export default class LoginView extends Component {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     )
   }
-
-
-uploadData = async() => {
-  this.setState({
-    loading : true
-  })
-    const { uri } = this.state.ImageSource;
-    const filename = uri.substring(uri.lastIndexOf('/') + 1);
-    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-    var storageRef = storage().ref('Requests/'+filename);
-    await  storageRef.putFile(uploadUri);
-    const url = await storageRef.getDownloadURL().catch((error) => {throw error});
-    
-    await firebase.database().ref('RequestData/').push({
-    u_name: this.state.u_name ,
-    u_email: this.state.u_email,
-    problem : this.state.Problem ,
-    u_image: url ,
-    latitude : JSON.stringify(this.state.latitude) ,
-    longitude : JSON.stringify(this.state.longitude) ,
-    address : this.state.Address ,
-    mo_no : this.state.Mo_no ,
-    n_name : 'lol',
-    n_email : 'lol@lol.com',
-    status : "Inactive"
-    });
-    Alert.alert(
-      'Request Sent !',
-      'Your request has been sent Successfully!'
-    );
-   await  this.setState({
-      loading : false
-    })
-  };
-
- 
-  
-
 
   render() {
     let Problem = [{

@@ -17,7 +17,8 @@ import {
     TouchableHighlight,
     BackHandler,
     ImageBackground,
-    Dimensions
+    Dimensions,
+    Linking
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImagePicker from 'react-native-image-picker';
@@ -26,6 +27,8 @@ import openMap from 'react-native-open-maps';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Button } from 'react-native-paper';
 import { Card } from 'react-native-paper'
+import firebase from '../../../config'
+import storage from '@react-native-firebase/storage';
 
 class Home extends Component {
     constructor() {
@@ -37,8 +40,10 @@ class Home extends Component {
             ModalComplete: false,
             TempImageURL: '',
             userid: '',
-            r_id: '',
-            loading: false
+            n_name:'',
+            id: null,
+            loading: false,
+            dataSource:[]
         }
     }
 
@@ -49,88 +54,70 @@ class Home extends Component {
             //AsyncStorage returns a promise so adding a callback to get the value
             this.setState({ userid: value }),
         );
+        AsyncStorage.getItem('n_name').then(value =>
+            this.setState({ n_name: value })
+          );  
     }
 
     FetchPending = () => {
         // console.warn(this.state.userid)
         this.setState({
             ModalVisibleStatus: true,
-            loading: true,
+            // loading: true,
         });
         const { userid } = this.state;
         console.warn(userid)
-        fetch('https://ngoapp3219.000webhostapp.com/db/status/n_pending.php', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: userid,
-            })
-        }).then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson === 'Invalid') {
+        // fetch('https://ngoapp3219.000webhostapp.com/db/status/n_pending.php', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         username: userid,
+        //     })
+        // }).then((response) => response.json())
+        //     .then((responseJson) => {
+        //         if (responseJson === 'Invalid') {
 
-                    Alert.alert('No any Pending Request found');
-                    this.props.navigation.goBack();
-                }
-                else {
-                    this.setState({
-                        dataSource: responseJson,
-                        loading: false,
-                    })
-                }
-                console.warn(responseJson)
-            }
-            ).catch((error) => {
-                // console.error(error);
-                Alert.alert('Network Error !')
-                this.setState({
-                    loading: false,
-                    ModalVisibleStatus: false,
-                })
-            });
-    }
+        //             Alert.alert('No any Pending Request found');
+        //             this.props.navigation.goBack();
+        //         }
+        //         else {
+        //             this.setState({
+        //                 dataSource: responseJson,
+        //                 loading: false,
+        //             })
+        //         }
+        //         console.warn(responseJson)
+        //     }
+//   )
+const root = firebase.database().ref();
+const dataa = root.child('RequestData').orderByChild('status').equalTo(`${userid}_Active`)
+// Here is the magic
+  dataa.on('value',Snapshot=>{
+    Snapshot.forEach(item => {
+    this.state.dataSource.push({id:item.key,...item.val()})
+    })
+  })
+}
 
     FetchComplete = () => {
         // console.warn(this.state.userid)
         this.setState({
-            loading: true,
+            // loading: true,
             ModalComplete: true,
         });
         const { userid } = this.state;
         console.warn(userid)
-        fetch('https://ngoapp3219.000webhostapp.com/db/status/n_complete.php', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: userid,
+        const root = firebase.database().ref();
+        const dataa = root.child('RequestData').orderByChild('status').equalTo(`${userid}_Complete`)
+        // Here is the magic
+          dataa.on('value',Snapshot=>{
+            Snapshot.forEach(item => {
+            this.state.dataSource.push({id:item.key,...item.val()})
             })
-        }).then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson === 'Invalid') {
-                    Alert.alert('No any Complete Request found !');
-                    this.props.navigation.goBack();
-                }
-                else {
-                    this.setState({
-                        dataSource: responseJson,
-                        loading: false,
-                    })
-                }
-            }
-            ).catch((error) => {
-                // console.error(error);
-                Alert.alert('Network Error !')
-                this.setState({
-                    loading: false,
-                    ModalComplete: false,
-                })
-            });
+          })
     }
 
 
@@ -167,77 +154,48 @@ class Home extends Component {
     }
 
 
-    Complete = (r_id) => {
+    Complete = async(id) => {
         this.setState({
-            r_id: r_id,
-            loading: true,
+        id: id,
+        // loading: true,
         });
-        console.warn(this.state.userid)
 
         if (this.state.ImageSource == null || this.state.data == null) {
             Alert.alert('You must Upload Image !');
             return false;
         }
         else {
-            // RNFetchBlob.fetch('POST', 'https://ngoapp.000webhostapp.com/ngoapp/n_signup.php', {
-            RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/complete.php', {
-                Authorization: "Bearer access-token",
-                otherHeader: "foo",
-                'Content-Type': 'multipart/form-data',
-            }, [
-                { name: 'username', data: this.state.userid },
-                { name: 'r_id', data: r_id },
-                { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data },
+            this.setState({
+                id: id,
+               });
 
-            ]).then((resp) => {
-                var tempMSG = resp.data;
-                tempMSG = tempMSG.replace(/\"/g, "");
-                Alert.alert(tempMSG);
-                this.setState({
-                    loading: false,
-                });
-                this.props.navigation.goBack();
-            }).catch((error) => {
-                console.error(error);
-            });
+               const { uri } = this.state.ImageSource;
+               const filename = uri.substring(uri.lastIndexOf('/') + 1);
+               const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+               var storageRef = storage().ref('Requests/'+filename);
+               await  storageRef.putFile(uploadUri);
+               const url = await storageRef.getDownloadURL().catch((error) => {throw error});
+
+               const root = firebase.database().ref();
+               const dataa = root.child('RequestData').child(id)
+               await dataa.update({'status':`${this.state.userid}_Complete`,'n_image':url,'n_name':this.state.n_name,'n_email':this.state.userid})
         }
 
     }
 
-    Cancel = (r_id) => {
-        console.warn(r_id)
+    Cancel = (id) => {
         this.setState({
-            r_id: r_id,
-            loading: true
-        });
-        console.warn(this.state.userid)
-        RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/status/cancel.php', {
-            Authorization: "Bearer access-token",
-            otherHeader: "foo",
-            'Content-Type': 'multipart/form-data',
-        }, [
-            { name: 'username', data: this.state.userid },
-            { name: 'r_id', data: r_id }
-
-        ]).then((resp) => {
-            var tempMSG = resp.data;
-            // tempMSG = tempMSG.replace(/^"|"$/g, '');
-            tempMSG = tempMSG.replace(/\"/g, "");
-            Alert.alert(tempMSG);
-            this.setState({
-                r_id: r_id,
-                loading: false
-            });
-            this.props.navigation.goBack();
-        }).catch((error) => {
-            console.error(error);
-        });
+            id: id,
+           });
+           const root = firebase.database().ref();
+           const dataa = root.child('RequestData').child(id)
+           dataa.update({'status':`Inactive`,'n_name':'none','n_email':'none'})
     }
 
 
-    ShowModalFunction(visible, r_id, image, problem, address, mo_no, latitude, longitude) {
+    ShowModalFunction(visible,id, image, problem, address, mo_no, latitude, longitude) {
         this.setState({
-            r_id: r_id,
+            id:id,
             secondModal: visible,
             Image: image,
             Problem: problem,
@@ -268,7 +226,7 @@ class Home extends Component {
 
 
     render() {
-
+        console.warn(this.state.id)
         if (this.state.loading) {
             return (
                 <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
@@ -320,12 +278,12 @@ class Home extends Component {
                             <View>
 
                                 <TouchableOpacity
-                                    onPress={this.ShowModalFunction.bind(this, true, item.r_id, item.image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
+                                    onPress={this.ShowModalFunction.bind(this, true, item.id, item.u_image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
                                     <Card style={styles.mycard}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.image }} />
+                                            <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.u_image }} />
                                             <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20 }}>
-                                                <Text style={{ fontSize: 15, color: 'black', }}>Problem
+                                                <Text style={{ fontSize: 15, color: 'black', }}>Problem:
                          </Text>
                                                 <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
                                                     {item.problem}
@@ -333,7 +291,7 @@ class Home extends Component {
                                                 <Text style={{ fontSize: 15, color: 'black', }}>Request Sent by:
                          </Text>
                                                 <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                    {item.username}
+                                                    {item.u_name}
                                                 </Text>
                                             </View>
                                         </View>
@@ -370,15 +328,20 @@ class Home extends Component {
                             <View>
 
                                 <TouchableOpacity
-                                    onPress={this.ShowModalFunction.bind(this, true, item.r_id, item.image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
+                                    onPress={this.ShowModalFunction.bind(this, true, item.id, item.u_image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
                                     <Card style={styles.mycard}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.image }} />
+                                            <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.u_image }} />
                                             <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20 }}>
                                                 <Text style={{ fontSize: 15, color: 'black', }}>Problem:
                          </Text>
                                                 <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
                                                     {item.problem}
+                                                </Text>
+                                                <Text style={{ fontSize: 15, color: 'black', }}>Request Sent by:
+                         </Text>
+                                                <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                                                    {item.u_name}
                                                 </Text>
 
                                             </View>
@@ -466,12 +429,12 @@ class Home extends Component {
 
 
                                     <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', padding: 10 }}>
-                                        <Button width={150} style={{ margin: 10 }} uppercase={false} icon="cancel" mode="contained" color='#e86100' onPress={this.Cancel.bind(this, this.state.r_id)}>
+                                        <Button width={150} style={{ margin: 10 }} uppercase={false} icon="cancel" mode="contained" color='#e86100' onPress={this.Cancel.bind(this,this.state.id)}>
                                             Cancel</Button>
 
 
 
-                                        <Button width={150} style={{ margin: 10 }} icon="check-decagram" uppercase={false} mode="contained" color="#00ea0c" onPress={this.Complete.bind(this, this.state.r_id)}>
+                                        <Button width={150} style={{ margin: 10 }} icon="check-decagram" uppercase={false} mode="contained" color="#00ea0c" onPress={this.Complete.bind(this, this.state.id)}>
                                             Complete</Button>
                                     </View>
 
