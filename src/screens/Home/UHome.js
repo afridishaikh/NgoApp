@@ -22,7 +22,8 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: null,
+  
+      username: '',
       name: '',
       dataArray:[],
       modal: false,
@@ -34,65 +35,27 @@ class Home extends Component {
 
   //To store AsyncStorage value in state.
   componentDidMount() {
-    AsyncStorage.getItem('username').then(value =>
-      //AsyncStorage returns a promise so adding a callback to get the value
-      this.setState({ username: value, isLoading: false }),
+   AsyncStorage.getItem('username').then(value =>
+   this.setState({ username: value, isLoading: false }),
     );
-
-   
-    const { username } = this.state;
-    console.warn(username)
-
-    // // const email = 'Harry@test.com';
-    // const root = firebase.database().ref();
-    // const dataa = root.child('UserData').orderByChild('email').equalTo(username);
-
-    // // Here is the magic
-    //   dataa.on('value',Snapshot=>{
-    //     Snapshot.forEach(item => {
-
-
-          //  AsyncStorage.setItem('u_name', item.val().name);
-
-        // this.state.dataArray.push(item.val().name)
-
-        // this.state.dataArray.push(item.val().name)
-        // let name = JSON.stringify(this.state.dataArray)
-        // let final = name.substring(2,name.length-2)
-        //   // console.warn(final)
-        //   this.setState({
-        //     name: final
-        //   })
-      //   })
-      // });
-
-      // AsyncStorage.setItem('username', this.state.email);
-      // console.warn(this.state.dataArray)
-
-      // this.storename();
-
   }
 
-  storename = () => {
+
+  storename = async() => {
     const  username  = this.state.username;
-     const root = firebase.database().ref();
-    const dataa = root.child('UserData').orderByChild('email').equalTo(username);
-    // Here is the magic
-      dataa.on('value',Snapshot=>{
-        Snapshot.forEach(item => {
-          console.warn(item.val())
-           AsyncStorage.setItem('u_name', item.val().name);
-
-        })
-      });
-
+    const root = firebase.database().ref();
+   const dataa = root.child('UserData').orderByChild('email').equalTo(username);
+   // Here is the magic
+    dataa.on('value',Snapshot=>{
+       Snapshot.forEach(item => {
+          AsyncStorage.setItem('u_name', item.val().name);
+       console.warn(Snapshot)
+       })
+     });
   }
 
   //Function to Open PROFILE
   profile = () => {
-    // this.setState({
-    //   loading: true,
-    // });
     this.setState({
       loading:true,
       modal: true,
@@ -102,14 +65,14 @@ class Home extends Component {
     const { username } = this.state;
     const root = firebase.database().ref();
     const dataa = root.child('UserData').orderByChild('email').equalTo(username);
-    // Here is the magic
       dataa.on('value',Snapshot=>{
         Snapshot.forEach(item => {
         this.state.dataArray.push({id:item.key,...item.val()})
         })
-        // console.warn(this.state.dataArray)
         this.setState({
-          loading:false
+          loading:false,
+          modal: true,
+          profile: true
         })
       });
  
@@ -118,6 +81,7 @@ class Home extends Component {
       
 
   render() {
+
     if (this.state.loading) {
       return (
         <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
@@ -143,7 +107,7 @@ class Home extends Component {
         </View>
 
         <View style={styles.container2}>
-          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => {this.props.navigation.navigate('Request'); this,this.storename()}}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => {this.props.navigation.navigate('Request'); this.storename() }}>
             <Text style={styles.loginText}>Post A Request</Text>
           </TouchableHighlight>
 
@@ -192,12 +156,6 @@ class Home extends Component {
                     <Text style={styles.name}> {item.name} </Text>
                     </View>
 
-                      {/* <Card style={styles.mycard}>
-                      <View style={styles.cardContent}>
-                      <Icon style={styles.Icon} name="user" size={20} />
-                      <Text style={{alignItems:'center', fontSize:17,paddingTop:10}}> item.username </Text>
-                      </View>
-                      </Card> */}
 
                       <Card style={styles.mycard}>
                       <View style={styles.cardContent}>

@@ -1,8 +1,9 @@
 
 import React, { Component } from 'react';
-import { Text, Platform, StyleSheet, View, FlatList, ActivityIndicator,animating, Linking, Image, Modal, TouchableOpacity, BackHandler ,ImageBackground } from 'react-native';
+import { Text, Platform, StyleSheet, View, FlatList, ActivityIndicator, animating, Linking, Image, Modal, TouchableOpacity, BackHandler, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Card } from 'react-native-paper'
+import firebase from '../../../config'
 
 export default class App extends Component {
 
@@ -11,28 +12,31 @@ export default class App extends Component {
     this.state = {
       isLoading: true,
       ModalVisibleStatus: false,
-      TempImageURL: ''
+      TempImageURL: '',
+      dataArray: []
     }
   }
-//Fetching data from server
+  //Fetching data from server
   componentDidMount() {
-    return fetch('https://ngoapp3219.000webhostapp.com/db/ngo_list.php')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson
-        }, function () {
-          // In this block you can do something with new state.
-        });
+    this.setState({
+      isLoading:true
+    })
+
+    const root = firebase.database().ref();
+    const dataa = root.child('NgoData')
+    // Here is the magic
+    dataa.on('value', Snapshot => {
+      Snapshot.forEach(item => {
+        this.state.dataArray.push({ id: item.key, ...item.val() })
       })
-      .catch((error) => {
-        // console.error(error);
-        Alert.alert('Network Error !')
-      });
+      this.setState({
+        isLoading: false
+      })
+    });
   }
-// For Modaal Storing and Defining Parameters , which will store the server data 
-  ShowModalFunction(visible, image, name, address, mo_no,category,city,email) {
+
+  // For Modaal Storing and Defining Parameters , which will store the server data 
+  ShowModalFunction(visible, image, name, address, mo_no, category, city, email) {
     this.setState({
       ModalVisibleStatus: visible,
       Image: image,
@@ -40,7 +44,7 @@ export default class App extends Component {
       Naddress: address,
       Nmo_no: mo_no,
       NCategory: category,
-      Ncity : city,
+      Ncity: city,
       Nemail: email
     });
   }
@@ -52,56 +56,44 @@ export default class App extends Component {
     else { phoneNumber = `telprompt:${number}`; }
     Linking.openURL(phoneNumber);
   };
-// making Seprators between the Flatlist
-  renderSeprator = () => {
-    return (
-      <View style={{ height: 2, width: "100%", backgroundColor: 'darkblue' }}>
-      </View>
-    )
-  }
-// The loading Circle
+
   render() {
- 
     if (this.state.isLoading) {
       return (
         <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
           <Text>Check Your Network</Text>
-        <Text> Please Wait ...</Text>
-        <ActivityIndicator
+          <Text> Please Wait ...</Text>
+          <ActivityIndicator
             animating={animating}
             color='#bc2b78'
             size={70}
             loading={this.state.loading}
-        />
-    </View>
+          />
+        </View>
       );
     }
     return (
       <View style={{ flex: 1, flexDirection: 'row', marginBottom: 3 }}>
-
         <FlatList
-          data={this.state.dataSource}
-          // ItemSeparatorComponent={this.renderSeprator}
+          data={this.state.dataArray}
           renderItem={({ item }) =>
-
-            
-            <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.image, item.name, item.address, item.mo_no,item.category,item.city,item.email)} >
+            <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.ngoImg, item.name, item.address, item.mo_no, item.ngoType, item.city, item.email)} >
               <Card style={styles.mycard}>
-                <View style={{flexDirection:'row'}}>
-              <Image style={{ width: 100, height: 100, margin: 5,borderRadius:5, borderWidth:2, borderColor:'black', flexDirection: 'row' }} source={{ uri: item.image }} />
-              <View style={{justifyContent:'center',alignContent:'center', marginLeft:20}}>
-              <Text style={{ fontSize: 15, color: 'black', }}>NGO Name
+                <View style={{ flexDirection: 'row' }}>
+                  <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.ngoImg }} />
+                  <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20 }}>
+                    <Text style={{ fontSize: 15, color: 'black', }}>NGO Name:
                          </Text>
-              <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                {item.name}
-              </Text>
-              <Text style={{ fontSize: 15, color: 'black', }}>NGO Service
+                    <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                      {item.name}
+                    </Text>
+                    <Text style={{ fontSize: 15, color: 'black', }}>NGO Service:
                          </Text>
-              <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                {item.category}
-                </Text>
-              </View>
-              </View>
+                    <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                      {item.ngoType}
+                    </Text>
+                  </View>
+                </View>
               </Card>
             </TouchableOpacity>
 
@@ -128,47 +120,47 @@ export default class App extends Component {
 
                 <View style={styles.modalView2}>
 
-                  <Text style={styles .modalFont}>NGO Name
+                  <Text style={styles.modalFont}>NGO Name
                          </Text>
-                  <Text style={styles .modalText}>
+                  <Text style={styles.modalText}>
                     {this.state.Iname}
                   </Text>
 
 
-                  <Text style={styles .modalFont}>Address
+                  <Text style={styles.modalFont}>Address
                          </Text>
-                  <Text style={styles .modalText}>
+                  <Text style={styles.modalText}>
                     {this.state.Naddress}
                   </Text>
 
-                  <Text style={styles .modalFont}>Mobile Number</Text>
-                  <Text style={styles .modalText}>
+                  <Text style={styles.modalFont}>Mobile Number</Text>
+                  <Text style={styles.modalText}>
                     {this.state.Nmo_no}
                   </Text>
 
-                  <Text style={styles .modalFont}>Email Address</Text>
-                  <Text style={styles .modalText}>
+                  <Text style={styles.modalFont}>Email Address</Text>
+                  <Text style={styles.modalText}>
                     {this.state.Nemail}
                   </Text>
 
-                  
-                  <Text style={styles .modalFont}>NGO Service Type</Text>
-                  <Text style={styles .modalText}>
+
+                  <Text style={styles.modalFont}>NGO Service Type</Text>
+                  <Text style={styles.modalText}>
                     {this.state.NCategory}
                   </Text>
 
-                  <Text style={styles .modalFont}>City</Text>
-                  <Text style={styles .modalText}>
+                  <Text style={styles.modalFont}>City</Text>
+                  <Text style={styles.modalText}>
                     {this.state.Ncity}
                   </Text>
-                
+
 
                 </View>
 
 
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity onPress={() => { this.dialCall(this.state.Nmo_no) }} activeOpacity={0.7} style={styles.buttonn} >
-                  <Icon  name="phone" size={35} color="#fff" />
+                    <Icon name="phone" size={35} color="#fff" />
                     {/* <Text style={styles.TextStyle}>Call Now</Text> */}
                   </TouchableOpacity>
                 </View>
@@ -205,39 +197,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 3,
-    margin:5,
+    margin: 5,
     backgroundColor: 'black',
-    borderRadius:10
+    borderRadius: 10
   },
   modalView2: {
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 30,
-    backgroundColor:'white'
+    backgroundColor: 'white'
   },
 
   mycard2: {
-    margin:3,
-    justifyContent:'space-around',
-    borderColor:'white',
-    borderBottomColor:'#8803fc',
-    borderWidth:1,
-    },
-  
-    cardContent: {
-      margin:3,
-      flexDirection:'row'
-     },
+    margin: 3,
+    justifyContent: 'space-around',
+    borderColor: 'white',
+    borderBottomColor: '#8803fc',
+    borderWidth: 1,
+  },
+
+  cardContent: {
+    margin: 3,
+    flexDirection: 'row'
+  },
 
   modalFont: {
     fontSize: 15,
-     color: 'black', 
+    color: 'black',
   },
   modalText: {
     fontSize: 18,
-     color: '#8803fc',
-     marginBottom: 15 
+    color: '#8803fc',
+    marginBottom: 15
   },
   TouchableOpacity_Style: {
     width: 25,
@@ -261,10 +253,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#e0d238',
     alignItems: 'center',
-    borderWidth:2,
-    borderBottomColor:'black'
+    borderWidth: 2,
+    borderBottomColor: 'black'
 
-},
+  },
   TextStyle: {
     color: '#fff',
     fontSize: 18,

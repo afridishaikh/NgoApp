@@ -18,79 +18,73 @@ class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      TextInputName: '',
-      TextInputMono: '',
-      TextInputEmail: '',
-      TextInputUsername: '',
-      TextInputPassword: '',
-      loading: false,
+      Name: '',
+      Mono: '',
+      Email: '',
+      Password: '',
+      loading: false
+    
     }
   }
 
   InsertDataToServer = () => {
-    const { TextInputName } = this.state;
-    const { TextInputMono } = this.state;
-    const { TextInputEmail } = this.state;
-    const { TextInputUsername } = this.state;
-    const { TextInputPassword } = this.state;
+    const { Name } = this.state;
+    const { Mono } = this.state;
+    const { Email } = this.state;
+    const { Password } = this.state;
 
     //VALIDATION
+   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let phoneno = /^[0]?[6789]\d{9}$/;
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    if (TextInputName == '' || TextInputMono == '' || TextInputEmail == '' || TextInputUsername == '' || TextInputPassword == '') {
+
+    if (Name == '' || Mono == '' || Email == '' || Password == '') {
       Alert.alert('Input Fields should not be Empty !')
     }
-    else if (phoneno.test(this.state.TextInputMono) === false) {
+    else if (phoneno.test(this.state.Mono) === false) {
       Alert.alert('Mobile Number is Invalid !');
       return false;
     }
-    else if (reg.test(this.state.TextInputEmail) === false) {
+    else if (reg.test(this.state.Email) === false) {
       Alert.alert('Email Address is Invalid !');
       return false;
     }
-    else if (this.state.TextInputPassword.length <= 6) {
+    else if (this.state.Password.length <= 6) {
       Alert.alert('Password Must Be Greater than 6 Characters !')
       return false;
     }
     else {
-
       this.setState({
         loading: true,
       });
 
-      fetch('https://ngoapp3219.000webhostapp.com/db/user_signup.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: TextInputName,
-          mo_no: TextInputMono,
-          email: TextInputEmail,
-          username: TextInputUsername,
-          password: TextInputPassword
-        })
-      }).then((response) => response.json())
-        .then((responseJson) => {
-          Alert.alert(responseJson);
-          this.props.navigation.navigate('Login');
-          this.setState({
-            loading: false,
-          });
-        }).catch((error) => {
-          // console.error(error);
-          Alert.alert('Network Error !')
-          this.setState({
-            loading: false,
-          });
+      firebase.database().ref('UserData/').push({
+        name:Name,
+        mo_no : Mono,
+        email: Email,
+        password: Password
+      });
+
+      firebase.auth().createUserWithEmailAndPassword(Email, Password)
+      .then(()=>{  
+        this.props.navigation.goBack();
+        this.setState({
+          loading: false,
         });
+        Alert.alert('Signup Success !')
+      })
+      .catch(error=>{
+        alert(error.message)
+        this.setState({
+          loading: false,
+        });
+      })
     }
   }
   render() {
+    const bg = {uri:'https://firebasestorage.googleapis.com/v0/b/pukaar-c2f79.appspot.com/o/Assest%2Fetc%2Fbg.jpg?alt=media&token=e7d69656-d0a2-427d-aec8-197561522b9a'}
     return (
 
-      <ImageBackground source={require('../../assets/bg.jpg')} style={styles.backgroundImage}>
+      <ImageBackground source={bg} style={styles.backgroundImage}>
         <View style={styles.container}>
           <View>
             <TouchableHighlight style={styles.SkipButton} onPress={() => this.props.navigation.replace('Home')}>
@@ -100,6 +94,20 @@ class Login extends Component {
 
           <ScrollView style={{ padding: 25, marginBottom: 100 }} >
             <View style={styles.container}>
+
+            <View style={{
+                            backgroundColor: '#00ab5e',
+                            justifyContent: 'center',
+                            alignContent: 'center',
+                            // paddingLeft: 50,
+                            margin: 10,
+                            borderRadius:10,
+                            marginBottom:30,
+                            borderColor: 'black',
+                            borderWidth: 2
+                        }}>
+            <Text style={[styles.Text, { fontSize: 22 }]} >  User Signup ! </Text>
+            </View>
 
               <View style={styles.inputContainer}>
                 <Icon style={styles.Icon} name="pencil" size={25} color="grey" />
@@ -127,15 +135,6 @@ class Login extends Component {
                   placeholder="Enter Email Address"
                   autoCapitalize='none'
                   onChangeText={TextInputEmail => this.setState({ TextInputEmail })} />
-              </View>
-
-              <View style={styles.inputContainer}>
-                <Icon style={styles.Icon} name="user" size={25} color="grey" />
-                <TextInput style={styles.inputs}
-                  underlineColorAndroid='transparent'
-                  placeholder="Create Username"
-                  autoCapitalize='none'
-                  onChangeText={TextInputUsername => this.setState({ TextInputUsername })} />
               </View>
 
               <View style={styles.inputContainer}>
@@ -214,6 +213,11 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  Text: {
+    color: 'white',
+    alignContent: 'center',
+    justifyContent: 'center'
+},
   buttonContainer: {
     height: 45,
     flexDirection: 'row',

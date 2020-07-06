@@ -26,6 +26,8 @@ export default class Home extends Component {
       username: null,
       modal: false,
       upidata: '',
+      id: null,
+      dataArray: [],
       loading: false,
       profile: false,
       upimodal: false,
@@ -35,57 +37,45 @@ export default class Home extends Component {
   //To store AsyncStorage value in state.
   componentDidMount() {
     AsyncStorage.getItem('username').then(value =>
-      //AsyncStorage returns a promise so adding a callback to get the value
       this.setState({ username: value, isLoading: false })
-      //Setting the value in Text  
     );
   }
 
-  profile = () => {
-    const { username } = this.state;
-    this.setState({
-      modal: true,
-      loading: true,
-      profile: false
+  profile = async() => {
+   await this.setState({
+    loading: true,
+     
     })
-    fetch('https://ngoapp3219.000webhostapp.com/db/n_profile.php', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-      })
-    }).then((response) => response.json())
-      .then((responseJson) => {
+    const { username } = this.state;
+    const root = firebase.database().ref();
+    const dataa = root.child('NgoData').orderByChild('email').equalTo(username);
+    // Here is the magic
+   await dataa.on('value', Snapshot => {
+      Snapshot.forEach(item => {
+        this.state.dataArray.push({ id: item.key, ...item.val() })
 
         this.setState({
-          dataSource: responseJson,
-          loading: false,
-          profile: true,
+          id: item.key,
         })
-      }
-      ).catch((error) => {
-        // console.error(error);
-        Alert.alert("Network Error !")
-        this.setState({
-          loading: false
-        })
-      });
+      })
+
+      this.setState({
+        loading: false,
+        modal: true,
+        profile: true,
+      })
+    });
   }
 
   storename = () => {
-    const  username  = this.state.username;
-     const root = firebase.database().ref();
+    const username = this.state.username;
+    const root = firebase.database().ref();
     const dataa = root.child('NgoData').orderByChild('email').equalTo(username);
-    // Here is the magic
-      dataa.on('value',Snapshot=>{
-        Snapshot.forEach(item => {
-          console.warn(item.val())
-           AsyncStorage.setItem('n_name', item.val().name);
-        })
-      });
+    dataa.on('value', Snapshot => {
+      Snapshot.forEach(item => {
+        AsyncStorage.setItem('n_name', item.val().name);
+      })
+    });
 
   }
 
@@ -95,7 +85,7 @@ export default class Home extends Component {
     })
   }
 
-  upiSet = () => {
+  upiSet =() => {
     this.setState({
       loading: true,
     });
@@ -104,73 +94,56 @@ export default class Home extends Component {
       Alert.alert('Input Fields should not be Empty !');
       this.setState({
         loading: false,
-
       })
 
     }
     else {
-      RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/update/upi.php', {
-        Authorization: "Bearer access-token",
-        otherHeader: "foo",
-        'Content-Type': 'multipart/form-data',
-      }, [
-        { name: 'username', data: this.state.username },
-        { name: 'upi', data: this.state.upidata },
-      ]).then((resp) => {
-        var tempMSG = resp.data;
-        tempMSG = tempMSG.replace(/\"/g, "");
-        Alert.alert(tempMSG);
-        this.setState({
-          loading: false,
-          upimodal: false,
-          modal: false,
-        })
-      }).catch((error) => {
-        // console.error(error);
-        Alert.alert('Network Error !')
-      });
+      const root = firebase.database().ref();
+      const data = root.child('NgoData').child(this.state.id)
+      data.update({ 'upi': this.state.upidata })
+
+      this.setState({
+        loading: false,
+        profile: false,
+        modal: false,
+        upimodal:false,
+      })
+      this.props.navigation.goBack();
+      Alert.alert('UPI is Updated !', 'Your UPI ID is updated !')
+
     }
   }
 
-  ShowModalFunction(visible, name) {
-    this.setState({
-      r_id: r_id,
-      Iname: name,
-
-    });
-  }
 
 
   render() {
+    console.warn(this.state.dataArray)
     if (this.state.loading) {
       return (
-      
-          <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
-            <Text> Please Wait ...</Text>
-            <ActivityIndicator
-              animating={animating}
-              color='#bc2b78'
-              size={70}
-              loading={this.state.loading}
-            />
-          </View>
-    
-
+        <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
+          <Text> Please Wait ...</Text>
+          <ActivityIndicator
+            animating={animating}
+            color='#bc2b78'
+            size={70}
+            loading={this.state.loading}
+          />
+        </View>
       );
     }
+
     return (
       <View style={styles.container1}>
         <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
           <TouchableOpacity onPress={this.profile}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
               <Image style={styles.avatar2} source={require('../../assets/images/user.jpg')} />
-
             </View>
           </TouchableOpacity>
         </View>
 
         <View style={styles.container2}>
-          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => {this.props.navigation.navigate('ReqList'),this,this.storename()}}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.Button]} onPress={() => { this.props.navigation.navigate('ReqList'), this, this.storename() }}>
             <Text style={styles.loginText}>Request List</Text>
           </TouchableHighlight>
 
@@ -191,7 +164,7 @@ export default class Home extends Component {
 
           {/* FOR PROFILE */}
           <FlatList
-            data={this.state.dataSource}
+            data={this.state.dataArray}
             ItemSeparatorComponent={this.renderSeprator}
             renderItem={({ item }) =>
               <Modal
@@ -210,12 +183,7 @@ export default class Home extends Component {
                         <Text style={styles.name}> {item.name}</Text>
                       </View>
 
-                      <Card style={styles.mycard}>
-                        <View style={styles.cardContent}>
-                          <Icon style={styles.Icon} name="user" size={20} />
-                          <Text style={{ alignItems: 'center', fontSize: 17, paddingTop: 10 }}> {item.username} </Text>
-                        </View>
-                      </Card>
+
 
                       <Card style={styles.mycard}>
                         <View style={styles.cardContent}>
@@ -253,12 +221,12 @@ export default class Home extends Component {
                       </TouchableOpacity>
                     </View>
 
-<View style={{alignItems:'center'}}>
-                    <TouchableOpacity style={[styles.buttonContainer, styles.logoutButton]}
-                      onPress={this._logout}
-                    >
-                      <Text style={{ color: 'white' }}>Logout</Text>
-                    </TouchableOpacity>
+                    <View style={{ alignItems: 'center' }}>
+                      <TouchableOpacity style={[styles.buttonContainer, styles.logoutButton]}
+                        onPress={this._logout}
+                      >
+                        <Text style={{ color: 'white' }}>Logout</Text>
+                      </TouchableOpacity>
                     </View>
 
                   </View>

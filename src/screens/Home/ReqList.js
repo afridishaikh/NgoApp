@@ -14,12 +14,13 @@ export default class App extends Component {
     super();
     this.state = {
       dataArray:[],
-      // isLoading: true,
+      isLoading: true,
       ModalVisibleStatus: false,
       TempImageURL: '',
       n_name:'',
       userid: '',
-      id: ''
+      id: '',
+      u_email:''
     }
   }
 
@@ -27,6 +28,11 @@ export default class App extends Component {
 
   //Fetching data from server
   componentDidMount() {
+    this.setState({
+      isLoading:true
+    })
+
+
     AsyncStorage.getItem('username').then(value =>
       //AsyncStorage returns a promise so adding a callback to get the value
       this.setState({ userid: value }),
@@ -36,29 +42,43 @@ export default class App extends Component {
     );  
 
     const root = firebase.database().ref();
-    // const dataa = root.child('RequestData').orderByChild('status').equalTo('Inactive')
-    const dataa = root.child('RequestData').orderByChild('status')
+    const dataa = root.child('RequestData').orderByChild('status').equalTo('Inactive')
     // Here is the magic
       dataa.on('value',Snapshot=>{
         Snapshot.forEach(item => {
         this.state.dataArray.push({id:item.key,...item.val()})
         })
         this.setState({
-          loading:false
+          isLoading:false,
+          ModalComplete: true,
         })
+
+        if (this.state.dataArray==''){
+          Alert.alert('Empty List !','The Request List is Empty !')
+          this.setState({
+              ModalComplete: false,
+              loading: false,
+          });
+          this.props.navigation.goBack();
+      }
       });
   }
 
 
 
   //Function That will send data to server
-  Accept = async(id) => {
+  Accept = async(id,u_email) => {
    await this.setState({
      id: id,
+     u_email:u_email
     });
     const root = firebase.database().ref();
     const dataa = root.child('RequestData').child(id)
-        dataa.update({'status':`${this.state.userid}_Active`,'n_name':this.state.n_name,'n_email':this.state.userid})
+   await dataa.update({'n_status':`${this.state.userid}_Active`,'u_status':`${u_email}_Active`,'status':'Active','n_name':this.state.n_name,'n_email':this.state.userid})  
+
+   await Alert.alert('Request Accepted ! ','The Request has been added to your Pending List !');
+   await  this.props.navigation.goBack();
+    
   }
 
 
@@ -99,7 +119,8 @@ export default class App extends Component {
       return (
       
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-          <Text> Please Wait ...</Text>
+           <Text>Check Your Network</Text>
+          <Text> Please Wait...</Text>
           <ActivityIndicator
             animating={animating}
             color='#bc2b78'
@@ -131,7 +152,7 @@ export default class App extends Component {
                         </Text>
                     
                       </View>
-                      <Button style={{ marginLeft: 130, marginBottom: 50 }} width={90} uppercase={false} mode="contained" onPress={this.Accept.bind(this, item.id)}>
+                      <Button style={{ marginLeft: 130, marginBottom: 50 }} width={90} uppercase={false} mode="contained" onPress={this.Accept.bind(this, item.id,item.u_email)}>
                         Accept</Button>
                     </View>
 

@@ -6,15 +6,16 @@ import openMap from 'react-native-open-maps';
 import AsyncStorage from '@react-native-community/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Card, Button } from 'react-native-paper'
+import firebase from '../../../config'
 
 export default class App extends Component {
 
     constructor() {
         super();
         this.state = {
-            isLoading: true,
+            isLoading: false,
             ModalVisibleStatus: false,
-            TempImageURL: '',
+            dataArray:[],
             upi: '',
             n_id: ''
         }
@@ -23,51 +24,40 @@ export default class App extends Component {
     //Fetching data from server
     componentDidMount() {
         AsyncStorage.getItem('username').then(value =>
-            //AsyncStorage returns a promise so adding a callback to get the value
             this.setState({ userid: value }),
         );
-        
+
         this.setState({
             isLoading: true,
         })
 
-        return fetch('https://ngoapp3219.000webhostapp.com/db/update/donation.php')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson === 'Invalid') {
-                    Alert.alert('No any NGO Found with UPI !');
-                    this.props.navigation.goBack();
-                }
-                else {
-                    this.setState({
-                        dataSource: responseJson,
-                        isLoading: false,
-                    })
-                }       
+        const root = firebase.database().ref();
+        const dataa = root.child('NgoData').orderByChild('upi')
+
+
+        dataa.on('value', Snapshot => {
+            Snapshot.forEach(item => {
+                this.state.dataArray.push({ id: item.key, ...item.val() })
+                // console.warn(item)
             })
-            .catch((error) => {
-                // console.error(error);
-            Alert.alert('Network Error !');
             this.setState({
-                isLoading: false,
-            });
-            this.props.navigation.goBack();
-            });
+                isLoading: false
+            })
+        });
     }
 
 
 
     // For Modal Storing and Defining Parameters , which will store the server data 
-    ShowModalFunction(visible, n_id, name, image, category, mo_no, email, username, upi) {
+    ShowModalFunction(visible, id, name, image, category, mo_no, email, upi) {
         this.setState({
             ModalVisibleStatus: visible,
-            n_id: n_id,
+            id: id,
             Name: name,
             Image: image,
             Category: category,
             Mo_no: mo_no,
             Email: email,
-            Username: username,
             upi: upi,
         });
 
@@ -75,7 +65,6 @@ export default class App extends Component {
     //To copy in clipBoard
     copy = async () => {
         await Clipboard.setString(this.state.upi);
-
         ToastAndroid.showWithGravity(
             "Copied To Clipboard",
             ToastAndroid.SHORT,
@@ -106,23 +95,21 @@ export default class App extends Component {
 
 
                 <FlatList
-                    data={this.state.dataSource}
-                    ItemSeparatorComponent={this.renderSeprator}
+                    data={this.state.dataArray}
                     renderItem={({ item }) =>
                         <View>
-                            {/* <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.n_id,item.name, item.image, item.category,item.mo_no, item.email, item.username, item.upi)} > */}
-                            <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.n_id, item.name, item.image, item.category, item.mo_no, item.email, item.username, item.upi)} >
+                            <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.id, item.name, item.ngoImg, item.ngoType, item.mo_no, item.email, item.upi)} >
                                 <Card style={styles.mycard}>
                                     <View style={{ flexDirection: 'row' }}>
 
-                                        <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.image }} />
+                                        <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.ngoImg }} />
                                         <View style={{ justifyContent: 'space-evenly', padding: 5 }}>
                                             <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20, marginTop: 70 }}>
                                                 <Text style={{ fontSize: 15, color: 'black', }}>NGO Name:
                          </Text>
-                         <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                {item.name}
-                                            </Text>
+                                                <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                                                    {item.name}
+                                                </Text>
                                                 <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
                                                     {item.problem}
                                                 </Text>

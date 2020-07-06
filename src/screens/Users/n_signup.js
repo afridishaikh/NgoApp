@@ -72,7 +72,7 @@ export default class LoginView extends Component {
     }
 
 
-    Signup = async() =>{
+    Signup = async () => {
         console.warn('Firebase call')
         const { Name } = this.state;
         const { Category } = this.state;
@@ -83,146 +83,75 @@ export default class LoginView extends Component {
         const { Password } = this.state;
 
         //   VALIDATION
-        // let phoneno = /^[0]?[6789]\d{9}$/;
-        // let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-        // // console.warn(this.state.Name)
-        // if (this.state.Name == '' || this.state.Address == '' || this.state.Username == '' || this.state.City == '' || this.state.Category == '') {
-        //     Alert.alert('Input Field should not be Empty !')
-        // }
-        // else if (this.state.Password.length <= 6) {
-        //     Alert.alert('Password Must Be Greater than 6 Characters !');
-        //     //    this.setState({Password:text}) 
-        //     return false;
-        // }
-        // else if (this.state.ImageSource == null || this.state.data == null) {
-        //     Alert.alert('You must Upload Your NGO image !');
-        //     //    this.setState({Password:text}) 
-        //     return false;
-        // }
-        // else if (phoneno.test(this.state.Mo_no) === false) {
-        //     Alert.alert('Mobile Number is Invalid !');
-        //     //   this.setState({Mo_no:text}) 
-        //     return false;
-        // }
-        // else if (reg.test(this.state.Email) === false) {
-        //     Alert.alert('Email Address is Invalid !');
-        //     //    this.setState({Email:text}) 
-        //     return false;
-        // }
-
-        // else {
-        //     this.setState({
-        //         loading: true,
-        //     });
-
-        const { uri } = this.state.ImageSource;
-        const filename = uri.substring(uri.lastIndexOf('/') + 1);
-        const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-        var storageRef = storage().ref('NgoImg/'+filename);
-        await  storageRef.putFile(uploadUri);
-        const url = await storageRef.getDownloadURL().catch((error) => {throw error});
-
-
-
-        await  firebase.auth().createUserWithEmailAndPassword(Email, Password)
-          .then(()=>{  
-            this.props.navigation.goBack();
-            // AsyncStorage.setItem('userType', 'ngo');
-            // AsyncStorage.setItem('username', this.state.username);
-            this.setState({
-              loading: false,
-            });
-          })
-          .catch(error=>{
-            alert(error.message)
-            this.setState({
-              loading: false,
-            });
-          })
-
-          
-        await  firebase.database().ref('NgoData/').push({
-            name:Name,
-            ngoType: Category,
-            email: Email,
-            mo_no : Mo_no,
-            password: Password,
-            ngoImg: url,
-            address : Address,
-            city: City
-        
-          });
+        let phoneno = /^[0]?[6789]\d{9}$/;
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        if (this.state.Name == '' || this.state.Address == '' || this.state.Username == '' || this.state.City == '' || this.state.Category == '') {
+            Alert.alert('Input Field should not be Empty !')
         }
-    
-    //   }
-    
-    // //Function to send all data to server
-    // InsertDataToServer = () => {
-    //     //   VALIDATION
-    //     let phoneno = /^[0]?[6789]\d{9}$/;
-    //     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    //     // console.warn(this.state.Name)
-    //     if (this.state.Name == '' || this.state.Address == '' || this.state.Username == '' || this.state.City == '' || this.state.Category == '') {
-    //         Alert.alert('Input Field should not be Empty !')
-    //     }
-    //     else if (this.state.Password.length <= 6) {
-    //         Alert.alert('Password Must Be Greater than 6 Characters !');
-    //         //    this.setState({Password:text}) 
-    //         return false;
-    //     }
-    //     else if (this.state.ImageSource == null || this.state.data == null) {
-    //         Alert.alert('You must Upload Your NGO image !');
-    //         //    this.setState({Password:text}) 
-    //         return false;
-    //     }
-    //     else if (phoneno.test(this.state.Mo_no) === false) {
-    //         Alert.alert('Mobile Number is Invalid !');
-    //         //   this.setState({Mo_no:text}) 
-    //         return false;
-    //     }
-    //     else if (reg.test(this.state.Email) === false) {
-    //         Alert.alert('Email Address is Invalid !');
-    //         //    this.setState({Email:text}) 
-    //         return false;
-    //     }
+        else if (this.state.Password.length <= 6) {
+            Alert.alert('Password Must Be Greater than 6 Characters !');
 
-    //     else {
-    //         this.setState({
-    //             loading: true,
-    //         });
-    //         RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/ngo_signup.php', {
-    //             Authorization: "Bearer access-token",
-    //             otherHeader: "foo",
-    //             'Content-Type': 'multipart/form-data',
-    //         }, [
-    //             { name: 'name', data: this.state.Name },
-    //             { name: 'category', data: this.state.Category },
-    //             { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data },
-    //             { name: 'mo_no', data: this.state.Mo_no },
-    //             { name: 'email', data: this.state.Email },
-    //             { name: 'address', data: this.state.Address },
-    //             { name: 'city', data: this.state.City },
-    //             { name: 'username', data: this.state.Username },
-    //             { name: 'password', data: this.state.Password },
+            return false;
+        }
+        else if (this.state.ImageSource == null || this.state.data == null) {
+            Alert.alert('You must Upload Your NGO image !');
 
-    //         ]).then((resp) => {
-    //             var tempMSG = resp.data;
-    //             tempMSG = tempMSG.replace(/\"/g, "");
-    //             Alert.alert(tempMSG);
-    //             // this.props.navigation.replace('Nlogin');
-    //             this.props.navigation.goBack();
-    //             this.setState({
-    //                 loading: false,
-    //             });
-    //         }).catch((error) => {
-    //             // console.error(error);
-    //             Alert.alert('Network Error !')
-    //             this.setState({
-    //                 loading: false,
-    //               });
-    //         });
-    //     }
-    // }
+            return false;
+        }
+        else if (phoneno.test(this.state.Mo_no) === false) {
+            Alert.alert('Mobile Number is Invalid !');
+
+            return false;
+        }
+        else if (reg.test(this.state.Email) === false) {
+            Alert.alert('Email Address is Invalid !');
+
+            return false;
+        }
+
+        else {
+            this.setState({
+                loading: true,
+            });
+
+            const { uri } = this.state.ImageSource;
+            const filename = uri.substring(uri.lastIndexOf('/') + 1);
+            const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+            var storageRef = storage().ref('NgoImg/' + filename);
+            await storageRef.putFile(uploadUri);
+            const url = await storageRef.getDownloadURL().catch((error) => { throw error });
+
+            await firebase.auth().createUserWithEmailAndPassword(Email, Password)
+
+                .then(() => {
+                    this.props.navigation.goBack();
+                    this.setState({
+                        loading: false,
+                    });
+                    Alert.alert('Signup Success !','You have been sign up successfully !')
+                })
+                .catch(error => {
+                    alert(error.message)
+                    this.setState({
+                        loading: false,
+                    });
+                })
+
+
+            await firebase.database().ref('NgoData/').push({
+                name: Name,
+                ngoType: Category,
+                email: Email,
+                mo_no: Mo_no,
+                password: Password,
+                ngoImg: url,
+                address: Address,
+                city: City
+            });
+        }
+
+    }
+
 
 
     render() {
@@ -280,13 +209,7 @@ export default class LoginView extends Component {
                         />
                     </View>
 
-                   
-                   
-
-                
-                    <Text style={{ fontSize: 20, color: 'back', marginTop:20, marginBottom: 10 }}>Upload Photo of NGO:</Text>
-                        
-
+                    <Text style={{ fontSize: 20, color: 'back', marginTop: 20, marginBottom: 10 }}>Upload Photo of NGO:</Text>
 
                     <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
                         <View style={styles.ImageContainer}>
@@ -326,7 +249,7 @@ export default class LoginView extends Component {
                             onChangeText={Mo_no => this.setState({ Mo_no })} />
                     </View>
 
-                   
+
 
 
 
@@ -436,7 +359,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 295,
         height: 195,
-        marginTop:22,
+        marginTop: 22,
         // borderColor: '#9B9B9B',
         borderWidth: 10 / PixelRatio.get(),
         justifyContent: 'center',
@@ -724,9 +647,9 @@ const styles = StyleSheet.create({
 //                         />
 //                     </View>
 
-                
+
 //                     <Text style={{ fontSize: 20, color: 'back', marginTop:20, marginBottom: 10 }}>Upload Photo of NGO:</Text>
-                        
+
 
 
 //                     <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>

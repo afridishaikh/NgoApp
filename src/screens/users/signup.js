@@ -13,10 +13,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import  firebase from '../../../config.js';
-// import * as firebase from 'firebase';
-// import { firebaseConfig } from '../../../config.js';
-// firebase.initializeApp(firebaseConfig);
-// const { navigate } = this.props.navigation;
 export default class LoginView extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +26,6 @@ export default class LoginView extends Component {
   }
 
   Signup = () =>{
-    console.warn('Firebase call')
     const { Name } = this.state;
     const { Mono } = this.state;
     const { Email } = this.state;
@@ -69,11 +64,10 @@ export default class LoginView extends Component {
       firebase.auth().createUserWithEmailAndPassword(Email, Password)
       .then(()=>{  
         this.props.navigation.goBack();
-        // AsyncStorage.setItem('userType', 'ngo');
-        // AsyncStorage.setItem('username', this.state.username);
         this.setState({
           loading: false,
         });
+        Alert.alert('Signup Success !','You have been sign up successfully !')
       })
       .catch(error=>{
         alert(error.message)

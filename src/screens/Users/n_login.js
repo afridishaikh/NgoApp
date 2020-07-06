@@ -46,7 +46,6 @@ class Login extends Component {
       .then(()=>{  
         this.props.navigation.navigate('NHome')
         AsyncStorage.setItem('userType', 'ngo');
-        AsyncStorage.setItem('username', this.state.email);
         this.setState({
           loading: false,
         });
@@ -60,58 +59,9 @@ class Login extends Component {
     }
   }
 
-  // UserLoginFunction = () => {
-
-  //   const { username } = this.state;
-  //   const { password } = this.state;
-
-  //   if (username == '' || password == '') {
-  //     Alert.alert('Input Fields Should not be Empty !')
-  //   }
-  //   else {
-  //     this.setState({
-  //       loading: true,
-  //     });
-  //     const { username } = this.state;
-  //     const { password } = this.state;
-  //     fetch('https://ngoapp3219.000webhostapp.com/db/ngo_login.php', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Accept': 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         username: username,
-  //         password: password,
-  //       })
-  //     }).then((response) => response.json())
-  //       .then((responseJson) => {
-  //         if (responseJson === 'Login Success') {
-  //           AsyncStorage.setItem('username', this.state.username);
-  //           AsyncStorage.setItem('userType', 'ngo');
-  //           this.props.navigation.navigate('NHome');
-  //           Alert.alert('Login Success !');
-  //         }
-  //         else if (this.state.username == '' || this.state.password == '') {
-  //           Alert.alert('Username or Password is empty.');
-  //           //alert for the empty InputText
-
-  //         }
-  //         else {
-  //           Alert.alert(responseJson);
-  //           this.setState({
-  //             loading: false,
-  //           });
-  //         }
-  //       }).catch((error) => {
-  //         // console.error(error);
-  //         Alert.alert('Netwrok Error !')
-  //         this.setState({
-  //           loading: false,
-  //         });
-  //       });
-  //   }
-  // }
+  Store = () => {
+    AsyncStorage.setItem('username', this.state.email);
+  }
 
 
   render() {
@@ -120,10 +70,10 @@ class Login extends Component {
         <ScrollView style={{ flex: 1, marginTop: 70, backgroundColor: '#dcdcdc' }} >
           <View style={styles.maincontainer}>
             <View style={styles.inputContainer}>
-              <Icon style={styles.Icon} name="user" size={25} color="#000" />
+              <Icon style={styles.Icon} name="envelope" size={22} color="#000" />
               <TextInput style={styles.inputs}
                 autoCapitalize="none"
-                placeholder="Username"
+                placeholder="Email Address"
                 keyboardType="email-address"
                 underlineColorAndroid='transparent'
                 onChangeText={(email) => this.setState({ email })}
@@ -143,14 +93,9 @@ class Login extends Component {
               />
             </View>
 
-
-
-
-
-
             <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]}
-              onPress={this.Login}
-            >
+              onPress={() => {this.Login() ; this.Store() }}>
+            
               <Text style={styles.loginText}>Login</Text>
 
             </TouchableHighlight>

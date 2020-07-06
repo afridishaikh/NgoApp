@@ -26,22 +26,6 @@ class Login extends Component {
     }
   }
 
-  // componentDidMount(){
-  //   const email = 'Harry@test.com';
-  // //   const my = firebase.database().ref("UserData/-M9vL7Djax8WmNeF2818");
-  // //   my.on('value',data=>{
-  // //  console.warn(data.val())  
-  // //   })
-  // const root = firebase.database().ref();
-  // const my = root.child('UserData').orderByChild('email').equalTo(email);
-  //   my.on('value',data=>{
-  //  console.warn(data.val())
-  // //  console.warn(typeof(data))
-  //   })
-  
-  //  }
-  
-
   //Login Function
   Login = () => {
     const { email } = this.state;
@@ -53,11 +37,12 @@ class Login extends Component {
       this.setState({
         loading: true,
       });
-      firebase.auth().signInWithEmailAndPassword(email, password)
+     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(()=>{  
         this.props.navigation.navigate('UHome')
         AsyncStorage.setItem('userType', 'user');
-        AsyncStorage.setItem('username', this.state.email);
+        // AsyncStorage.setItem('userType', 'user');
+        // AsyncStorage.setItem('username', this.state.email);
         this.setState({
           loading: false,
         });
@@ -71,6 +56,11 @@ class Login extends Component {
     }
   }
 
+  Store = () => {
+
+    AsyncStorage.setItem('username', this.state.email);
+  }
+
   render() {
     return (
 
@@ -78,10 +68,10 @@ class Login extends Component {
       <ScrollView style={{flex:1 , marginTop:70, backgroundColor:'#dcdcdc'}} >
         <View style={styles.maincontainer}>
         <View style={styles.inputContainer}>
-          <Icon style={styles.Icon} name="user" size={25} color="#000" />
+          <Icon style={styles.Icon} name="envelope" size={22} color="#000" />
           <TextInput style={styles.inputs}
             autoCapitalize="none"
-            placeholder="Username"
+            placeholder="Email Address"
             keyboardType="email-address"
             underlineColorAndroid='transparent'
             onChangeText={(email) => this.setState({ email })}
@@ -102,7 +92,7 @@ class Login extends Component {
 
 
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]}
-          onPress={this.Login}>
+          onPress={() => {this.Login() ; this.Store() }}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 

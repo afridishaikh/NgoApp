@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, View, FlatList, Text, animating, ActivityIndicator, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
+import firebase from '../../../config'
 export default class App extends Component{
     constructor()
     {
@@ -7,33 +8,36 @@ export default class App extends Component{
       this.state = { 
       isLoading: true,
       ModalVisibleStatus: false,
-      TempImageURL : ''
+      TempImageURL : '',
+      dataArray:[]
      }
     }
     componentDidMount() {
+
+      this.setState({
+        isLoading:true
+      })
       
-      return fetch('https://ngoapp3219.000webhostapp.com/db/Gallery.php')
-             .then((response) => response.json())
-             .then((responseJson) => {
-               this.setState({
-                 isLoading: false,
-                 dataSource: responseJson
-               }, function() {
-                 // In this block you can do something with new state.
-               });
-             })
-             .catch((error) => {
-              //  console.error(error);
-              Alert.alert('Network Error !');
-             });
+      const root = firebase.database().ref();
+      const dataa = root.child('RequestData')
+      // Here is the magic
+        dataa.on('value',Snapshot=>{
+          Snapshot.forEach(item => {
+          this.state.dataArray.push({id:item.key,...item.val()})
+          })
+          this.setState({
+            isLoading:false
+          })
+        });
+
          }
  
-    ShowModalFunction(visible, imageURL) 
+    ShowModalFunction(visible, imageURL, nimg) 
     {
       this.setState({
         ModalVisibleStatus: visible,
         TempImageURL : imageURL,
-   
+        nimg : nimg
       })
     }
     
@@ -56,11 +60,11 @@ export default class App extends Component{
    <View style={styles.MainContainer}>
     
          <FlatList
-            data={ this.state.dataSource }
+            data={ this.state.dataArray}
             renderItem={({item}) => 
               <View style={{flex:1, flexDirection: 'column', margin:10 }}> 
-                <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.N_img)} >
-                  <Image style={styles.imageThumbnail} source = {{ uri: item.N_img }} />
+                <TouchableOpacity onPress={this.ShowModalFunction.bind(this, true, item.u_image,item.n_image)} >
+                  <Image style={styles.imageThumbnail} source = {{ uri: item.u_image}} />
                 </TouchableOpacity>
 
               </View> 

@@ -93,7 +93,7 @@ export default class LoginView extends Component {
       const { uri } = this.state.ImageSource;
       const filename = uri.substring(uri.lastIndexOf('/') + 1);
       const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-      var storageRef = storage().ref('Requests/'+filename);
+      var storageRef = storage().ref('Request/'+filename);
       await  storageRef.putFile(uploadUri);
       const url = await storageRef.getDownloadURL().catch((error) => {throw error});
       
@@ -109,7 +109,9 @@ export default class LoginView extends Component {
       n_name : 'none',
       n_email : 'none',
       n_image : 'none',
-      status : "Inactive"
+      n_status:'none',
+      status : 'Inactive',
+      u_status:`${this.state.u_email}_Inactive`,
       });
       Alert.alert(
         'Request Sent !',
@@ -118,18 +120,20 @@ export default class LoginView extends Component {
      await  this.setState({
         loading : false
       })
+      this.props.navigation.goBack()
     };
   
 
   //Function To get current location on map
-  componentDidMount = () => {
+  componentDidMount =async() => {
     AsyncStorage.getItem('username').then(value =>
       this.setState({ u_email: value })
     );  
 
-    AsyncStorage.getItem('u_name').then(value =>
+  await  AsyncStorage.getItem('u_name').then(value =>
       this.setState({ u_name: value })
     );  
+
     //For Grant Location Service
     var that = this;
     //Checking for the permission just after component loaded
@@ -152,7 +156,6 @@ export default class LoginView extends Component {
           }
         } catch (err) {
           alert("err", err);
-          console.warn(err)
         }
       }
       requestLocationPermission();
@@ -183,6 +186,8 @@ export default class LoginView extends Component {
   }
 
   render() {
+    console.warn(this.state.u_name)
+
     let Problem = [{
       value: 'Food',
     }, {

@@ -21,6 +21,8 @@ import { Dropdown } from 'react-native-material-dropdown';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
+import storage from '@react-native-firebase/storage';
+import firebase from '../../../config'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class LoginView extends Component {
@@ -74,13 +76,13 @@ export default class LoginView extends Component {
     }
 
     //Function to send all data to server
-    InsertDataToServer = () => {
+    InsertDataToServer = async() => {
 
         if (this.state.Comment == '') {
             Alert.alert('Input Field should not be Empty !')
         }
         else if (this.state.ImageSource == null || this.state.data == null) {
-            Alert.alert('You must Upload Your NGO image !');
+            Alert.alert('You must Attach the Screenshot !');
             //    this.setState({Password:text}) 
             return false;
         }
@@ -89,42 +91,37 @@ export default class LoginView extends Component {
             this.setState({
                 loading: true,
             });
-            RNFetchBlob.fetch('POST', 'https://ngoapp3219.000webhostapp.com/db/feedback.php', {
-                Authorization: "Bearer access-token",
-                otherHeader: "foo",
-                'Content-Type': 'multipart/form-data',
-            }, [
-                { name: 'username', data: this.state.username },
-                { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data },
-                { name: 'comment', data: this.state.Comment },
 
-
-            ]).then((resp) => {
-                var tempMSG = resp.data;
-                tempMSG = tempMSG.replace(/\"/g, "");
-                Alert.alert(tempMSG);
-                // this.props.navigation.replace('Nlogin');
-                this.props.navigation.goBack();
-                this.setState({
-                    loading: false,
-                });
-            }).catch((error) => {
-                // console.error(error);
-                Alert.alert('Network Error !')
+            const { uri } = this.state.ImageSource;
+            const filename = uri.substring(uri.lastIndexOf('/') + 1);
+            const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+            var storageRef = storage().ref('Feedback/'+filename);
+            await  storageRef.putFile(uploadUri);
+            const url = await storageRef.getDownloadURL().catch((error) => {throw error});
+            
+            await firebase.database().ref('FeedbackData/').push({
+            screenshot: url ,
+            sent_by : this.state.username,
+            comment : this.state.Comment
             });
+            Alert.alert(
+              'Feedback Sent !',
+              'Your Feedback has been sent Successfully!'
+            );
+           await  this.setState({
+              loading : false,
+              Comment:null,
+              ImageSource:null
+            })
+            this.props.navigation.goBack()
         }
     }
 
 
-    render() {
-
-    
+    render() {    
         return (
             <View style={styles.Container}>
                 <ScrollView style={{ padding: 30 }}>
-
-
-                
                     <Text style={{ fontSize: 20, color: 'back', marginTop:20, marginBottom: 10 }}>Attach Screenshot:</Text>
                     <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
                         <View style={styles.ImageContainer}>
@@ -136,7 +133,7 @@ export default class LoginView extends Component {
                     </TouchableOpacity>
 
                     <View style={styles.inputContainer}>
-                        <Icon style={styles.Icon} name="mobile" size={30} color="#000" />
+                        <Icon style={styles.Icon} name="comments" size={30} color="#000" />
                         <TextInput style={styles.inputs}
                             keyboardType="default"
                             underlineColorAndroid='transparent'

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-    SafeAreaView,
     StyleSheet,
     Modal,
     PixelRatio,
@@ -11,11 +10,7 @@ import {
     View,
     FlatList,
     Image,
-    TextInput,
-    ScrollView,
     TouchableOpacity,
-    TouchableHighlight,
-    BackHandler,
     ImageBackground,
     Dimensions,
     Linking
@@ -34,16 +29,16 @@ class Home extends Component {
     constructor() {
         super();
         this.state = {
-            isLoading: true,
             ModalVisibleStatus: false,
             secondModal: false,
             ModalComplete: false,
             TempImageURL: '',
             userid: '',
-            n_name:'',
+            n_name: '',
             id: null,
+            u_email: '',
             loading: false,
-            dataSource:[]
+            dataSource: []
         }
     }
 
@@ -56,68 +51,66 @@ class Home extends Component {
         );
         AsyncStorage.getItem('n_name').then(value =>
             this.setState({ n_name: value })
-          );  
+        );
     }
 
     FetchPending = () => {
-        // console.warn(this.state.userid)
         this.setState({
-            ModalVisibleStatus: true,
-            // loading: true,
+            loading: true,
         });
-        const { userid } = this.state;
-        console.warn(userid)
-        // fetch('https://ngoapp3219.000webhostapp.com/db/status/n_pending.php', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         username: userid,
-        //     })
-        // }).then((response) => response.json())
-        //     .then((responseJson) => {
-        //         if (responseJson === 'Invalid') {
+   
+        const root = firebase.database().ref();
+        const dataa = root.child('RequestData').orderByChild('n_status').equalTo(`${this.state.userid}_Active`)
+       dataa.on('value', Snapshot => {
+            Snapshot.forEach(item => {
+                this.state.dataSource.push({ id: item.key, ...item.val() })
+            })
+            this.setState({
+                loading: false,
+                ModalVisibleStatus: true,
+            });
 
-        //             Alert.alert('No any Pending Request found');
-        //             this.props.navigation.goBack();
-        //         }
-        //         else {
-        //             this.setState({
-        //                 dataSource: responseJson,
-        //                 loading: false,
-        //             })
-        //         }
-        //         console.warn(responseJson)
-        //     }
-//   )
-const root = firebase.database().ref();
-const dataa = root.child('RequestData').orderByChild('status').equalTo(`${userid}_Active`)
-// Here is the magic
-  dataa.on('value',Snapshot=>{
-    Snapshot.forEach(item => {
-    this.state.dataSource.push({id:item.key,...item.val()})
-    })
-  })
-}
+            if (this.state.dataSource==''){
+                Alert.alert('Empty List !','Your Pending Request List is Empty !')
+                this.setState({
+                    sentModal: false,
+                    loading: false,
+                });
+                this.props.navigation.goBack();
+            }
+        })
+       
+    }
 
     FetchComplete = () => {
-        // console.warn(this.state.userid)
         this.setState({
-            // loading: true,
-            ModalComplete: true,
+            loading: true,
+     
+
         });
+
         const { userid } = this.state;
-        console.warn(userid)
         const root = firebase.database().ref();
-        const dataa = root.child('RequestData').orderByChild('status').equalTo(`${userid}_Complete`)
-        // Here is the magic
-          dataa.on('value',Snapshot=>{
+        const dataa = root.child('RequestData').orderByChild('n_status').equalTo(`${userid}_Complete`)
+        dataa.on('value', Snapshot => {
             Snapshot.forEach(item => {
-            this.state.dataSource.push({id:item.key,...item.val()})
+                this.state.dataSource.push({ id: item.key, ...item.val() })
             })
-          })
+            this.setState({
+                loading: false,
+                ModalComplete: true,
+            });
+            if (this.state.dataSource==''){
+                Alert.alert('Empty List !','Your Pending Request List is Empty !')
+                this.setState({
+                    sentModal: false,
+                    loading: false,
+                });
+                this.props.navigation.goBack();
+            }
+        })
+
+    
     }
 
 
@@ -154,49 +147,70 @@ const dataa = root.child('RequestData').orderByChild('status').equalTo(`${userid
     }
 
 
-    Complete = async(id) => {
+    Complete = async (id, u_email) => {
         this.setState({
-        id: id,
-        // loading: true,
+            loading: true,
+            id: id,
+            u_email: u_email
+
         });
 
         if (this.state.ImageSource == null || this.state.data == null) {
             Alert.alert('You must Upload Image !');
+            this.setState({
+                loading: false,
+              
+    
+            });
             return false;
         }
         else {
             this.setState({
                 id: id,
-               });
+            });
 
-               const { uri } = this.state.ImageSource;
-               const filename = uri.substring(uri.lastIndexOf('/') + 1);
-               const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-               var storageRef = storage().ref('Requests/'+filename);
-               await  storageRef.putFile(uploadUri);
-               const url = await storageRef.getDownloadURL().catch((error) => {throw error});
+            const { uri } = this.state.ImageSource;
+            const filename = uri.substring(uri.lastIndexOf('/') + 1);
+            const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+            var storageRef = storage().ref('Requests/' + filename);
+            await storageRef.putFile(uploadUri);
+            const url = await storageRef.getDownloadURL().catch((error) => { throw error });
+            const root = firebase.database().ref();
+            const dataa = root.child('RequestData').child(id)
+            await dataa.update({ 'n_status': `${this.state.userid}_Complete`, 'n_image':url, 'u_status': `${u_email}_Complete`, 'status': 'Complete', 'n_email': this.state.userid })
 
-               const root = firebase.database().ref();
-               const dataa = root.child('RequestData').child(id)
-               await dataa.update({'status':`${this.state.userid}_Complete`,'n_image':url,'n_name':this.state.n_name,'n_email':this.state.userid})
+            this.setState({
+                loading: false,
+            });
+            await Alert.alert('Request Completed! ','The Request has been Completed !');
+            await  this.props.navigation.goBack();
         }
 
     }
 
-    Cancel = (id) => {
+    Cancel = async(id, u_email) => {
         this.setState({
+            loading: true,
             id: id,
-           });
-           const root = firebase.database().ref();
-           const dataa = root.child('RequestData').child(id)
-           dataa.update({'status':`Inactive`,'n_name':'none','n_email':'none'})
+            u_email: u_email
+        });
+        const root = firebase.database().ref();
+        const dataa = root.child('RequestData').child(id)
+       await dataa.update({ 'n_status': `none`, 'u_status': `${u_email}_Inactive`, 'status': 'Inactive', 'n_name': 'none', 'n_email': 'none' })
+
+        this.setState({
+            loading: false,
+        });
+        await Alert.alert('Request Cancel ! ','The Request has been Canceled !');
+        await  this.props.navigation.goBack();
     }
 
 
-    ShowModalFunction(visible,id, image, problem, address, mo_no, latitude, longitude) {
+    ShowModalFunction(visible, id, u_email, image, problem, address, mo_no, latitude, longitude) {
         this.setState({
-            id:id,
             secondModal: visible,
+            id: id,
+            u_email: u_email,
             Image: image,
             Problem: problem,
             Naddress: address,
@@ -226,7 +240,10 @@ const dataa = root.child('RequestData').orderByChild('status').equalTo(`${userid
 
 
     render() {
-        console.warn(this.state.id)
+
+
+        const bg = {uri:'https://firebasestorage.googleapis.com/v0/b/pukaar-c2f79.appspot.com/o/Assest%2Fetc%2Fbg.jpg?alt=media&token=e7d69656-d0a2-427d-aec8-197561522b9a'}
+
         if (this.state.loading) {
             return (
                 <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
@@ -243,217 +260,209 @@ const dataa = root.child('RequestData').orderByChild('status').equalTo(`${userid
 
         return (
 
-            <ImageBackground source={require('../../assets/bg.jpg')} style={styles.backgroundImage}>
-            <View style={styles.container}>
+            <ImageBackground source={bg} style={styles.backgroundImage}>
+                <View style={styles.container}>
+                    <Button style={{ marginBottom: 50 }} uppercase={false} color="#eeff00" icon="clock-outline" mode="contained" onPress={this.FetchPending}>
+                        Pending Requests</Button>
 
+                    <Button icon="check-decagram" uppercase={false} mode="contained" color="#00ea0c" onPress={this.FetchComplete}>
+                        Completed Requests</Button>
 
-                <Button style={{ marginBottom: 50 }} uppercase={false} color="#eeff00" icon="clock-outline" mode="contained" onPress={this.FetchPending}>
-                    Pending Requests</Button>
+                    <Modal
+                        transparent={false}
+                        animationType={"fade"}
+                        visible={this.state.ModalComplete}
+                        onRequestClose={() => { this.setState({ ModalComplete: false }); this.props.navigation.goBack() }} >
 
-                <Button icon="check-decagram" uppercase={false} mode="contained" color="#00ea0c" onPress={this.FetchComplete}>
-                    Completed Requests</Button>
+                        <View style={{
+                            backgroundColor: '#bc2b78',
+                            justifyContent: 'center',
+                            alignContent: 'center',
+                            paddingLeft: 50,
+                            margin: 10,
+                            borderColor: 'black',
+                            borderWidth: 2
+                        }}>
+                            <Text style={[styles.loginText, { fontSize: 18 }]} >Your Completed Requests List </Text>
+                        </View>
 
-                <Modal
-                    transparent={false}
-                    animationType={"fade"}
-                    visible={this.state.ModalComplete}
-                    onRequestClose={() => { this.setState({ ModalComplete: false }); }} >
-
-<View style={{
-                        backgroundColor: '#bc2b78',
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                        paddingLeft:50,
-                        margin:10,
-                        borderColor:'black',
-                        borderWidth:2
-                    }}>
-                        <Text style={[styles.loginText, { fontSize: 18 }]} >Your Completed Requests List </Text>
-                    </View>
-
-                    <FlatList
-                        data={this.state.dataSource}
-
-                        renderItem={({ item }) =>
-                            <View>
-
-                                <TouchableOpacity
-                                    onPress={this.ShowModalFunction.bind(this, true, item.id, item.u_image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
-                                    <Card style={styles.mycard}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.u_image }} />
-                                            <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20 }}>
-                                                <Text style={{ fontSize: 15, color: 'black', }}>Problem:
-                         </Text>
-                                                <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                    {item.problem}
-                                                </Text>
-                                                <Text style={{ fontSize: 15, color: 'black', }}>Request Sent by:
-                         </Text>
-                                                <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                    {item.u_name}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </Card>
-                                </TouchableOpacity>
-                            </View>
-                        }
-                        keyExtractor={(item, index) => index}
-                    />
-                </Modal>
-
-                <Modal
-                    transparent={false}
-                    animationType={"fade"}
-                    visible={this.state.ModalVisibleStatus}
-                    onRequestClose={() => { this.setState({ ModalVisibleStatus: false }); }} >
-
-<View style={{
-                        backgroundColor: '#bc2b78',
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                        paddingLeft:50,
-                        margin:10,
-                        borderColor:'black',
-                        borderWidth:2
-                    }}>
-                        <Text style={[styles.loginText, { fontSize: 18 }]} >Your Pending Requests List </Text>
-                    </View>
-
-                    <FlatList
-                        data={this.state.dataSource}
-
-                        renderItem={({ item }) =>
-                            <View>
-
-                                <TouchableOpacity
-                                    onPress={this.ShowModalFunction.bind(this, true, item.id, item.u_image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
-                                    <Card style={styles.mycard}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.u_image }} />
-                                            <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20 }}>
-                                                <Text style={{ fontSize: 15, color: 'black', }}>Problem:
-                         </Text>
-                                                <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                    {item.problem}
-                                                </Text>
-                                                <Text style={{ fontSize: 15, color: 'black', }}>Request Sent by:
-                         </Text>
-                                                <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
-                                                    {item.u_name}
-                                                </Text>
-
-                                            </View>
-                                        </View>
-                                    </Card>
-                                </TouchableOpacity>
-                            </View>
-                        }
-                        keyExtractor={(item, index) => index}
-                    />
-                </Modal>
-
-
-                {
-                    this.state.secondModal
-                        ?
-                        (
-                            <Modal
-                                transparent={false}
-                                animationType={"fade"}
-                                visible={this.state.ModalVisibleStatus}
-                                onRequestClose={() => { this.ShowModalFunction(!this.state.secondModal) }} >
-                                <View style={styles.modalView}>
-                                    {/* <Image style={styles.mainImage} source={{ uri: this.state.Image }} /> */}
-                                    <TouchableOpacity
-                                        activeOpacity={0.5}
-                                        style={styles.TouchableOpacity_Style}
-                                        onPress={() => { this.ShowModalFunction(!this.state.ModalVisibleStatus) }}>
-                                    </TouchableOpacity>
-                                </View>
-
+                        <FlatList
+                            data={this.state.dataSource}
+                            renderItem={({ item }) =>
                                 <View>
 
-                                    <View style={{ flexDirection: 'row' }}>
-
-
-                                        <View>
-                                            <Image style={{ width: 200, height: 200, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: this.state.Image }} />
-                                        </View>
-                                        <View style={{ paddingTop: 20 }}>
-                                            <Text style={styles.modalFont}>Problem </Text>
-                                            <Text style={styles.modalText}>
-                                                {this.state.Problem}
-                                            </Text>
-
-                                            <Text style={styles.modalFont}>Address
+  
+                                        <Card style={styles.mycard}>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.u_image }} />
+                                                <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20 }}>
+                                                    <Text style={{ fontSize: 15, color: 'black', }}>Problem:
                          </Text>
-                                            <Text style={styles.modalText}>
-                                                {this.state.Naddress}
-                                            </Text>
+                                                    <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                                                        {item.problem}
+                                                    </Text>
+                                                    <Text style={{ fontSize: 15, color: 'black', }}>Request Sent by:
+                         </Text>
+                                                    <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                                                        {item.u_name}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                        </Card>
+             
+                                </View>
+                            }
+                            keyExtractor={(item, index) => index}
+                        />
+                    </Modal>
 
-                                            <Text style={styles.modalFont}>Mobile Number</Text>
-                                            <Text style={styles.modalText}>
-                                                {this.state.Nmo_no}
-                                            </Text>
-                                        </View>
+                    <Modal
+                        transparent={false}
+                        animationType={"fade"}
+                        visible={this.state.ModalVisibleStatus}
+                        onRequestClose={() => { this.setState({ ModalVisibleStatus: false }); this.props.navigation.goBack() }} >
 
+                        <View style={{
+                            backgroundColor: '#bc2b78',
+                            justifyContent: 'center',
+                            alignContent: 'center',
+                            paddingLeft: 50,
+                            margin: 10,
+                            borderColor: 'black',
+                            borderWidth: 2
+                        }}>
+                            <Text style={[styles.loginText, { fontSize: 18 }]} >Your Pending Requests List </Text>
+                        </View>
+
+                        <FlatList
+                            data={this.state.dataSource}
+
+                            renderItem={({ item }) =>
+                                <View>
+
+                                    <TouchableOpacity
+                                        onPress={this.ShowModalFunction.bind(this, true, item.id, item.u_email, item.u_image, item.problem, item.address, item.mo_no, item.latitude, item.longitude)} >
+                                        <Card style={styles.mycard}>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Image style={{ width: 100, height: 100, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: item.u_image }} />
+                                                <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 20 }}>
+                                                    <Text style={{ fontSize: 15, color: 'black', }}>Problem:
+                         </Text>
+                                                    <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                                                        {item.problem}
+                                                    </Text>
+                                                    <Text style={{ fontSize: 15, color: 'black', }}>Request Sent by:
+                         </Text>
+                                                    <Text style={{ fontSize: 18, color: 'darkblue', marginBottom: 15, flexDirection: 'row' }}>
+                                                        {item.u_name}
+                                                    </Text>
+
+                                                </View>
+                                            </View>
+                                        </Card>
+                                    </TouchableOpacity>
+                                </View>
+                            }
+                            keyExtractor={(item, index) => index}
+                        />
+                    </Modal>
+
+
+                    {
+                        this.state.secondModal
+                            ?
+                            (
+                                <Modal
+                                    transparent={false}
+                                    animationType={"fade"}
+                                    visible={this.state.ModalVisibleStatus}
+                                    onRequestClose={() => { this.ShowModalFunction(!this.state.secondModal); }} >
+                                    <View style={styles.modalView}>
+                                        {/* <Image style={styles.mainImage} source={{ uri: this.state.Image }} /> */}
+                                        <TouchableOpacity
+                                            activeOpacity={0.5}
+                                            style={styles.TouchableOpacity_Style}
+                                            onPress={() => { this.ShowModalFunction(!this.state.ModalVisibleStatus) }}>
+                                        </TouchableOpacity>
                                     </View>
 
-                                    <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                                        <Text style={{ paddingTop: 10, fontSize: 18 }}>Take A Photo With Victim</Text>
-                                        <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-                                            <View style={styles.ImageContainer}>
+                                    <View>
 
-                                                {this.state.ImageSource === null ? <Icon style={styles.Icon} name="camera" size={50} color="grey" /> :
-                                                    <Image style={styles.ImageContainer} source={this.state.ImageSource} />
-                                                }
+                                        <View style={{ flexDirection: 'row' }}>
+
+
+                                            <View>
+                                                <Image style={{ width: 200, height: 200, margin: 5, borderRadius: 5, borderWidth: 2, borderColor: 'black', flexDirection: 'row' }} source={{ uri: this.state.Image }} />
+                                            </View>
+                                            <View style={{ paddingTop: 20 }}>
+                                                <Text style={styles.modalFont}>Problem </Text>
+                                                <Text style={styles.modalText}>
+                                                    {this.state.Problem}
+                                                </Text>
+
+                                                <Text style={styles.modalFont}>Address
+                         </Text>
+                                                <Text style={styles.modalText}>
+                                                    {this.state.Naddress}
+                                                </Text>
+
+                                                <Text style={styles.modalFont}>Mobile Number</Text>
+                                                <Text style={styles.modalText}>
+                                                    {this.state.Nmo_no}
+                                                </Text>
                                             </View>
 
-                                        </TouchableOpacity>
+                                        </View>
+
+                                        <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+                                            <Text style={{ paddingTop: 10, fontSize: 18 }}>Take A Photo With Victim</Text>
+                                            <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                                                <View style={styles.ImageContainer}>
+
+                                                    {this.state.ImageSource === null ? <Icon style={styles.Icon} name="camera" size={50} color="grey" /> :
+                                                        <Image style={styles.ImageContainer} source={this.state.ImageSource} />
+                                                    }
+                                                </View>
+
+                                            </TouchableOpacity>
+                                        </View>
+
+
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center' }}>
+                                            <TouchableOpacity onPress={() => { this.dialCall(this.state.Nmo_no) }} activeOpacity={0.7} style={styles.buttonn} >
+                                                <Icon style={{ paddingLeft: 50 }} name="phone" size={35} color="#fff" />
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity onPress={() => { this._goToYosemite(this.state.Latitude, this.state.Longitude) }} activeOpacity={0.7} style={styles.buttonn} >
+
+                                                <Icon style={{ paddingLeft: 50 }} name="map-marker" size={35} color="#fff" />
+
+                                            </TouchableOpacity>
+                                        </View>
+
+
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', padding: 10 }}>
+                                            <Button width={150} style={{ margin: 10 }} uppercase={false} icon="cancel" mode="contained" color='#e86100' onPress={this.Cancel.bind(this, this.state.id, this.state.u_email)}>
+                                                Cancel</Button>
+
+
+
+                                            <Button width={150} style={{ margin: 10 }} icon="check-decagram" uppercase={false} mode="contained" color="#00ea0c" onPress={this.Complete.bind(this, this.state.id, this.state.u_email)}>
+                                                Complete</Button>
+                                        </View>
+
                                     </View>
 
 
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center' }}>
-                                        <TouchableOpacity onPress={() => { this.dialCall(this.state.Nmo_no) }} activeOpacity={0.7} style={styles.buttonn} >
-                                            <Icon style={{ paddingLeft: 50 }} name="phone" size={35} color="#fff" />
-                                        </TouchableOpacity>
 
-                                        <TouchableOpacity onPress={() => { this._goToYosemite(this.state.Latitude, this.state.Longitude) }} activeOpacity={0.7} style={styles.buttonn} >
+                                </Modal>
+                            )
+                            :
+                            null
+                    }
 
-                                            <Icon style={{ paddingLeft: 50 }} name="map-marker" size={35} color="#fff" />
-
-                                        </TouchableOpacity>
-                                    </View>
-
-
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', padding: 10 }}>
-                                        <Button width={150} style={{ margin: 10 }} uppercase={false} icon="cancel" mode="contained" color='#e86100' onPress={this.Cancel.bind(this,this.state.id)}>
-                                            Cancel</Button>
-
-
-
-                                        <Button width={150} style={{ margin: 10 }} icon="check-decagram" uppercase={false} mode="contained" color="#00ea0c" onPress={this.Complete.bind(this, this.state.id)}>
-                                            Complete</Button>
-                                    </View>
-
-                                </View>
-
-
-
-                            </Modal>
-                        )
-                        :
-                        null
-                }
-
-            </View>
-
-
-
-
-</ImageBackground>
+                </View>
+            </ImageBackground>
 
         );
     }
@@ -520,14 +529,14 @@ const styles = StyleSheet.create({
         borderColor: 'black'
     },
 
-    
+
     backgroundImage: {
         position: 'absolute',
         left: 0,
         top: 0,
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
-      },
+    },
 
     loginText: {
         color: 'white',

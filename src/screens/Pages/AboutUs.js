@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, Platform, StatusBar, animating, Button, StyleSheet, ToastAndroid, View, ScrollView, Clipboard, FlatList, Alert, TouchableHighlight, ActivityIndicator, Linking, Image, Modal, TouchableOpacity, ImageBackground } from 'react-native';
-
+import { SocialIcon } from 'react-native-elements'
 export default class HowToUse extends Component {
     render() {
         return (
@@ -11,50 +11,80 @@ export default class HowToUse extends Component {
                     <View style={styles.body}>
                         <View style={styles.bodyContent}>
                             <Text style={styles.name}>Afridi Shaikh</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', margin: 10 }}>
-                                <TouchableOpacity
-                                onPress={ ()=>{ Linking.openURL('https://www.facebook.com/afridishaikh15')}}
-                                >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.jpg')} />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                onPress={ ()=>{ Linking.openURL('https://www.instagram.com/afridi_shaikh15')}}
-                                >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/ig.jpg')} />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                onPress={() => Linking.openURL('mailto:afridishaikh1512@gmail.com')}
-                                >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.jpg')} />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                onPress={ ()=>{ Linking.openURL('https://www.github.com/afridishaikh')}}
-                                >
-                                    <Image style={styles.avatar2} source={require('../../assets/icons/logo/git.jpg')} />
-                                </TouchableOpacity>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between', margin: 10
+                            }}>
+                                <SocialIcon
+                                    //Social Icon using react-native-elements
+                                    type="facebook"
+                                    //Type of Social Icon
+                                    onPress={() => {
+                                        Linking.openURL('https://www.facebook.com/afridi.shaikh.15')
+                                    }}
+                                />
+
+                                <SocialIcon
+                                    //Social Icon using react-native-elements
+                                    type="instagram"
+                                    //Type of Social Icon
+                                    onPress={() => {
+                                        Linking.openURL('https://www.instagram.com/afridi_shaikh15')
+                                    }}
+                                />
+                                <SocialIcon
+                                    //Social Icon using react-native-elements
+                                    type="envelope"
+                                    //Type of Social Icon
+                                    onPress={() => {
+                                        Linking.openURL('mailto:afridishaikh1517@gmail.com')
+                                    }}
+                                />
+
+                                <SocialIcon
+                                    //Social Icon using react-native-elements
+                                    type="github"
+                                    //Type of Social Icon
+                                    onPress={() => {
+                                        Linking.openURL('https://www.github.com/afridishaikh')
+                                    }}
+                                />
+
                             </View>
                         </View>
+
+
 
                         <View style={styles.bodyContent2}>
                             <Text style={styles.name}>Mustakim Kaji</Text>
                         </View>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', margin: 10 }}>
-                            <TouchableOpacity
-                            onPress={ ()=>{ Linking.openURL('https://www.facebook.com/mustakim.kazi.923')}}
-                            >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.jpg')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                             onPress={ ()=>{ Linking.openURL('https://www.instagram.com/mr.m.k.kaji')}}
-                            >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/ig.jpg')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                            onPress={() => Linking.openURL('mailto:mustakimkaji28@gmail.com')}
-                            >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.jpg')} />
-                            </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', margin: 10, justifyContent: 'center' }}>
+
+                            <SocialIcon
+                                //Social Icon using react-native-elements
+                                type="facebook"
+                                //Type of Social Icon
+                                onPress={() => {
+                                    Linking.openURL('https://www.facebook.com/mustakim.kazi.923')
+                                }}
+                            />
+                            <SocialIcon
+                                //Social Icon using react-native-elements
+                                type="instagram"
+                                //Type of Social Icon
+                                onPress={() => {
+                                    Linking.openURL('https://www.instagram.com/mr.m.k.kaji')
+                                }}
+                            />
+                            <SocialIcon
+                                //Social Icon using react-native-elements
+                                type="envelope"
+                                //Type of Social Icon
+                                onPress={() => {
+                                    Linking.openURL('mailto:mustakimkaji28@gmail.com')
+                                }}
+                            />
 
                         </View>
 
@@ -63,17 +93,25 @@ export default class HowToUse extends Component {
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'center', margin: 10 }}>
-                            <TouchableOpacity
-                            onPress={ ()=>{ Linking.openURL('https://www.facebook.com/govind.solanki.98871174')}}
-                            >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/fb.jpg')} />
-                            </TouchableOpacity>
-                 
-                            <TouchableOpacity
-                            onPress={() => Linking.openURL('mailto:solankigovind421@gmail.com')}
-                            >
-                                <Image style={styles.avatar2} source={require('../../assets/icons/logo/gmail.jpg')} />
-                            </TouchableOpacity>
+                            <SocialIcon
+                                //Social Icon using react-native-elements
+                                type="facebook"
+                                //Type of Social Icon
+                                onPress={() => {
+                                    Linking.openURL('https://www.facebook.com/govind.solanki.98871174')
+                                }}
+                            />
+                            <SocialIcon
+                                //Social Icon using react-native-elements
+                                type="envelope"
+                                //Type of Social Icon
+                                onPress={() => {
+                                    Linking.openURL('mailto:solankigovind421@gmail.com')
+                                }}
+                            />
+
+
+
                         </View>
                     </View>
                 </View>
